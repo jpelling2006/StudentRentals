@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Room {
-    private Integer roomID;
+    private Integer ID;
     private Integer propertyID;
     private String type;
     private Double rentPrice;
@@ -12,8 +12,8 @@ public class Room {
     private Date endDate;
     // photos? *scratches head*
 
-    public Integer getRoomID() { return roomID; }
-    public void setRoomID(Integer roomID) { this.roomID = roomID; }
+    public Integer getID() { return ID; }
+    public void setID(Integer ID) { this.ID = ID; }
 
     public Integer getPropertyID() { return propertyID; }
     public void setPropertyID(Integer propertyID) { this.propertyID = propertyID; }

@@ -1,13 +1,13 @@
 public class Property {
-    private Integer propertyID;
+    private Integer ID;
     private Integer userID; // only homeowners (duh)
     private String address;
     private String type; // like uh house or flat
     private Integer bedrooms;
     private Integer bathrooms;
 
-    public Integer getPropertyID() { return propertyID; }
-    public void setPropertyID(Integer propertyID) { this.propertyID = propertyID; }
+    public Integer getID() { return ID; }
+    public void setID(Integer ID) { this.ID = ID; }
 
     public Integer getUserID() { return userID; }
     public void setUserID(Integer userID) { this.userID = userID; }

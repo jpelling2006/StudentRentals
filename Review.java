@@ -1,13 +1,13 @@
 public class Review {
-    private Integer reviewID;
+    private Integer ID;
     private Integer propertyID; // this makes more sense icl
     private Integer userID; // students only!! :3
     private Integer stars; // (LIKE IN TIME??) 1-5, should also calculate average or wtv
     private String title;
     private String content;
 
-    public Integer getReviewID() { return reviewID; }
-    public void setReviewID(Integer reviewID) { this.reviewID = reviewID; }
+    public Integer getID() { return ID; }
+    public void setID(Integer ID) { this.ID = ID; }
 
     public Integer getPropertyID() { return propertyID; }
     public void setPropertyID(Integer propertyID) { this.propertyID = propertyID; }

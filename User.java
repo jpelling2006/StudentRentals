@@ -1,16 +1,16 @@
 public class User {
-    private Integer userID;
-    private String userType; // student or homeowner
+    private Integer ID;
+    private String type; // student or homeowner
     private String name; // legal name, could probably expand this
     private String email;
     private String phone;
     private String password; // this doesnt feel right but shhhhh thats a future jess issue!
 
-    public Integer getUserID() { return userID; }
-    public void setUserID(Integer userID) { this.userID = userID; }
+    public Integer getID() { return ID; }
+    public void setID(Integer ID) { this.ID = ID; }
 
-    public String getUserType() { return userType; }
-    public void setUserType(String userType) { this.userType = userType; }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
