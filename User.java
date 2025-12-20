@@ -13,6 +13,8 @@ public class User {
     private String phone;
     private String passwordHash;
     private byte[] salt;
+    private Integer campusID;
+    private String studentNumber;
 
     public Integer getUserID() { return userID; }
     public void setUserID(Integer userID) {
@@ -48,7 +50,7 @@ public class User {
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) {
-        if (phone == null || !phone.matches("\\d{10}")) {
+        if (phone == null || !phone.matches("^\\d{10}")) {
             throw new IllegalArgumentException("Phone number must be ten digits long.");
         }
         this.phone = phone;
@@ -57,11 +59,20 @@ public class User {
     public String getPasswordHash() {
         return passwordHash;
     }
-
     public void setPasswordHash(String rawPassword) throws Exception {
         this.salt = generateSalt();
         String hashedPassword = hashPassword(rawPassword, salt);
         this.passwordHash = hashedPassword;
+    }
+
+    public Integer getCampusID() { return campusID; }
+    public void setCampusID(Integer campusID) { this.campusID = campusID; }
+
+    public String getStudentNumber() { return studentNumber; }
+    public void setStudentNumber() {
+        if (studentNumber != null && !studentNumber.matches("^\\d{1,32}")) {
+            throw new IllegalArgumentException("Student number must up to 32 digits long.");
+        }
     }
 
     private boolean isValidEmail(String email) {

@@ -10,6 +10,7 @@ public class Room {
     private String amenities;
     private Date startDate;
     private Date endDate;
+    // photos?
 
     public Integer getID() { return roomID; }
     public void setID(Integer roomID) {

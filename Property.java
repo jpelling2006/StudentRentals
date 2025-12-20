@@ -1,8 +1,9 @@
 public class Property {
     private Integer propertyID;
-    private Integer userID; // only homeowners (duh)
+    private Integer userID; // only homeowners
     private String address;
-    private String propertyType; // like uh house or flat
+    public String description;
+    private String propertyType;
     private Integer bedrooms;
     private Integer bathrooms;
 
@@ -28,6 +29,14 @@ public class Property {
             throw new IllegalArgumentException("Address must be up to 512 characters long.");
         }
         this.address = address;
+    }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) {
+        if (description == null || description.length() > 2048) {
+            throw new IllegalArgumentException("Description must be up to 2048 characters long.");
+        }
+        this.description = description;
     }
 
     public String getPropertyType() { return propertyType; }
