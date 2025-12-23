@@ -6,9 +6,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 public class User {
-    private Integer userID;
+    private String username;
     private String userType; // student, homeowner, or administrator
-    private String name; // legal name, could probably expand this
     private String email;
     private String phone;
     private String passwordHash;
@@ -16,12 +15,13 @@ public class User {
     private Integer campusID;
     private String studentNumber;
 
-    public Integer getUserID() { return userID; }
-    public void setUserID(Integer userID) {
-        if (userID == null || userID <= 0) {
-            throw new IllegalArgumentException("UserID must be a positive integer.");
+    public String getUsername() { return username; }
+    public void setUsername(String username) {
+        // add regex
+        if (username == null || username.length() > 32) {
+            throw new IllegalArgumentException("Username must be up to 32 characters.");
         }
-        this.userID = userID;
+        this.username = username;
     }
 
     public String getUserType() { return userType; }
@@ -30,14 +30,6 @@ public class User {
             throw new IllegalArgumentException("Type must be one of the following: student, homeowner, administrator.");
         }
         this.userType = userType; 
-    }
-
-    public String getName() { return name; }
-    public void setName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be null or empty.");
-        }
-        this.name = name;
     }
 
     public String getEmail() { return email; }
@@ -50,7 +42,7 @@ public class User {
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) {
-        if (phone == null || !phone.matches("^\\d{10}")) {
+        if (phone == null || !phone.matches("^\\d{10}$")) {
             throw new IllegalArgumentException("Phone number must be ten digits long.");
         }
         this.phone = phone;
@@ -69,13 +61,14 @@ public class User {
     public void setCampusID(Integer campusID) { this.campusID = campusID; }
 
     public String getStudentNumber() { return studentNumber; }
-    public void setStudentNumber() {
-        if (studentNumber != null && !studentNumber.matches("^\\d{1,32}")) {
-            throw new IllegalArgumentException("Student number must up to 32 digits long.");
+    public void setStudentNumber(String studentNumber) {
+        if (studentNumber != null && !studentNumber.matches("^\\d{1,32}$")) {
+            throw new IllegalArgumentException("Student number must be up to 32 digits long.");
         }
+        this.studentNumber = studentNumber;
     }
 
-    private boolean isValidEmail(String email) {
+    public static boolean isValidEmail(String email) {
         // https://www.baeldung.com/java-email-validation-regex
         String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         Pattern pattern = Pattern.compile(emailRegex);
@@ -88,6 +81,8 @@ public class User {
         new SecureRandom().nextBytes(salt);
         return salt;
     }
+
+    public byte[] getSalt() { return salt; }
 
     public static String hashPassword(String password, byte[] salt) throws Exception {
         // PBKDF2 hash configuration
@@ -105,5 +100,16 @@ public class User {
     public boolean verifyPassword(String rawPassword, String storedHash, byte[] storedSalt) throws Exception {
         String hashedInputPassword = hashPassword(rawPassword, storedSalt);  // hash the password with stored salt
         return hashedInputPassword.equals(storedHash);  // compare hashes
+    }
+
+    public User(String username, String userType, String rawPassword, String email, String phone, Integer campusID, String studentNumber) throws Exception {
+        setUsername(username);
+        setUserType(userType);
+        setEmail(email);
+        setPhone(phone);
+        setPasswordHash(rawPassword);
+
+        this.campusID = campusID;
+        setStudentNumber(studentNumber);
     }
 }
