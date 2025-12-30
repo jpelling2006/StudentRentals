@@ -1,6 +1,10 @@
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Property {
+    private static final AtomicInteger idGenerator = new AtomicInteger(1);
+
     private Integer propertyID;
-    private Integer userID; // only homeowners
+    private String username; // only homeowners
     private String address;
     public String description;
     private String propertyType;
@@ -8,19 +12,19 @@ public class Property {
     private Integer bathrooms;
 
     public Integer getPropertyID() { return propertyID; }
-    public void setPropertyID(Integer propertyID) {
-        if (propertyID == null || propertyID <= 0) {
-            throw new IllegalArgumentException("PropertyID must be a positive integer.");
-        }
-        this.propertyID = propertyID;
+    private void setPropertyID() {
+        this.propertyID = idGenerator.getAndIncrement();
     }
+    public void generatePropertyID() { setPropertyID(); }
 
-    public Integer getUserID() { return userID; }
-    public void setUserID(Integer userID) {
-        if (userID == null || userID <= 0) {
-            throw new IllegalArgumentException("UserID must be a positive integer.");
+    // if exists too
+    public String getUsername() { return username; }
+    public void setUsername(String username) {
+        // add regex
+        if (username == null || username.length() > 32) {
+            throw new IllegalArgumentException("Username must be up to 32 characters.");
         }
-        this.userID = userID;
+        this.username = username;
     }
 
     public String getAddress() { return address; }
@@ -62,4 +66,6 @@ public class Property {
         }
         this.bathrooms = bathrooms;
     }
+
+    public Property() {}
 }

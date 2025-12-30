@@ -15,6 +15,8 @@ public class User {
     private Integer campusID;
     private String studentNumber;
 
+    // add userID back?
+
     public String getUsername() { return username; }
     public void setUsername(String username) {
         // add regex

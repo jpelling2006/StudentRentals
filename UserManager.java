@@ -6,6 +6,7 @@ public class UserManager {
     private List<User> users = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
 
+    // put into helpers class
     private boolean usernameExists(String username) {
         for (User user : users) {
             if (user.getUsername().equalsIgnoreCase(username)) { return true; }
@@ -17,7 +18,6 @@ public class UserManager {
     public void register() {
         // username
         String username;
-
         while (true) {
             System.out.print("\nEnter username: ");
             username = scanner.nextLine();
@@ -69,7 +69,7 @@ public class UserManager {
             }
         }
 
-
+        // password
         String rawPassword;
         while (true) {
             System.out.print("Enter password: ");
@@ -88,6 +88,7 @@ public class UserManager {
             break;
         }
 
+        // email
         String email;
         while (true) {
             System.out.print("Enter email: ");
@@ -98,6 +99,7 @@ public class UserManager {
             } else { break; }
         }
 
+        // phone
         String phone;
         while (true) {
             System.out.print("Enter phone number: ");
@@ -108,9 +110,9 @@ public class UserManager {
             } else { break; }
         }
         
+        // campusID and studentNumber - only done if user is student
         Integer campusID = null;
         String studentNumber = null;
-
         if (userType.equals("student")) {
             // please change later im begging you
             // maybe start by searching by letter?
@@ -218,7 +220,7 @@ public class UserManager {
                     System.out.println("Exiting...");
                     return;
                 default:
-                    System.out.println("Invalid choice. Please select 1, 2, 3, or 4.");
+                    System.out.println("Invalid choice. Please select an integer between 1-4.");
                     break;
             }
         }
