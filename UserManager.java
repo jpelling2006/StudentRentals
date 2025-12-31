@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class UserManager {
     private List<User> users = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
+    private User loggedInUser = null;
 
     // put into helpers class
     private boolean usernameExists(String username) {
@@ -14,36 +15,30 @@ public class UserManager {
         return false;
     }
 
-    // register new user
-    public void register() {
-        // username
-        String username;
+    public void inputUsername(User user) {
         while (true) {
             System.out.print("\nEnter username: ");
-            username = scanner.nextLine();
-
-            if (username.isBlank()) {
-                System.out.println("Username cannot be empty.");
-                continue;
-            }
-
-            if (username.length() > 32) {
-                System.out.println("Username must up to 32 characters long.");
-                continue;
-            }
+            String username = scanner.nextLine();
 
             if (usernameExists(username)) {
                 System.out.println("Username already exists.");
                 continue;
             }
 
-            break;
+            try {
+                user.setUsername(username);
+                System.out.println("Username set.");
+                return;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
         }
+    }
 
-        // userType
-        Integer typeChoice;
-        String userType;
+    public void inputUserType(User user) {
         while (true) {
+            Integer choice; 
+
             System.out.println("Please pick from the following user types:");
             System.out.println("1. Student");
             System.out.println("2. Homeowner");
@@ -52,103 +47,130 @@ public class UserManager {
             String input = scanner.nextLine();
 
             try {
-                typeChoice = Integer.parseInt(input);
+                choice = Integer.parseInt(input);
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a number.");
                 continue;
             }
 
-            if (typeChoice == 1) {
-                userType = "student";
+            if (choice == 1) {
+                user.setUserType("student");
+                System.out.println("User type set.");
                 break;
-            } else if (typeChoice == 2) {
-                userType = "homeowner";
+            } else if (choice == 2) {
+                user.setUserType("homeowner");
+                System.out.println("User type set.");
                 break;
             } else {
                 System.out.println("Please enter either 1 or 2.");
             }
         }
+    }
 
-        // password
-        String rawPassword;
+    public void inputPassword(User user) {
         while (true) {
             System.out.print("Enter password: ");
-            rawPassword = scanner.nextLine();
+            String rawPassword = scanner.nextLine();
 
             if (rawPassword.isBlank()) {
-                System.out.println("Input required.");
+                System.out.println("Password is required.");
                 continue;
             }
 
             if (rawPassword.length() < 8) {
-                System.out.println("Password must be at least 8 characters.");
+                System.out.println("Password must be at least 8 characters long.");
                 continue;
             }
-            
-            break;
-        }
 
-        // email
-        String email;
+            try {
+                user.setPasswordHash(rawPassword); // 🔐 hashing happens here
+                System.out.println("Password set.");
+                return;
+            } catch (Exception e) {
+                System.out.println("Failed to set password.");
+            }
+        }
+    }
+
+    public void inputEmail(User user) {
         while (true) {
             System.out.print("Enter email: ");
-            email = scanner.nextLine();
+            String email = scanner.nextLine();
 
-            if (!User.isValidEmail(email)) { 
-                System.out.println("Invalid email.");
-            } else { break; }
+            try {
+                user.setEmail(email);
+                System.out.println("Email set.");
+                return;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
         }
+    }
 
-        // phone
-        String phone;
+    public void inputPhone(User user) {
         while (true) {
             System.out.print("Enter phone number: ");
-            phone = scanner.nextLine();
+            String phone = scanner.nextLine();
 
-            if (!phone.matches("^\\d{10}$")) {
-                System.out.println("Invalid phone number.");
-            } else { break; }
-        }
-        
-        // campusID and studentNumber - only done if user is student
-        Integer campusID = null;
-        String studentNumber = null;
-        if (userType.equals("student")) {
-            // please change later im begging you
-            // maybe start by searching by letter?
-            while (true) {
-                System.out.print("Enter campus ID: ");
-                
-                try {
-                    campusID = Integer.parseInt(scanner.nextLine());
-                    break;
-                } catch (Exception e) {
-                    System.out.println("Please enter an integer.");
-                }
+            try {
+                user.setPhone(phone);
+                System.out.println("Phone number set.");
+                return;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
             }
+        }
+    }
 
-            while (true) {
-                System.out.print("Enter your student number: ");
-                studentNumber = scanner.nextLine();
-
-                if (!studentNumber.matches("^\\d{1,32}$")) {
-                    System.out.println("Student number must be between 1-32 digits long.");
-                } else { break; }
+    public void inputCampusID(User user) {
+        while (true) {
+            System.out.print("Enter campus ID: ");
+            try {
+                int campusID = Integer.parseInt(scanner.nextLine());
+                user.setCampusID(campusID);
+                System.out.println("Campus ID set.");
+                return;
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
             }
+        }
+    }
 
-        } else if (userType.equals("homeowner")) {
-        } else {
-            System.out.println("Invalid user type.");
-            return;
+    public void inputStudentNumber(User user) {
+        while (true) {
+            System.out.print("Enter student number: ");
+            String studentNumber = scanner.nextLine();
+
+            try {
+                user.setStudentNumber(studentNumber);
+                System.out.println("Student number set.");
+                return;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    // register new user
+    public void register() {
+        User user = new User();
+
+        System.out.println("\nRegistering new user");
+
+        inputUsername(user);
+        inputUserType(user);
+        inputEmail(user);
+        inputPhone(user);
+        inputPassword(user);
+        if (user.getUserType().equals("student")) {
+            inputCampusID(user);
+            inputStudentNumber(user);
         }
 
-        try {
-            User newUser = new User(username, userType, rawPassword, email, phone, campusID, studentNumber);
-            users.add(newUser);
-            System.out.println("Registration successful!");
-        } catch (Exception e) {
-            System.out.println("Registration failed: " + e.getMessage());
-        }
+        users.add(user);
+        System.out.println("Registration successful");
     }
 
     // user login
@@ -161,8 +183,10 @@ public class UserManager {
         for (User user : users) {
             try {
                 if (user.getUsername().equalsIgnoreCase(username) &&
-                    user.verifyPassword(rawPassword, user.getPasswordHash(), user.getSalt())) {
-                    System.out.println("Login successful.");
+                    user.verifyPassword(rawPassword)) {
+                        loggedInUser = user;
+                        System.out.println("Login successful.");
+                        userMenu();
                     return;
                 }
             } catch (Exception e) {
@@ -173,23 +197,106 @@ public class UserManager {
         System.out.println("Login failed. Username or password incorrect.");
     }
 
+    private void viewMyDetails() {
+        User user = loggedInUser;
+
+        if (loggedInUser == null) {
+            System.out.println("No user logged in.");
+            return;
+        }
+
+
+        System.out.println("\nYour Details:");
+        System.out.println("Username: " + user.getUsername());
+        System.out.println("User type: " + user.getUserType());
+        System.out.println("Email: " + user.getEmail());
+        System.out.println("Phone: " + user.getPhone());
+
+        if (user.getUserType().equals("student")) {
+            System.out.println("Campus ID: " + user.getCampusID());
+            System.out.println("Student number: " + user.getStudentNumber());
+        }
+    }
+
+    public void editMyDetails() {
+        if (loggedInUser == null) {
+            System.out.println("No user logged in.");
+            return;
+        }
+
+        while (true) {
+            System.out.println("\nEdit My Details");
+            System.out.println("1. Email");
+            System.out.println("2. Phone");
+            System.out.println("3. Password");
+
+            if (loggedInUser.getUserType().equals("student")) {
+                System.out.println("4. Campus ID");
+                System.out.println("5. Student Number");
+                System.out.println("6. Cancel");
+            } else {
+                System.out.println("4. Cancel");
+            }
+
+            System.out.print("Choose option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (loggedInUser.getUserType().equals("student")) {
+                switch (choice) {
+                    case 1 -> inputEmail(loggedInUser);
+                    case 2 -> inputPhone(loggedInUser);
+                    case 3 -> inputPassword(loggedInUser);
+                    case 4 -> inputCampusID(loggedInUser);
+                    case 5 -> inputStudentNumber(loggedInUser);
+                    case 6 -> { return; }
+                    default -> System.out.println("Invalid option.");
+                }
+            } else {
+                switch (choice) {
+                    case 1 -> inputEmail(loggedInUser);
+                    case 2 -> inputPhone(loggedInUser);
+                    case 3 -> inputPassword(loggedInUser);
+                    case 4 -> { return; }
+                    default -> System.out.println("Invalid option.");
+                }
+            }
+        }
+    }
+
+    private void userMenu() {
+        while (true) {
+            System.out.println("\nWelcome, " + loggedInUser.getUsername());
+            System.out.println("1. View my details");
+            System.out.println("2. Edit my details");
+            System.out.println("3. Logout");
+
+            System.out.print("Enter choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1 -> viewMyDetails();
+                case 2 -> editMyDetails();
+                case 3 -> {
+                    loggedInUser = null;
+                    System.out.println("Logged out.");
+                    return;
+                }
+                default -> System.out.println("Invalid option.");
+            }
+        }
+    }
+
     // forgot password operation
     public void forgetPassword() {
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
 
         for (User user : users) {
-            if (user.getUsername().equals(username)) {
-                System.out.print("Enter new password: ");
-                String newPassword = scanner.nextLine();
-                
-                try {
-                    user.setPasswordHash(newPassword);
-                    System.out.println("Password reset successful!");
-                    return;
-                } catch (Exception e) {
-                    System.out.println("Password reset failed.");
-                }
+            if (user.getUsername().equalsIgnoreCase(username)) {
+                inputPassword(user);
+                return;
             }
         }
         System.out.println("User not found.");
@@ -202,29 +309,24 @@ public class UserManager {
             System.out.println("2. Login");
             System.out.println("3. Forget Password");
             System.out.println("4. Exit");
-            System.out.print("Enter your choice: ");
+
+            System.out.print("Enter choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
 
             switch (choice) {
-                case 1:
-                    register();
-                    break;
-                case 2:
-                    login();
-                    break;
-                case 3:
-                    forgetPassword();
-                    break;
-                case 4:
+                case 1 -> register();
+                case 2 -> login();
+                case 3 -> forgetPassword();
+                case 4 -> {
                     System.out.println("Exiting...");
                     return;
-                default:
-                    System.out.println("Invalid choice. Please select an integer between 1-4.");
-                    break;
+                }
+                default -> System.out.println("Invalid choice.");
             }
         }
     }
+
 
     public static void main(String[] args) {
         UserManager manager = new UserManager();

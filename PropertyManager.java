@@ -96,7 +96,7 @@ public class PropertyManager {
 
     private void inputBedrooms(Property property) {
         while (true) {
-            System.out.print("New number of bedrooms: ");
+            System.out.print("Number of bedrooms: ");
             try {
                 int bedrooms = Integer.parseInt(scanner.nextLine());
                 property.setBedrooms(bedrooms);
@@ -112,7 +112,7 @@ public class PropertyManager {
 
     private void inputBathrooms(Property property) {
         while (true) {
-            System.out.print("New number of bathrooms: ");
+            System.out.print("Number of bathrooms: ");
             try {
                 int bathrooms = Integer.parseInt(scanner.nextLine());
                 property.setBathrooms(bathrooms);
@@ -240,7 +240,7 @@ public class PropertyManager {
             return;
         }
 
-        // Display properties
+        // display properties
         System.out.println("\nYour properties:");
         for (int i = 0; i < userProperties.size(); i++) {
             Property property = userProperties.get(i);
@@ -251,7 +251,7 @@ public class PropertyManager {
             );
         }
 
-        // Select property
+        // select property
         int choice;
         while (true) {
             System.out.print("Select a property to delete (1-" + userProperties.size() + "): ");

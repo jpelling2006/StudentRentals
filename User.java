@@ -60,15 +60,26 @@ public class User {
     }
 
     public Integer getCampusID() { return campusID; }
-    public void setCampusID(Integer campusID) { this.campusID = campusID; }
+    public void setCampusID(Integer campusID) {
+        if (!"student".equals(this.userType)) {
+            throw new IllegalStateException("Only student can have a campus ID.");
+        }
+        this.campusID = campusID;
+    }
 
     public String getStudentNumber() { return studentNumber; }
     public void setStudentNumber(String studentNumber) {
-        if (studentNumber != null && !studentNumber.matches("^\\d{1,32}$")) {
+        if (!"student".equals(this.userType)) {
+            throw new IllegalStateException("Only students can have a student number.");
+        }
+
+        if (studentNumber == null || !studentNumber.matches("^\\d{1,32}$")) {
             throw new IllegalArgumentException("Student number must be up to 32 digits long.");
         }
+
         this.studentNumber = studentNumber;
     }
+
 
     public static boolean isValidEmail(String email) {
         // https://www.baeldung.com/java-email-validation-regex
@@ -99,19 +110,7 @@ public class User {
         return Base64.getEncoder().encodeToString(hash);
     }
 
-    public boolean verifyPassword(String rawPassword, String storedHash, byte[] storedSalt) throws Exception {
-        String hashedInputPassword = hashPassword(rawPassword, storedSalt);  // hash the password with stored salt
-        return hashedInputPassword.equals(storedHash);  // compare hashes
-    }
-
-    public User(String username, String userType, String rawPassword, String email, String phone, Integer campusID, String studentNumber) throws Exception {
-        setUsername(username);
-        setUserType(userType);
-        setEmail(email);
-        setPhone(phone);
-        setPasswordHash(rawPassword);
-
-        this.campusID = campusID;
-        setStudentNumber(studentNumber);
+    public boolean verifyPassword(String rawPassword) throws Exception {
+        return hashPassword(rawPassword, salt).equals(passwordHash);
     }
 }
