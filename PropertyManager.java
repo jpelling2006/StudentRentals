@@ -3,35 +3,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class PropertyManager {
-    private List<User> users = new ArrayList<>();
     private List<Property> properties = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
+    private Session session;
 
-    // put into helpers class
-    private boolean usernameExists(String username) {
-        for (User user : users) {
-            if (username.equalsIgnoreCase(user.getUsername())) { return true; }
-        }
-        return false;
-    }
-
-    public void inputUsername(Property property) {
-        while (true) {
-            System.out.print("Enter username: ");
-            String username = scanner.nextLine();
-
-            if (!usernameExists(username)) {
-                System.out.println("Username doesn't exist.");
-                continue;
-            }
-
-            try {
-                property.setUsername(username);
-                return;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
+    public PropertyManager(Session session, Scanner scanner) {
+        this.session = session;
+        this.scanner = scanner;
     }
 
     private void inputAddress(Property property) {
@@ -68,6 +46,7 @@ public class PropertyManager {
         Integer choice;
 
         while (true) {
+            // change this bc mmmmm consistency
             System.out.println("Please pick from the following property types:\n1. House\n2. Flat");
             System.out.print("Enter choice (1/2): ");
 
@@ -83,11 +62,11 @@ public class PropertyManager {
             if (choice == 1) {
                 property.setPropertyType("house");
                 System.out.println("Property type set.");
-                break;
+                return;
             } else if (choice == 2) {
                 property.setPropertyType("flat");
                 System.out.println("Property type set.");
-                break;
+                return;
             } else {
                 System.out.println("Please enter either 1 or 2.");
             }
@@ -133,7 +112,7 @@ public class PropertyManager {
         System.out.println("\nCreating new property");
 
         property.generatePropertyID();
-        inputUsername(property);
+        property.setUsername(session.getCurrentUser().getUsername());
         inputAddress(property);
         inputDescription(property);
         inputPropertyType(property);
@@ -173,7 +152,9 @@ public class PropertyManager {
         }
     }
 
-    public void editProperty(String username){
+    public void editProperty(){
+        User currentUser = session.getCurrentUser();
+        String username = currentUser.getUsername();
         List<Property> userProperties = getUserProperties(username);
 
         listProperties(userProperties);
@@ -232,7 +213,8 @@ public class PropertyManager {
         }
     }
     
-    public void deleteProperty(String username) {
+    public void deleteProperty() {
+        String username = session.getCurrentUser().getUsername();
         List<Property> userProperties = getUserProperties(username);
 
         if (userProperties.isEmpty()) {
@@ -298,16 +280,6 @@ public class PropertyManager {
         }
     }
 
-    private String promptUsername() {
-        while (true) {
-            System.out.print("Enter username: ");
-            String username = scanner.nextLine();
-            if (usernameExists(username)) return username;
-            System.out.println("Username doesn't exist.");
-        }
-    }
-
-
     public void start() {
         while (true) {
             System.out.println("\nProperty Management System");
@@ -325,14 +297,15 @@ public class PropertyManager {
                     newProperty();
                     break;
                 case 2:
-                    // get current username
-                    listProperties(getUserProperties(promptUsername()));
+                    listProperties(
+                        getUserProperties(session.getCurrentUser().getUsername())
+                    );
                     break;
                 case 3:
-                    editProperty(promptUsername());
+                    editProperty();
                     break;
                 case 4:
-                    deleteProperty(promptUsername());
+                    deleteProperty();
                     break;
                 case 5:
                     System.out.println("Exiting...");
@@ -342,10 +315,5 @@ public class PropertyManager {
                     break;
             }
         }
-    }
-
-    public static void main(String[] args) {
-        PropertyManager manager = new PropertyManager();
-        manager.start();
     }
 }

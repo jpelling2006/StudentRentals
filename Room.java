@@ -1,6 +1,10 @@
+import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Room {
+    private static final AtomicInteger idGenerator = new AtomicInteger(1);
+
     private Integer roomID;
     private Integer propertyID;
     private String roomType;
@@ -8,17 +12,14 @@ public class Room {
     private Boolean billsIncluded;
     private String location; // as in where it is in the house, what floor etc
     private String amenities;
-    private Date startDate;
-    private Date endDate;
-    // photos?
+    private LocalDate startDate;
+    private LocalDate endDate;
 
-    public Integer getID() { return roomID; }
-    public void setID(Integer roomID) {
-        if (roomID == null || roomID <= 0) {
-            throw new IllegalArgumentException("RoomID must be a positive integer.");
-        }
-        this.roomID = roomID;
+    public Integer getRoomID() { return roomID; }
+    public void setRoomID() {
+        this.roomID = idGenerator.getAndIncrement();
     }
+    public void generateRoomID() { setRoomID(); }
 
     public Integer getPropertyID() { return propertyID; }
     public void setPropertyID(Integer propertyID) {
@@ -69,9 +70,29 @@ public class Room {
     }
 
     // check if dates have passed
-    public Date getStartDate() { return startDate; }
-    public void setStartDate(Date startDate) { this.startDate = startDate; }
+    public LocalDate getStartDate() { return startDate; }
+    public void setStartDate(LocalDate startDate) {
+        validateDate(startDate, this.endDate);
+        this.startDate = startDate;
+    }
 
-    public Date getEndDate() { return endDate; }
-    public void setEndDate(Date endDate) { this.endDate = endDate; }
+    public LocalDate getEndDate() { return endDate; }
+    public void setEndDate(LocalDate endDate) { 
+        validateDate(this.startDate, endDate);
+        this.endDate = endDate;
+    }
+
+    private void validateDate(LocalDate start, LocalDate end) {
+        LocalDate today = LocalDate.now();
+
+        if (start != null && start.isBefore(today)) {
+            throw new IllegalArgumentException("Start date cannot be in the past.");
+        }
+        if (end != null && end.isBefore(today)) {
+            throw new IllegalArgumentException("End date cannot be in the past.");
+        }
+        if (start != null && end != null && end.isBefore(start)) {
+            throw new IllegalArgumentException("End date cannot be before start date.");
+        }
+    }
 }

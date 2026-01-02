@@ -5,7 +5,13 @@ import java.util.Scanner;
 public class UserManager {
     private List<User> users = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
-    private User loggedInUser = null;
+    private Session session;
+
+    public UserManager(List<User> users, Session session, Scanner scanner) {
+        this.users = users;
+        this.session = session;
+        this.scanner = scanner;
+    }
 
     // put into helpers class
     private boolean usernameExists(String username) {
@@ -184,7 +190,7 @@ public class UserManager {
             try {
                 if (user.getUsername().equalsIgnoreCase(username) &&
                     user.verifyPassword(rawPassword)) {
-                        loggedInUser = user;
+                        session.login(user);
                         System.out.println("Login successful.");
                         userMenu();
                     return;
@@ -198,13 +204,12 @@ public class UserManager {
     }
 
     private void viewMyDetails() {
-        User user = loggedInUser;
-
-        if (loggedInUser == null) {
+        if (!session.isLoggedIn()) {
             System.out.println("No user logged in.");
             return;
         }
 
+        User user = session.getCurrentUser();
 
         System.out.println("\nYour Details:");
         System.out.println("Username: " + user.getUsername());
@@ -219,10 +224,12 @@ public class UserManager {
     }
 
     public void editMyDetails() {
-        if (loggedInUser == null) {
+        if (!session.isLoggedIn()) {
             System.out.println("No user logged in.");
             return;
         }
+
+        User user = session.getCurrentUser();
 
         while (true) {
             System.out.println("\nEdit My Details");
@@ -230,7 +237,7 @@ public class UserManager {
             System.out.println("2. Phone");
             System.out.println("3. Password");
 
-            if (loggedInUser.getUserType().equals("student")) {
+            if (user.getUserType().equals("student")) {
                 System.out.println("4. Campus ID");
                 System.out.println("5. Student Number");
                 System.out.println("6. Cancel");
@@ -242,21 +249,21 @@ public class UserManager {
             int choice = scanner.nextInt();
             scanner.nextLine();
 
-            if (loggedInUser.getUserType().equals("student")) {
+            if (user.getUserType().equals("student")) {
                 switch (choice) {
-                    case 1 -> inputEmail(loggedInUser);
-                    case 2 -> inputPhone(loggedInUser);
-                    case 3 -> inputPassword(loggedInUser);
-                    case 4 -> inputCampusID(loggedInUser);
-                    case 5 -> inputStudentNumber(loggedInUser);
+                    case 1 -> inputEmail(user);
+                    case 2 -> inputPhone(user);
+                    case 3 -> inputPassword(user);
+                    case 4 -> inputCampusID(user);
+                    case 5 -> inputStudentNumber(user);
                     case 6 -> { return; }
                     default -> System.out.println("Invalid option.");
                 }
             } else {
                 switch (choice) {
-                    case 1 -> inputEmail(loggedInUser);
-                    case 2 -> inputPhone(loggedInUser);
-                    case 3 -> inputPassword(loggedInUser);
+                    case 1 -> inputEmail(user);
+                    case 2 -> inputPhone(user);
+                    case 3 -> inputPassword(user);
                     case 4 -> { return; }
                     default -> System.out.println("Invalid option.");
                 }
@@ -266,7 +273,9 @@ public class UserManager {
 
     private void userMenu() {
         while (true) {
-            System.out.println("\nWelcome, " + loggedInUser.getUsername());
+            User user = session.getCurrentUser();
+
+            System.out.println("\nWelcome, " + user.getUsername());
             System.out.println("1. View my details");
             System.out.println("2. Edit my details");
             System.out.println("3. Logout");
@@ -279,7 +288,7 @@ public class UserManager {
                 case 1 -> viewMyDetails();
                 case 2 -> editMyDetails();
                 case 3 -> {
-                    loggedInUser = null;
+                    session.logout();
                     System.out.println("Logged out.");
                     return;
                 }
@@ -325,11 +334,5 @@ public class UserManager {
                 default -> System.out.println("Invalid choice.");
             }
         }
-    }
-
-
-    public static void main(String[] args) {
-        UserManager manager = new UserManager();
-        manager.start();
     }
 }
