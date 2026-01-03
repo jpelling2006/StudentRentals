@@ -123,6 +123,7 @@ public class PropertyManager {
         System.out.println("Property created successfully");
     } 
 
+    // get current user
     public List<Property> getUserProperties(String username) {
         List<Property> userProperties = new ArrayList<>();
 
@@ -145,14 +146,14 @@ public class PropertyManager {
         for (int i = 0; i < userProperties.size(); i++) {
             Property property = userProperties.get(i);
             System.out.println(
-                (i+1) + ". "
+                (i+1) + ") "
                 + property.getAddress() + " ("
-                + property.getPropertyType() + ") "
+                + property.getPropertyType() + ")"
             );
         }
     }
 
-    public void editProperty(){
+    public void editProperty() {
         User currentUser = session.getCurrentUser();
         String username = currentUser.getUsername();
         List<Property> userProperties = getUserProperties(username);
@@ -222,18 +223,9 @@ public class PropertyManager {
             return;
         }
 
-        // display properties
-        System.out.println("\nYour properties:");
-        for (int i = 0; i < userProperties.size(); i++) {
-            Property property = userProperties.get(i);
-            System.out.println(
-                (i + 1) + ". " +
-                property.getAddress() + " (" +
-                property.getPropertyType() + ")"
-            );
-        }
+        listProperties(userProperties);
 
-        // select property
+        // select property - maybe make this a helper since its used sm
         int choice;
         while (true) {
             System.out.print("Select a property to delete (1-" + userProperties.size() + "): ");
@@ -251,13 +243,11 @@ public class PropertyManager {
 
         Property selectedProperty = userProperties.get(choice - 1);
 
-        // Confirm deletion
         if (!confirmDeletion(selectedProperty)) {
             System.out.println("Deletion cancelled.");
             return;
         }
 
-        // Remove from main list
         properties.remove(selectedProperty);
         System.out.println("Property deleted successfully.");
     }

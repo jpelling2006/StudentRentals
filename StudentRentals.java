@@ -11,6 +11,7 @@ public class StudentRentals {
 
         UserManager userManager = new UserManager(users, session, scanner);
         PropertyManager propertyManager = new PropertyManager(session, scanner);
+        RoomManager roomManager = new RoomManager(propertyManager, session, scanner);
 
         while (true) {
             if (!session.isLoggedIn()) {

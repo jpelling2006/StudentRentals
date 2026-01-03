@@ -5,45 +5,47 @@ import java.util.Scanner;
 
 public class RoomManager {
     // add users to maybe check if they own the property? *shrugs*
-    private List<Property> properties = new ArrayList<>();
     private List<Room> rooms = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
+    private Session session;
+    private PropertyManager propertyManager;
 
-    private boolean propertyIDExists(Integer propertyID) {
-        for (Property property : properties) {
-            if (propertyID == property.getPropertyID()) { return true; }
-        }
-        return false;
+    public RoomManager(PropertyManager propertyManager, Session session, Scanner scanner) {
+        this.propertyManager = propertyManager;
+        this.session = session;
+        this.scanner = scanner;
     }
 
     public void inputProperty(Room room) {
+        List<Property> userProperties = propertyManager.getUserProperties(session.getCurrentUser().getUsername());
+
+        if (userProperties.isEmpty()) {
+            System.out.println("You have no properties.");
+            return;
+        }
+
+        for (int i = 0; i < userProperties.size(); i++) {
+            System.out.println((i + 1) + ") " + userProperties.get(i).getAddress());
+        }
+
+        int choice;
         while (true) {
-            // update later
-            System.out.print("Enter property ID: ");
-            
-            Integer propertyID;
+            System.out.print("Select property: ");
 
             try {
-                propertyID = Integer.parseInt(scanner.nextLine());
+                choice = Integer.parseInt(scanner.nextLine());
+                if (choice < 1 || choice > userProperties.size()) {
+                    System.out.println("Invalid selection.");
+                    continue;
+                }
+                break;
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a whole number.");
-                continue;
-            }
-
-            // add user checking too
-            if (!propertyIDExists(propertyID)) {
-                System.out.println("Property doesn't exist.");
-                continue;
-            }
-
-            try {
-                room.setPropertyID(propertyID);
-                return;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-                continue;
             }
         }
+
+        Property selectedProperty = userProperties.get(choice - 1);
+        room.setPropertyID(selectedProperty.getPropertyID());
     }
 
     public void inputRoomType(Room room) {
@@ -184,6 +186,11 @@ public class RoomManager {
     }
 
     public void newRoom() {
+        if (!session.getCurrentUser().getUserType().equals("homeowner")) {
+            System.out.println("Only homeowners can add rooms.");
+            return;
+        }
+
         Room room = new Room();
 
         System.out.println("\nCreating new room");
@@ -202,8 +209,188 @@ public class RoomManager {
         System.out.println("Room created successfully");
     }
 
-    // get uh back to this
-    // public List<Room> getUserRooms(String username) {}
+    public List<Room> getUserRooms() {
+        String username = session.getCurrentUser().getUsername();
+        
+        List<Room> userRooms = new ArrayList<>();
 
-    
+        List<Property> userProperties = propertyManager.getUserProperties(username);
+
+        for (Property property : userProperties) {
+            for (Room room : rooms) {
+                if (room.getPropertyID().equals(property.getPropertyID())) { userRooms.add(room); }
+            }
+        }
+
+        return userRooms;
+    }
+
+    // edit late to group by room mayhaps
+    public void listRooms(List<Room> userRooms) {
+        if (userRooms.isEmpty()) {
+            System.out.println("You have no rooms.");
+            return;
+        }
+
+        System.out.println("\nYour rooms:");
+        for (int i = 0; i < userRooms.size(); i++) {
+            Room room = userRooms.get(i);
+            System.out.println(
+                (i + 1) + ") " // get property name
+                + room.getLocation() + " ("
+                + room.getRoomType() + ")"
+            );
+        }
+    }    
+
+    public void editRoom() {
+        List<Room> userRooms = getUserRooms();
+        listRooms(userRooms);
+
+        // select room to edit
+        int choice;
+        while (true) {
+            System.out.print("Select a room to edit (1-" + userRooms.size() + "): ");
+            try {
+                choice = Integer.parseInt(scanner.nextLine()); // do this for others
+                if (choice < 1 || choice > userRooms.size()) {
+                    System.out.println("Invalid selection.");
+                    continue;
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
+            }
+        }
+
+        Room selectedRoom = userRooms.get(choice - 1);
+        editRoomMenu(selectedRoom);
+    }
+
+    private void editRoomMenu(Room room) {
+        while (true) {
+            System.out.println("\nEditing room: + (property name) " + room.getLocation());
+            System.out.println("1. Room Type");
+            System.out.println("2. Rent price");
+            System.out.println("3. Bills included");
+            System.out.println("4. Room location");
+            System.out.println("5. Amenities");
+            System.out.println("6. Availability start date");
+            System.out.println("7. Availability end date");
+            System.out.println("8. Cancel");
+
+            System.out.print("Choose a field to edit: ");
+            
+            try {
+                int choice = Integer.parseInt(scanner.nextLine());
+
+                switch (choice) {
+                    case 1 -> inputRoomType(room);
+                    case 2 -> inputRentPrice(room);
+                    case 3 -> inputBillsIncluded(room);
+                    case 4 -> inputLocation(room);
+                    case 5 -> inputAmenities(room);
+                    case 6 -> inputStartDate(room);
+                    case 7 -> inputEndDate(room);
+                    case 8 -> {
+                        System.out.println("Edit cancelled.");
+                        return;
+                    }
+                    default -> System.out.println("Invalid option.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a whole number.");
+            }
+        }
+    }
+
+    public void deleteRoom() {
+        List<Room> userRooms = getUserRooms();
+
+        if (userRooms.isEmpty()) {
+            System.out.println("You have no rooms to delete");
+            return;
+        }
+
+        listRooms(userRooms);
+
+        // same thing, make a helper
+        int choice;
+        while (true) {
+            System.out.print("Select a room to edit (1-" + userRooms.size() + "): ");
+            try {
+                choice = Integer.parseInt(scanner.nextLine()); // do this for others
+                if (choice < 1 || choice > userRooms.size()) {
+                    System.out.println("Invalid selection.");
+                    continue;
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
+            }
+        }
+
+        Room selectedRoom = userRooms.get(choice - 1);
+
+        if (!confirmDeletion(selectedRoom)) {
+            System.out.println("Deletion cancelled");
+            return;
+        }
+
+        rooms.remove(selectedRoom);
+        System.out.println("Room deleted successfully.");
+    }
+
+    private boolean confirmDeletion(Room room) {
+        while (true) {
+            System.out.println("\nAre you sure you want to delete this room?");
+            System.out.println("address" + " (" + room.getLocation() + ", " + room.getRoomType() + ")");
+            System.out.print("Type Y to confirm or N to cancel: ");
+
+            String input = scanner.nextLine().trim().toUpperCase();
+
+            if (input.equals("Y")) {
+                return true;
+            } else if (input.equals("N")) {
+                return false;
+            } else {
+                System.out.println("Please enter Y or N.");
+            }
+        }
+    }
+
+    public void start() {
+        while (true) {
+            System.out.println("\nRoom Management System");
+            System.out.println("1. Create room");
+            System.out.println("2. List rooms");
+            System.out.println("3. Edit rooms");
+            System.out.println("4. Delete rooms");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    newRoom();
+                    break;
+                case 2:
+                    listRooms(getUserRooms());
+                    break;
+                case 3:
+                    editRoom();
+                    break;
+                case 4:
+                    deleteRoom();
+                    break;
+                case 5:
+                    System.out.println("Exiting...");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please select an integer between 1-5.");
+                    break;
+            }
+        }
+    }
 }
