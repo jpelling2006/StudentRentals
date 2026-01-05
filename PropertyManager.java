@@ -43,21 +43,12 @@ public class PropertyManager {
     }
 
     private void inputPropertyType(Property property) {
-        Integer choice;
-
         while (true) {
-            // change this bc mmmmm consistency
-            System.out.println("Please pick from the following property types:\n1. House\n2. Flat");
-            System.out.print("Enter choice (1/2): ");
+            System.out.println("Please pick from the following property types:");
+            System.out.println("1. House");
+            System.out.println("2. Flat");
 
-            String input = scanner.nextLine();
-
-            try {
-                choice = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a whole number.");
-                continue;
-            }
+            Integer choice = Helpers.readInt(scanner, "Enter choice (1/2): ");
 
             if (choice == 1) {
                 property.setPropertyType("house");
@@ -75,14 +66,11 @@ public class PropertyManager {
 
     private void inputBedrooms(Property property) {
         while (true) {
-            System.out.print("Number of bedrooms: ");
+            Integer bedrooms = Helpers.readInt(scanner, "Number of bedrooms: ");
             try {
-                int bedrooms = Integer.parseInt(scanner.nextLine());
                 property.setBedrooms(bedrooms);
                 System.out.println("Bedrooms set.");
                 return;
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
@@ -91,14 +79,11 @@ public class PropertyManager {
 
     private void inputBathrooms(Property property) {
         while (true) {
-            System.out.print("Number of bathrooms: ");
+            Integer bathrooms = Helpers.readInt(scanner, "Number of bathrooms: ");
             try {
-                int bathrooms = Integer.parseInt(scanner.nextLine());
                 property.setBathrooms(bathrooms);
                 System.out.println("Bathrooms set.");
                 return;
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
@@ -123,7 +108,10 @@ public class PropertyManager {
         System.out.println("Property created successfully");
     } 
 
-    // get current user
+    public List<Property> getAllProperties() {
+        return properties;
+    }
+
     public List<Property> getUserProperties(String username) {
         List<Property> userProperties = new ArrayList<>();
 
@@ -134,6 +122,13 @@ public class PropertyManager {
         }
 
         return userProperties;
+    }
+
+    public Property getPropertyByID(Integer propertyID) {
+        for (Property property : properties) {
+            if (property.getPropertyID().equals(propertyID)) { return property; }
+        }
+        return null;
     }
 
     public void listProperties(List<Property> userProperties) {
@@ -158,23 +153,15 @@ public class PropertyManager {
         String username = currentUser.getUsername();
         List<Property> userProperties = getUserProperties(username);
 
+        if (userProperties.isEmpty()) {
+            System.out.println("You have no properties to edit.");
+            return;
+        }
+
+
         listProperties(userProperties);
 
-        // select property to edit
-        int choice;
-        while (true) {
-            System.out.print("Select a property to edit (1-" + userProperties.size() + "): ");
-            try {
-                choice = Integer.parseInt(scanner.nextLine()); // do this for others
-                if (choice < 1 || choice > userProperties.size()) {
-                    System.out.println("Invalid selection.");
-                    continue;
-                }
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
-            }
-        }
+        int choice = Helpers.selectFromList(scanner, userProperties.size(), "Select a property to edit");
 
         Property selectedProperty = userProperties.get(choice - 1);
         editPropertyMenu(selectedProperty);
@@ -225,21 +212,7 @@ public class PropertyManager {
 
         listProperties(userProperties);
 
-        // select property - maybe make this a helper since its used sm
-        int choice;
-        while (true) {
-            System.out.print("Select a property to delete (1-" + userProperties.size() + "): ");
-            try {
-                choice = Integer.parseInt(scanner.nextLine());
-                if (choice < 1 || choice > userProperties.size()) {
-                    System.out.println("Invalid selection.");
-                    continue;
-                }
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
-            }
-        }
+        int choice = Helpers.selectFromList(scanner, userProperties.size(), "Select a property to delete");
 
         Property selectedProperty = userProperties.get(choice - 1);
 
@@ -253,22 +226,12 @@ public class PropertyManager {
     }
 
     private boolean confirmDeletion(Property property) {
-        while (true) {
-            System.out.println("\nAre you sure you want to delete this property?");
-            System.out.println(property.getAddress() + " (" + property.getPropertyType() + ")");
-            System.out.print("Type Y to confirm or N to cancel: ");
+        System.out.println("\nAre you sure you want to delete this property?");
+        System.out.println(property.getAddress() + " (" + property.getPropertyType() + ")");
 
-            String input = scanner.nextLine().trim().toUpperCase();
-
-            if (input.equals("Y")) {
-                return true;
-            } else if (input.equals("N")) {
-                return false;
-            } else {
-                System.out.println("Please enter Y or N.");
-            }
-        }
+        return Helpers.confirm(scanner);
     }
+
 
     public void start() {
         while (true) {
@@ -278,9 +241,7 @@ public class PropertyManager {
             System.out.println("3. Edit properties");
             System.out.println("4. Delete properties");
             System.out.println("5. Exit");
-            System.out.print("Enter your choice: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            Integer choice = Helpers.readInt(scanner, "Enter your choice: ");
 
             switch (choice) {
                 case 1:

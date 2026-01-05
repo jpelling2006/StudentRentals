@@ -12,6 +12,7 @@ public class StudentRentals {
         UserManager userManager = new UserManager(users, session, scanner);
         PropertyManager propertyManager = new PropertyManager(session, scanner);
         RoomManager roomManager = new RoomManager(propertyManager, session, scanner);
+        ReviewManager reviewManager = new ReviewManager(propertyManager, session, scanner);
 
         while (true) {
             if (!session.isLoggedIn()) {
@@ -42,7 +43,8 @@ public class StudentRentals {
                         session.getCurrentUser().getUsername());
                 System.out.println("1. My Account");
                 System.out.println("2. Properties");
-                System.out.println("3. Logout");
+                System.out.println("3. Rooms");
+                System.out.println("4. Logout");
 
                 int choice = Integer.parseInt(scanner.nextLine());
 
@@ -55,7 +57,14 @@ public class StudentRentals {
                             propertyManager.start();
                         }
                     }
-                    case 3 -> session.logout();
+                    case 3 -> {
+                        if (!session.getCurrentUser().getUserType().equals("homeowner")) {
+                            System.out.println("Only homeowners can manage rooms.");
+                        } else {
+                            roomManager.start();
+                        }
+                    }
+                    case 4 -> session.logout();
                 }
             }
         }

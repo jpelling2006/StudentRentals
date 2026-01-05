@@ -16,7 +16,7 @@ public class Room {
     private LocalDate endDate;
 
     public Integer getRoomID() { return roomID; }
-    public void setRoomID() {
+    private void setRoomID() {
         this.roomID = idGenerator.getAndIncrement();
     }
     public void generateRoomID() { setRoomID(); }

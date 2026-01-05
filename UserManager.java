@@ -21,6 +21,10 @@ public class UserManager {
         return false;
     }
 
+    private boolean isStudent(User user) {
+        return user.getUserType().equals("student");
+    }
+
     public void inputUsername(User user) {
         while (true) {
             System.out.print("\nEnter username: ");
@@ -130,14 +134,12 @@ public class UserManager {
 
     public void inputCampusID(User user) {
         while (true) {
-            System.out.print("Enter campus ID: ");
+            Integer campusID = Helpers.readInt(scanner, "Enter campus ID: ");
+
             try {
-                int campusID = Integer.parseInt(scanner.nextLine());
                 user.setCampusID(campusID);
                 System.out.println("Campus ID set.");
                 return;
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
@@ -170,7 +172,7 @@ public class UserManager {
         inputEmail(user);
         inputPhone(user);
         inputPassword(user);
-        if (user.getUserType().equals("student")) {
+        if (isStudent(user)) {
             inputCampusID(user);
             inputStudentNumber(user);
         }
@@ -217,7 +219,7 @@ public class UserManager {
         System.out.println("Email: " + user.getEmail());
         System.out.println("Phone: " + user.getPhone());
 
-        if (user.getUserType().equals("student")) {
+        if (isStudent(user)) {
             System.out.println("Campus ID: " + user.getCampusID());
             System.out.println("Student number: " + user.getStudentNumber());
         }
@@ -237,17 +239,14 @@ public class UserManager {
             System.out.println("2. Phone");
             System.out.println("3. Password");
 
-            if (user.getUserType().equals("student")) {
+            if (isStudent(user)) {
                 System.out.println("4. Campus ID");
                 System.out.println("5. Student Number");
                 System.out.println("6. Cancel");
             } else {
                 System.out.println("4. Cancel");
             }
-
-            System.out.print("Choose option: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            Integer choice = Helpers.readInt(scanner, "Enter choice: ");
 
             if (user.getUserType().equals("student")) {
                 switch (choice) {
@@ -297,7 +296,6 @@ public class UserManager {
         }
     }
 
-    // forgot password operation
     public void forgetPassword() {
         System.out.print("Enter username: ");
         String username = scanner.nextLine();

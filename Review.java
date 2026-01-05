@@ -1,18 +1,20 @@
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Review {
+    private static final AtomicInteger idGenerator = new AtomicInteger(1);
+
     private Integer reviewID;
     private Integer propertyID; // this makes more sense icl
-    private Integer userID; // students only!! :3
+    private String username; // students only!! :3
     private Integer stars; // (LIKE IN TIME??) 1-5, should also calculate average or wtv
     private String title;
     private String content;
 
     public Integer getReviewID() { return reviewID; }
-    public void setReviewID(Integer reviewID) { 
-        if (reviewID == null || reviewID <= 0) {
-            throw new IllegalArgumentException("ReviewID must be a positive integer.");
-        }
-        this.reviewID = reviewID;
+    private void setReviewID(Integer reviewID) { 
+        this.reviewID = idGenerator.getAndIncrement();
     }
+    public void generateReviewID() { setReviewID(reviewID); }
 
     public Integer getPropertyID() { return propertyID; }
     public void setPropertyID(Integer propertyID) {
@@ -22,12 +24,13 @@ public class Review {
         this.propertyID = propertyID;
     }
 
-    public Integer getUserID() { return userID; }
-    public void setUserID(Integer userID) {
-        if (userID == null || userID <= 0) {
-            throw new IllegalArgumentException("UserID must be a positive integer.");
+    public String getUsername() { return username; }
+    public void setUsername(String username) {
+        // add regex
+        if (username == null || username.length() > 32) {
+            throw new IllegalArgumentException("Username must be up to 32 characters.");
         }
-        this.userID = userID;
+        this.username = username;
     }
 
     public Integer getStars() { return stars; }
