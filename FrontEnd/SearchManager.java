@@ -27,11 +27,15 @@ public class SearchManager {
     }
 
     private boolean inPriceRange(Room room, Double minPrice, Double maxPrice) {
-        return room.getRentPrice() > minPrice && room.getRentPrice() < maxPrice;
+        return room.getRentPrice() >= minPrice && room.getRentPrice() <= maxPrice;
     }
 
     private boolean correctRoomType(Room room, String roomType) {
-        return room.getRoomType().equals(roomType);
+        return room.getRoomType().equalsIgnoreCase(roomType);
+    }
+
+    private boolean matchesLocation(Property property, String cityOrArea) {
+        return cityOrArea == null || property.getCity().equalsIgnoreCase(cityOrArea);
     }
 
     // FOR each room
@@ -51,23 +55,44 @@ public class SearchManager {
         LocalDate moveOut,
         String roomType
     ) {
-        List<Room> roomResults = new ArrayList<>();
+        List<Room> results = new ArrayList<>();
 
-        for (Room room : rooms) {
-            if (!isRoomAvailable(room, moveIn, moveOut)) { continue; }
-            if (!inPriceRange(room, minPrice, maxPrice)) { continue; }
-            if (!correctRoomType(room, roomType)) { continue; }
+        for (Property property : propertyManager.getAllProperties()) {
+            if (!matchesLocation(property, cityOrArea)) { continue; }
 
-            Property property = propertyManager.getPropertyByID(room.getPropertyID());
+            for (Room room : property.getRooms()) {
+                if (!isRoomAvailable(room, moveIn, moveOut)) { continue; }
+                if (!inPriceRange(room, minPrice, maxPrice)) { continue; }
+                if (!correctRoomType(room, roomType)) { continue; }
 
-            // add city to property mayhaps
-            roomResults.add(room);
+                results.add(room);
+            }
         }
+
+        return results;
     }
 
     // 1. £120/week - Single room - City Centre
     public void displaySearchResults(List<Room> rooms) {
+        if (rooms.isEmpty()) {
+            System.out.println("No rooms match your search criteria.");
+            return;
+        }
 
+        System.out.println("\nSearch results");
+
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
+            Property property = room.getProperty();
+
+            System.out.println(
+                (i + 1) + ". £" + room.getRentPrice() + "/week - "
+                + property.getAverageRating() + " stars - "
+                + room.getLocation() + " - "
+                + property.getCity() + " - "
+                + property.getAddress()
+            );
+        }
     }
 
     public Room selectRoom() {
@@ -76,6 +101,16 @@ public class SearchManager {
     }
 
     public void viewRoomDetails(Room room) {
+        Property property = room.getProperty();
 
+        System.out.println("\nRoom Details");
+        System.out.println("Property: " + property.getAddress());
+        System.out.println("City: " + property.getCity());
+        System.out.println("Room type: " + room.getRoomType());
+        System.out.println("Rent: £" + room.getRentPrice() + "/week");
+        System.out.println("Bills included: " + (room.getBillsIncluded() ? "Yes" : "No"));
+        System.out.println("Amenities: " + room.getAmenities());
+        System.out.println("Available from: " + room.getStartDate());
+        System.out.println("Available until: " + room.getEndDate());
     }
 }

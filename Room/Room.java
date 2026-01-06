@@ -1,13 +1,18 @@
 package Room;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import Booking.Booking;
+import Properties.Property;
 
 public class Room {
     private static final AtomicInteger idGenerator = new AtomicInteger(1);
 
     private Integer roomID;
-    private Integer propertyID;
+    private Property property;
     private String roomType;
     private Double rentPrice;
     private Boolean billsIncluded;
@@ -15,19 +20,19 @@ public class Room {
     private String amenities;
     private LocalDate startDate;
     private LocalDate endDate;
+    private List<Booking> bookings = new ArrayList<>();
 
     public Integer getRoomID() { return roomID; }
-    private void setRoomID() {
+    public void generateRoomID() {
         this.roomID = idGenerator.getAndIncrement();
     }
-    public void generateRoomID() { setRoomID(); }
 
-    public Integer getPropertyID() { return propertyID; }
-    public void setPropertyID(Integer propertyID) {
-        if (propertyID == null || propertyID <= 0) {
-            throw new IllegalArgumentException("PropertyID must be a positive integer.");
+    public Property getProperty() { return property; }
+    public void setProperty(Property property) {
+        if (property == null) {
+            throw new IllegalArgumentException("Property required.");
         }
-        this.propertyID = propertyID;
+        this.property = property;
     }
 
     public String getRoomType() { return roomType; }
@@ -83,6 +88,10 @@ public class Room {
         this.endDate = endDate;
     }
 
+    public List<Booking> getBookings() { return bookings; }
+    public void addBooking(Booking booking) { bookings.add(booking); }
+    public void removeBooking(Booking booking) { bookings.remove(booking); }
+
     private void validateDate(LocalDate start, LocalDate end) {
         LocalDate today = LocalDate.now();
 
@@ -95,5 +104,12 @@ public class Room {
         if (start != null && end != null && end.isBefore(start)) {
             throw new IllegalArgumentException("End date cannot be before start date.");
         }
+    }
+
+    public boolean completedBookingUser(String username) {
+        for (Booking booking : bookings) {
+            if (booking.getUsername().equalsIgnoreCase(username)) { return true; }
+        }
+        return false;
     }
 }

@@ -10,7 +10,6 @@ import Properties.*;
 import FrontEnd.Session;
 
 public class RoomManager {
-    private List<Room> rooms = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
     private Session session;
     private PropertyManager propertyManager;
@@ -36,7 +35,7 @@ public class RoomManager {
         int choice = Helpers.selectFromList(scanner, userProperties.size(), "Select property");
 
         Property selectedProperty = userProperties.get(choice - 1);
-        room.setPropertyID(selectedProperty.getPropertyID());
+        room.setProperty(selectedProperty);
     }
 
     public void inputRoomType(Room room) {
@@ -157,7 +156,7 @@ public class RoomManager {
 
         room.generateRoomID();
         inputProperty(room);
-        if (room.getPropertyID() == null) {
+        if (room.getProperty() == null) {
             System.out.println("Room creation cancelled.");
             return;
         }
@@ -169,21 +168,16 @@ public class RoomManager {
         inputStartDate(room);
         inputEndDate(room);
 
-        rooms.add(room);
+        room.getProperty().addRoom(room);
         System.out.println("Room created successfully");
     }
 
     public List<Room> getUserRooms() {
-        String username = session.getCurrentUser().getUsername();
-        
         List<Room> userRooms = new ArrayList<>();
 
-        List<Property> userProperties = propertyManager.getUserProperties(username);
-
-        for (Property property : userProperties) {
-            for (Room room : rooms) {
-                if (room.getPropertyID().equals(property.getPropertyID())) { userRooms.add(room); }
-            }
+        for (
+            Property property : propertyManager.getUserProperties(session.getCurrentUser().getUsername())) {
+            userRooms.addAll(property.getRooms());
         }
 
         return userRooms;
@@ -198,11 +192,10 @@ public class RoomManager {
         System.out.println("\nYour rooms:");
         for (int i = 0; i < userRooms.size(); i++) {
             Room room = userRooms.get(i);
-            Property property = propertyManager.getPropertyByID(room.getPropertyID());
-            String address = (property != null) ? property.getAddress() : "Unknown property";
+            Property property = room.getProperty();
             System.out.println(
                 (i + 1) + ". "
-                + address + " - "
+                + property.getAddress() + " - "
                 + room.getLocation() + " ("
                 + room.getRoomType() + ")"
             );
@@ -227,7 +220,7 @@ public class RoomManager {
 
     private void editRoomMenu(Room room) {
         while (true) {
-            Property property = propertyManager.getPropertyByID(room.getPropertyID());
+            Property property = room.getProperty();
             String address = (property != null) ? property.getAddress() : "Unknown property";
 
             System.out.println(
@@ -282,12 +275,12 @@ public class RoomManager {
             return;
         }
 
-        rooms.remove(selectedRoom);
+        selectedRoom.getProperty().removeRoom(selectedRoom);
         System.out.println("Room deleted successfully.");
     }
 
     private boolean confirmDeletion(Room room) {
-        Property property = propertyManager.getPropertyByID(room.getPropertyID());
+        Property property = room.getProperty();
         String address = (property != null) ? property.getAddress() : "Unknown property";
 
         System.out.println("\nAre you sure you want to delete this room?");

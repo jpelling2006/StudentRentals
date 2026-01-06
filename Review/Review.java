@@ -2,28 +2,29 @@ package Review;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import Properties.Property;
+
 public class Review {
     private static final AtomicInteger idGenerator = new AtomicInteger(1);
 
     private Integer reviewID;
-    private Integer propertyID; // this makes more sense icl
+    private Property property;
     private String username;
-    private Integer stars; // (LIKE IN TIME??) 1-5, should also calculate average or wtv
+    private Integer stars;
     private String title;
     private String content;
 
     public Integer getReviewID() { return reviewID; }
-    private void setReviewID(Integer reviewID) { 
+    public void generateReviewID() {
         this.reviewID = idGenerator.getAndIncrement();
     }
-    public void generateReviewID() { setReviewID(reviewID); }
 
-    public Integer getPropertyID() { return propertyID; }
-    public void setPropertyID(Integer propertyID) {
-        if (propertyID == null || propertyID <= 0) {
-            throw new IllegalArgumentException("PropertyID must be a positive integer.");
+    public Property getProperty() { return property; }
+    public void setProperty(Property property) {
+        if (property == null) {
+            throw new IllegalArgumentException("Property required.");
         }
-        this.propertyID = propertyID;
+        this.property = property;
     }
 
     public String getUsername() { return username; }

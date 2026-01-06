@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import FrontEnd.Session;
 import Helpers.Helpers;
+import User.User;
 
 public class PropertyManager {
     private List<Property> properties = new ArrayList<>();
@@ -15,6 +16,21 @@ public class PropertyManager {
     public PropertyManager(Session session, Scanner scanner) {
         this.session = session;
         this.scanner = scanner;
+    }
+
+    private void inputCity(Property property) {
+        while (true) {
+            System.out.print("New city");
+            String city = scanner.nextLine();
+
+            try {
+                property.setCity(city);
+                System.out.println("City set.");
+                return;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     private void inputAddress(Property property) {
@@ -103,6 +119,7 @@ public class PropertyManager {
 
         property.generatePropertyID();
         property.setUsername(session.getCurrentUser().getUsername());
+        inputCity(property);
         inputAddress(property);
         inputDescription(property);
         inputPropertyType(property);

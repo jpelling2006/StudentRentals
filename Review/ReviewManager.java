@@ -6,10 +6,10 @@ import java.util.Scanner;
 
 import Helpers.*;
 import Properties.*;
+import Room.Room;
 import FrontEnd.Session;
 
 public class ReviewManager {
-    private List<Review> reviews = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
     private Session session;
     private PropertyManager propertyManager;
@@ -20,43 +20,16 @@ public class ReviewManager {
         this.scanner = scanner;
     }
 
-    // make a booking manager, but this works for now
-    public void inputProperty(Review review) {
+    public Property inputProperty() {
         List<Property> properties = propertyManager.getAllProperties();
-
-        if (properties.isEmpty()) {
-            System.out.println("No properties available to review.");
-            return;
-        }
+        if (properties.isEmpty()) { return null; }
 
         for (int i = 0; i < properties.size(); i++) {
-            System.out.println(
-                (i + 1) + ". "
-                + properties.get(i).getAddress()
-                + " ("
-                + properties.get(i).getPropertyType()
-                + ")"
-            );
+            System.out.println((i + 1) + ". " + properties.get(i).getAddress());
         }
 
-        Integer choice;
-        while (true) {
-            System.out.print("Select property: ");
-
-            try {
-                choice = Integer.parseInt(scanner.nextLine());
-                if (choice < 1 || choice > properties.size()) {
-                    System.out.println("Invalid selection.");
-                    continue;
-                }
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a whole number.");
-            }
-        }
-
-        Property selectProperty = properties.get(choice - 1);
-        review.setPropertyID(selectProperty.getPropertyID());
+        int choice = Helpers.selectFromList(scanner, properties.size(), "Select property");
+        return properties.get(choice - 1);
     }
 
     public void inputStars(Review review) {
@@ -109,18 +82,35 @@ public class ReviewManager {
             return;
         }
 
+        Property property = inputProperty();
+        if (property == null) { return; }
+
+        boolean eligible = false;
+
+        for (Room room : property.getRooms()) {
+            if (room.completedBookingUser(session.getCurrentUser().getUsername())) {
+                eligible = true;
+                break;
+            }
+        }
+
+        if (!eligible) {
+            System.out.println("You can only review properties you have stayed in.");
+            return;
+        }
+
         Review review = new Review();
 
         System.out.println("\nCreating new review");
 
         review.generateReviewID();
-        inputProperty(review);
+        review.setProperty(property);
         review.setUsername(session.getCurrentUser().getUsername());
         inputStars(review);
         inputTitle(review);
         inputContent(review);
 
-        reviews.add(review);
+        property.addReview(review);
         System.out.println("Review created succesfully.");
     }
 
@@ -128,9 +118,9 @@ public class ReviewManager {
         String username = session.getCurrentUser().getUsername();
         List<Review> userReviews = new ArrayList<>();
 
-        for(Review review : reviews) {
-            if (review.getUsername().equalsIgnoreCase(username)) {
-                userReviews.add(review);
+        for(Property property : propertyManager.getAllProperties()) {
+            for (Review review : property.getReviews()) {
+                if (review.getUsername().equalsIgnoreCase(username)) { userReviews.add(review); }
             }
         }
 
@@ -146,7 +136,7 @@ public class ReviewManager {
         System.out.println("\nYour reviews:");
         for (int i = 0; i < userReviews.size(); i++) {
             Review review = userReviews.get(i);
-            Property property = propertyManager.getPropertyByID(review.getPropertyID());
+            Property property = review.getProperty();
             String address = (property != null) ? property.getAddress() : "Unknown property";
             System.out.println(
                 (i + 1) + ". "
@@ -174,7 +164,7 @@ public class ReviewManager {
 
     private void editReviewMenu(Review review) {
         while (true) {
-            Property property = propertyManager.getPropertyByID(review.getPropertyID());
+            Property property = review.getProperty();
             String address = (property != null) ? property.getAddress() : "Unknown property";
 
             System.out.println(
@@ -230,7 +220,7 @@ public class ReviewManager {
         while (true) {
             System.out.println("\nAre you sure you want to delete this review?");
 
-            Property property = propertyManager.getPropertyByID(review.getPropertyID());
+            Property property = review.getProperty();
             String address = (property != null) ? property.getAddress() : "Unknown property";
 
             System.out.println(
