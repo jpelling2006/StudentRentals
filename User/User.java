@@ -14,7 +14,7 @@ public class User {
     private String phone;
     private String passwordHash;
     private byte[] salt;
-    private Integer campusID;
+    private String university;
     private String studentNumber;
 
     // add userID back?
@@ -68,12 +68,15 @@ public class User {
         this.passwordHash = hashedPassword;
     }
 
-    public Integer getCampusID() { return campusID; }
-    public void setCampusID(Integer campusID) {
+    public String getUniversity() { return university; }
+    public void setCampusID(String university) {
         if (!"student".equals(this.userType)) {
-            throw new IllegalStateException("Only student can have a campus ID.");
+            throw new IllegalStateException("Only student can input a university.");
         }
-        this.campusID = campusID;
+        if (university != null && university.length() > 128) {
+            throw new IllegalArgumentException("University name must be up to 128 characters long.");
+        }
+        this.university = university;
     }
 
     public String getStudentNumber() { return studentNumber; }

@@ -212,7 +212,7 @@ public class ReviewManager {
             return;
         }
 
-        reviews.remove(selectedReview);
+        reviews.remove(selectedReview); // get to this
         System.out.println("Room deleted successfully.");
     }
 
