@@ -1,3 +1,5 @@
+package Properties;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Property {
@@ -45,7 +47,11 @@ public class Property {
 
     public String getPropertyType() { return propertyType; }
     public void setPropertyType(String propertyType) {
-        if (propertyType == null || (!propertyType.equals("house") && !propertyType.equals("flat"))) {
+        if (
+            propertyType == null
+            || (!propertyType.equals("house")
+            && !propertyType.equals("flat"))
+        ) {
             throw new IllegalArgumentException("Property must be one of the following types: house, flat");
         }
         this.propertyType = propertyType;

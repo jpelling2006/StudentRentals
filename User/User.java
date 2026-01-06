@@ -1,3 +1,5 @@
+package User;
+
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.regex.Matcher;
@@ -28,8 +30,15 @@ public class User {
 
     public String getUserType() { return userType; }
     public void setUserType(String userType) {
-        if (userType == null || (!userType.equals("student") && !userType.equals("homeowner") && !userType.equals("administrator"))) {
-            throw new IllegalArgumentException("Type must be one of the following: student, homeowner, administrator.");
+        if (
+            userType == null
+            || (!userType.equals("student")
+            && !userType.equals("homeowner")
+            && !userType.equals("administrator"))
+        ) {
+            throw new IllegalArgumentException(
+                "Type must be one of the following: student, homeowner, administrator."
+            );
         }
         this.userType = userType; 
     }

@@ -1,3 +1,7 @@
+package FrontEnd;
+
+import User.*;
+
 public class Session {
     private User currentUser;
 

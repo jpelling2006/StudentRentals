@@ -1,3 +1,5 @@
+package Review;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Review {
@@ -5,7 +7,7 @@ public class Review {
 
     private Integer reviewID;
     private Integer propertyID; // this makes more sense icl
-    private String username; // students only!! :3
+    private String username;
     private Integer stars; // (LIKE IN TIME??) 1-5, should also calculate average or wtv
     private String title;
     private String content;

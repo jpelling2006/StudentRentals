@@ -1,7 +1,13 @@
+package Room;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import Helpers.*;
+import Properties.*;
+import FrontEnd.Session;
 
 public class RoomManager {
     private List<Room> rooms = new ArrayList<>();

@@ -1,6 +1,12 @@
+package Review;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import Helpers.*;
+import Properties.*;
+import FrontEnd.Session;
 
 public class ReviewManager {
     private List<Review> reviews = new ArrayList<>();

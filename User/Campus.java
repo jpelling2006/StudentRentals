@@ -1,3 +1,5 @@
+package User;
+
 public class Campus {
     private Integer campusID;
     private String campusName;

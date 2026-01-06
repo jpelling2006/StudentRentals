@@ -1,6 +1,13 @@
+package FrontEnd;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import Properties.PropertyManager;
+import Review.ReviewManager;
+import Room.RoomManager;
+import User.User;
+import User.UserManager;
 
 public class StudentRentals {
     public static void main(String[] args) {

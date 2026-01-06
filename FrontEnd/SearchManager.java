@@ -1,7 +1,13 @@
+package FrontEnd;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import Properties.*;
+import Room.*;
+import Helpers.*;
 
 public class SearchManager {
     private List<Property> properties = new ArrayList<>();
@@ -36,6 +42,7 @@ public class SearchManager {
     // IF city/area mismatch → skip
     // ADD room to results
 
+    // could vectorise?
     public List<Room> searchRooms(
         String cityOrArea,
         Double minPrice,

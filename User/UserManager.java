@@ -1,6 +1,11 @@
+package User;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import FrontEnd.Session;
+import Helpers.Helpers;
 
 public class UserManager {
     private List<User> users = new ArrayList<>();

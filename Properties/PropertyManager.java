@@ -1,6 +1,11 @@
+package Properties;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import FrontEnd.Session;
+import Helpers.Helpers;
 
 public class PropertyManager {
     private List<Property> properties = new ArrayList<>();
@@ -212,7 +217,10 @@ public class PropertyManager {
 
         listProperties(userProperties);
 
-        int choice = Helpers.selectFromList(scanner, userProperties.size(), "Select a property to delete");
+        int choice = Helpers.selectFromList(
+            scanner, userProperties.size(),
+            "Select a property to delete"
+        );
 
         Property selectedProperty = userProperties.get(choice - 1);
 
