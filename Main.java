@@ -47,37 +47,6 @@ public class Main {
                     }
                 }
             } else {
-                // // change to differ for each user
-                // System.out.println("\nLogged in as " +
-                //         session.getCurrentUser().getUsername());
-                // System.out.println("1. My Account");
-                // System.out.println("2. Properties");
-                // System.out.println("3. Rooms");
-                // System.out.println("5. Reviews");
-                // System.out.println("4. Logout");
-
-                // int choice = Integer.parseInt(scanner.nextLine());
-
-                // switch (choice) {
-                //     case 1 -> userManager.start();
-                //     case 2 -> {
-                //         if (!session.getCurrentUser().getUserType().equals("homeowner")) {
-                //             System.out.println("Only homeowners can manage properties.");
-                //         } else { propertyManager.start(); }
-                //     }
-                //     case 3 -> {
-                //         if (!session.getCurrentUser().getUserType().equals("homeowner")) {
-                //             System.out.println("Only homeowners can manage rooms.");
-                //         } else { roomManager.start(); }
-                //     }
-                //     case 4 -> {
-                //         if (!session.getCurrentUser().getUserType().equals("student")) {
-                //             System.out.println("Only students can manage reviews.");
-                //         } else { reviewManager.start(); }
-                //     }
-                //     case 5 -> session.logout();
-                // }
-
                 System.out.println("1. My account");
                 System.out.println("2. Reviews");
                 System.out.println("3. Search for rooms");
