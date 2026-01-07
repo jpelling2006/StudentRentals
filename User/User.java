@@ -7,15 +7,12 @@ import java.util.regex.Pattern;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-public class User {
+public abstract class User {
     private String username;
-    private String userType; // student, homeowner, or administrator
     private String email;
     private String phone;
     private String passwordHash;
     private byte[] salt;
-    private String university;
-    private String studentNumber;
 
     // add userID back?
 
@@ -28,20 +25,7 @@ public class User {
         this.username = username;
     }
 
-    public String getUserType() { return userType; }
-    public void setUserType(String userType) {
-        if (
-            userType == null
-            || (!userType.equals("student")
-            && !userType.equals("homeowner")
-            && !userType.equals("administrator"))
-        ) {
-            throw new IllegalArgumentException(
-                "Type must be one of the following: student, homeowner, administrator."
-            );
-        }
-        this.userType = userType; 
-    }
+    public abstract String getUserType(); // enum?
 
     public String getEmail() { return email; }
     public void setEmail(String email) {
@@ -69,37 +53,6 @@ public class User {
         String hashedPassword = hashPassword(rawPassword, salt);
         this.passwordHash = hashedPassword;
     }
-
-    public String getUniversity() { return university; }
-    public void setUniversity(String university) {
-        if (!"student".equals(this.userType)) {
-            throw new IllegalStateException("Only student can input a university.");
-        }
-        if (university != null && university.length() > 128) {
-            throw new IllegalArgumentException(
-                "University name must be up to 128 characters long."
-            );
-        }
-        this.university = university;
-    }
-
-    public String getStudentNumber() { return studentNumber; }
-    public void setStudentNumber(String studentNumber) {
-        if (!"student".equals(this.userType)) {
-            throw new IllegalStateException(
-                "Only students can have a student number."
-            );
-        }
-
-        if (studentNumber == null || !studentNumber.matches("^\\d{1,32}$")) {
-            throw new IllegalArgumentException(
-                "Student number must be up to 32 digits long."
-            );
-        }
-
-        this.studentNumber = studentNumber;
-    }
-
 
     public static boolean isValidEmail(String email) {
         // https://www.baeldung.com/java-email-validation-regex

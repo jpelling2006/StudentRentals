@@ -1,20 +1,25 @@
 package Booking;
 
-import Room.Room;
-import Helpers.Helpers;
+import java.util.Scanner;
+
+import FrontEnd.Session;
+import Room.RoomManager;
 
 public class BookingManager {
-    // public void bookRoom(Room room) {
-    //     Booking booking = new Booking();
-    //     booking.setUsername(session.getCurrentUser().getUsername());
-    //     booking.setStartDate(inputDate("Move-in date"));
-    //     booking.setEndDate(inputDate("Move-out date"));
+    private Scanner scanner = new Scanner(System.in);
+    private Session session;
+    private RoomManager roomManager;
 
-    //     try {
-    //         room.addBooking(booking);
-    //         System.out.println("Booking confirmed.");
-    //     } catch (IllegalStateException e) {
-    //         System.out.println(e.getMessage());
-    //     }
-    // }
+    public BookingManager(RoomManager roomManager, 
+        Session session, 
+        Scanner scanner
+    ) {
+        this.roomManager = roomManager;
+        this.session = session;
+        this.scanner = scanner;
+    }
+
+    private Room inputRoom() {
+       
+    }
 }

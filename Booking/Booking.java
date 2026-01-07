@@ -3,11 +3,14 @@ package Booking;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import Room.Room;
+
 public class Booking {
     private static final AtomicInteger idGenerator
         = new AtomicInteger(1);
 
     private Integer bookingID;
+    private Room room;
     private String username; // students only
     private LocalDate startDate;
     private LocalDate endDate;
@@ -15,6 +18,12 @@ public class Booking {
     public Integer getBookingID() { return bookingID; }
     public void generateBookingID() {
         this.bookingID = idGenerator.getAndIncrement();
+    }
+
+    public Room getRoom() { return room; }
+    public void setRoom() {
+        if (room == null) { throw new IllegalArgumentException("Room required."); }
+        this.room = room;
     }
 
     // if exists too
