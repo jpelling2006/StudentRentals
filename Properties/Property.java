@@ -1,7 +1,10 @@
 package Properties;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import Review.Review;
@@ -19,7 +22,7 @@ public class Property {
     private Integer bedrooms;
     private Integer bathrooms;
     private List<Room> rooms = new ArrayList<>();
-    private List<Review> reviews = new ArrayList<>();
+    private Map<String, Review> reviewsByUser = new HashMap<>();
 
     public Integer getPropertyID() { return propertyID; }
     public void generatePropertyID() {
@@ -31,7 +34,9 @@ public class Property {
     public void setUsername(String username) {
         // add regex
         if (username == null || username.length() > 32) {
-            throw new IllegalArgumentException("Username must be up to 32 characters.");
+            throw new IllegalArgumentException(
+                "Username must be up to 32 characters."
+            );
         }
         this.username = username;
     }
@@ -39,7 +44,9 @@ public class Property {
     public String getCity() { return city; }
     public void setCity(String city) {
         if (city == null || city.length() > 64) {
-            throw new IllegalArgumentException("City must be up to 64 characters.");
+            throw new IllegalArgumentException(
+                "City must be up to 64 characters."
+            );
         }
         this.city = city;
     }
@@ -47,7 +54,9 @@ public class Property {
     public String getAddress() { return address; }
     public void setAddress(String address) {
         if (address == null || address.length() > 512) {
-            throw new IllegalArgumentException("Address must be up to 512 characters long.");
+            throw new IllegalArgumentException(
+                "Address must be up to 512 characters long."
+            );
         }
         this.address = address;
     }
@@ -55,7 +64,9 @@ public class Property {
     public String getDescription() { return description; }
     public void setDescription(String description) {
         if (description == null || description.length() > 2048) {
-            throw new IllegalArgumentException("Description must be up to 2048 characters long.");
+            throw new IllegalArgumentException(
+                "Description must be up to 2048 characters long."
+            );
         }
         this.description = description;
     }
@@ -67,7 +78,9 @@ public class Property {
             || (!propertyType.equals("house")
             && !propertyType.equals("flat"))
         ) {
-            throw new IllegalArgumentException("Property must be one of the following types: house, flat");
+            throw new IllegalArgumentException(
+                "Property must be one of the following types: house, flat"
+            );
         }
         this.propertyType = propertyType;
     }
@@ -75,7 +88,9 @@ public class Property {
     public Integer getBedrooms() { return bedrooms; }
     public void setBedrooms(Integer bedrooms) { 
         if (bedrooms == null || bedrooms <= 0) {
-            throw new IllegalArgumentException("Bedrooms must be a positive integer.");
+            throw new IllegalArgumentException(
+                "Bedrooms must be a positive integer."
+            );
         }
         this.bedrooms = bedrooms;
     }
@@ -83,7 +98,9 @@ public class Property {
     public Integer getBathrooms() { return bathrooms; }
     public void setBathrooms(Integer bathrooms) { 
         if (bathrooms == null || bathrooms <= 0) {
-            throw new IllegalArgumentException("Bathrooms must be a positive integer.");
+            throw new IllegalArgumentException(
+                "Bathrooms must be a positive integer."
+            );
         }
         this.bathrooms = bathrooms;
     }
@@ -92,19 +109,41 @@ public class Property {
     public void addRoom(Room room) { rooms.add(room); }
     public void removeRoom(Room room) { rooms.remove(room); }
 
-    public List<Review> getReviews() { return reviews; }
-    public void addReview(Review review) { reviews.add(review); }
-    public void removeReview(Review review) { reviews.remove(review); }
+    // reviews
+
+    public Collection<Review> getReviews() { return reviewsByUser.values(); }
+
+    public Review getReviewByUser(String username) {
+        return reviewsByUser.get(username);
+    }
+
+    public boolean hasReviewFromUser(String username) {
+        return reviewsByUser.containsKey(username);
+    }
+
+    public void addReview(Review review) {
+        String username = review.getUsername();
+
+        if (reviewsByUser.containsKey(username)) {
+            throw new IllegalStateException(
+                "User has already reviewed this property."
+            );
+        }
+
+        reviewsByUser.put(username, review);
+    }
+
+    public void removeReview(String username) { reviewsByUser.remove(username); }
 
     public double getAverageRating() {
-        if (reviews.isEmpty()) { return 0; }
+        if (reviewsByUser.isEmpty()) { return 0; }
 
         Integer sum = 0;
-        for (Review review : reviews) {
+        for (Review review : reviewsByUser.values()) {
             sum += review.getStars();
         }
 
-        return (double) sum / reviews.size();
+        return (double) sum / reviewsByUser.size();
     }
 
     public Property() {}

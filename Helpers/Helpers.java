@@ -60,9 +60,7 @@ public class Helpers {
                 LocalDate date = LocalDate.parse(scanner.nextLine());
                 if (date.isBefore(LocalDate.now())) {
                     System.out.println("Date cannot be in the past.");
-                } else {
-                    return date;
-                }
+                } else { return date; }
             } catch (DateTimeParseException e) {
                 System.out.println("Invalid date format.");
             }

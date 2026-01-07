@@ -14,14 +14,20 @@ public class RoomManager {
     private Session session;
     private PropertyManager propertyManager;
 
-    public RoomManager(PropertyManager propertyManager, Session session, Scanner scanner) {
+    public RoomManager(
+        PropertyManager propertyManager, 
+        Session session, 
+        Scanner scanner
+    ) {
         this.propertyManager = propertyManager;
         this.session = session;
         this.scanner = scanner;
     }
 
     public void inputProperty(Room room) {
-        List<Property> userProperties = propertyManager.getUserProperties(session.getCurrentUser().getUsername());
+        List<Property> userProperties = propertyManager.getUserProperties(
+            session.getCurrentUser().getUsername()
+        );
 
         if (userProperties.isEmpty()) {
             System.out.println("You have no properties.");
@@ -32,7 +38,11 @@ public class RoomManager {
             System.out.println((i + 1) + ". " + userProperties.get(i).getAddress());
         }
 
-        int choice = Helpers.selectFromList(scanner, userProperties.size(), "Select property");
+        int choice = Helpers.selectFromList(
+            scanner, 
+            userProperties.size(), 
+            "Select property"
+        );
 
         Property selectedProperty = userProperties.get(choice - 1);
         room.setProperty(selectedProperty);
@@ -123,14 +133,21 @@ public class RoomManager {
     }
 
     public void inputStartDate(Room room) {
-        LocalDate startDate = Helpers.readFutureDate(scanner, "Availability start date");
+        LocalDate startDate = Helpers.readFutureDate(
+            scanner, 
+            "Availability start date"
+        );
+
         room.setStartDate(startDate);
         System.out.println("Start date set.");
     }
 
     public void inputEndDate(Room room) {
         while (true) {
-            LocalDate endDate = Helpers.readFutureDate(scanner, "Availability end date");
+            LocalDate endDate = Helpers.readFutureDate(
+                scanner, 
+                "Availability end date"
+            );
 
             if (endDate.isBefore(room.getStartDate())) {
                 System.out.println("End date must be after the start date.");
@@ -175,8 +192,9 @@ public class RoomManager {
     public List<Room> getUserRooms() {
         List<Room> userRooms = new ArrayList<>();
 
-        for (
-            Property property : propertyManager.getUserProperties(session.getCurrentUser().getUsername())) {
+        for (Property property : propertyManager.getUserProperties(
+            session.getCurrentUser().getUsername()
+        )) {
             userRooms.addAll(property.getRooms());
         }
 
@@ -212,7 +230,11 @@ public class RoomManager {
 
         listRooms(userRooms);
 
-        int choice = Helpers.selectFromList(scanner, userRooms.size(), "Select a room to edit");
+        int choice = Helpers.selectFromList(
+            scanner, 
+            userRooms.size(), 
+            "Select a room to edit"
+        );
 
         Room selectedRoom = userRooms.get(choice - 1);
         editRoomMenu(selectedRoom);
@@ -221,7 +243,8 @@ public class RoomManager {
     private void editRoomMenu(Room room) {
         while (true) {
             Property property = room.getProperty();
-            String address = (property != null) ? property.getAddress() : "Unknown property";
+            String address = (property != null) 
+                ? property.getAddress() : "Unknown property";
 
             System.out.println(
                 "\nEditing room: "
@@ -266,7 +289,11 @@ public class RoomManager {
 
         listRooms(userRooms);
 
-        int choice = Helpers.selectFromList(scanner, userRooms.size(), "Select a room to delete");
+        int choice = Helpers.selectFromList(
+            scanner, 
+            userRooms.size(), 
+            "Select a room to delete"
+        );
 
         Room selectedRoom = userRooms.get(choice - 1);
 
@@ -281,10 +308,15 @@ public class RoomManager {
 
     private boolean confirmDeletion(Room room) {
         Property property = room.getProperty();
-        String address = (property != null) ? property.getAddress() : "Unknown property";
+        String address = (property != null) 
+            ? property.getAddress() : "Unknown property";
 
         System.out.println("\nAre you sure you want to delete this room?");
-        System.out.println(address + " (" + room.getLocation() + ", " + room.getRoomType() + ")");
+        System.out.println(
+            address + " ("
+            + room.getLocation() + ", "
+            + room.getRoomType() + ")"
+        );
 
         return Helpers.confirm(scanner);
     }
@@ -317,7 +349,9 @@ public class RoomManager {
                     System.out.println("Exiting...");
                     return;
                 default:
-                    System.out.println("Invalid choice. Please select an integer between 1-5.");
+                    System.out.println(
+                        "Invalid choice. Please select an integer between 1-5."
+                    );
                     break;
             }
         }

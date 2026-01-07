@@ -1,22 +1,21 @@
-package FrontEnd;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import FrontEnd.Session;
 import Properties.PropertyManager;
 import Review.ReviewManager;
 import Room.RoomManager;
-import User.User;
-import User.UserManager;
+import User.*;
 
-public class StudentRentals {
+public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         List<User> users = new ArrayList<>();
         Session session = new Session();
 
-        UserManager userManager = new UserManager(users, session, scanner);
+        UserManager userManager = new UserManager(session, scanner);
         PropertyManager propertyManager = new PropertyManager(session, scanner);
         RoomManager roomManager = new RoomManager(propertyManager, session, scanner);
         ReviewManager reviewManager = new ReviewManager(propertyManager, session, scanner);
@@ -46,11 +45,13 @@ public class StudentRentals {
                     }
                 }
             } else {
+                // change to differ for each user
                 System.out.println("\nLogged in as " +
                         session.getCurrentUser().getUsername());
                 System.out.println("1. My Account");
                 System.out.println("2. Properties");
                 System.out.println("3. Rooms");
+                System.out.println("5. Reviews");
                 System.out.println("4. Logout");
 
                 int choice = Integer.parseInt(scanner.nextLine());
@@ -60,18 +61,19 @@ public class StudentRentals {
                     case 2 -> {
                         if (!session.getCurrentUser().getUserType().equals("homeowner")) {
                             System.out.println("Only homeowners can manage properties.");
-                        } else {
-                            propertyManager.start();
-                        }
+                        } else { propertyManager.start(); }
                     }
                     case 3 -> {
                         if (!session.getCurrentUser().getUserType().equals("homeowner")) {
                             System.out.println("Only homeowners can manage rooms.");
-                        } else {
-                            roomManager.start();
-                        }
+                        } else { roomManager.start(); }
                     }
-                    case 4 -> session.logout();
+                    case 4 -> {
+                        if (!session.getCurrentUser().getUserType().equals("student")) {
+                            System.out.println("Only students can manage reviews.");
+                        } else { reviewManager.start(); }
+                    }
+                    case 5 -> session.logout();
                 }
             }
         }

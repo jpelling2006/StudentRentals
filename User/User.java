@@ -54,7 +54,9 @@ public class User {
     public String getPhone() { return phone; }
     public void setPhone(String phone) {
         if (phone == null || !phone.matches("^\\d{10}$")) {
-            throw new IllegalArgumentException("Phone number must be ten digits long.");
+            throw new IllegalArgumentException(
+                "Phone number must be ten digits long."
+            );
         }
         this.phone = phone;
     }
@@ -69,12 +71,14 @@ public class User {
     }
 
     public String getUniversity() { return university; }
-    public void setCampusID(String university) {
+    public void setUniversity(String university) {
         if (!"student".equals(this.userType)) {
             throw new IllegalStateException("Only student can input a university.");
         }
         if (university != null && university.length() > 128) {
-            throw new IllegalArgumentException("University name must be up to 128 characters long.");
+            throw new IllegalArgumentException(
+                "University name must be up to 128 characters long."
+            );
         }
         this.university = university;
     }
@@ -82,11 +86,15 @@ public class User {
     public String getStudentNumber() { return studentNumber; }
     public void setStudentNumber(String studentNumber) {
         if (!"student".equals(this.userType)) {
-            throw new IllegalStateException("Only students can have a student number.");
+            throw new IllegalStateException(
+                "Only students can have a student number."
+            );
         }
 
         if (studentNumber == null || !studentNumber.matches("^\\d{1,32}$")) {
-            throw new IllegalArgumentException("Student number must be up to 32 digits long.");
+            throw new IllegalArgumentException(
+                "Student number must be up to 32 digits long."
+            );
         }
 
         this.studentNumber = studentNumber;
@@ -115,7 +123,13 @@ public class User {
         int keyLength = 256;
 
         // PBKDF2WithHmacSHA256 algorithm
-        PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, keyLength);
+        PBEKeySpec spec = new PBEKeySpec(
+            password.toCharArray(),
+            salt,
+            iterations,
+            keyLength
+        );
+        
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         byte[] hash = factory.generateSecret(spec).getEncoded();
 

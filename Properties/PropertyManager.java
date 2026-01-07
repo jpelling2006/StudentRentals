@@ -1,7 +1,9 @@
 package Properties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import FrontEnd.Session;
@@ -9,7 +11,7 @@ import Helpers.Helpers;
 import User.User;
 
 public class PropertyManager {
-    private List<Property> properties = new ArrayList<>();
+    private Map<Integer, Property> properties = new HashMap<>();
     private Scanner scanner = new Scanner(System.in);
     private Session session;
 
@@ -17,6 +19,8 @@ public class PropertyManager {
         this.session = session;
         this.scanner = scanner;
     }
+
+    // input helpers
 
     private void inputCity(Property property) {
         while (true) {
@@ -111,7 +115,9 @@ public class PropertyManager {
         }
     }
 
-    // add new property
+    // create
+
+
     public void newProperty() {
         Property property = new Property();
 
@@ -126,31 +132,30 @@ public class PropertyManager {
         inputBedrooms(property);
         inputBathrooms(property);
 
-        properties.add(property);
+        properties.put(property.getPropertyID(), property);
         System.out.println("Property created successfully");
     } 
 
+    // read
+    
+    public Property getPropertyByID(Integer propertyID) {
+        return properties.get(propertyID);
+    }
+
     public List<Property> getAllProperties() {
-        return properties;
+        return new ArrayList<>(properties.values());
     }
 
     public List<Property> getUserProperties(String username) {
         List<Property> userProperties = new ArrayList<>();
 
-        for(Property property : properties) {
+        for(Property property : properties.values()) {
             if (property.getUsername().equalsIgnoreCase(username)) {
                 userProperties.add(property);
             }
         }
 
         return userProperties;
-    }
-
-    public Property getPropertyByID(Integer propertyID) {
-        for (Property property : properties) {
-            if (property.getPropertyID().equals(propertyID)) { return property; }
-        }
-        return null;
     }
 
     public void listProperties(List<Property> userProperties) {
@@ -170,6 +175,8 @@ public class PropertyManager {
         }
     }
 
+    // update
+
     public void editProperty() {
         User currentUser = session.getCurrentUser();
         String username = currentUser.getUsername();
@@ -183,7 +190,11 @@ public class PropertyManager {
 
         listProperties(userProperties);
 
-        int choice = Helpers.selectFromList(scanner, userProperties.size(), "Select a property to edit");
+        int choice = Helpers.selectFromList(
+            scanner,
+            userProperties.size(), 
+            "Select a property to edit"
+        );
 
         Property selectedProperty = userProperties.get(choice - 1);
         editPropertyMenu(selectedProperty);
@@ -222,6 +233,8 @@ public class PropertyManager {
             }
         }
     }
+
+    // delete
     
     public void deleteProperty() {
         String username = session.getCurrentUser().getUsername();
@@ -246,13 +259,16 @@ public class PropertyManager {
             return;
         }
 
-        properties.remove(selectedProperty);
+        properties.remove(selectedProperty.getPropertyID());
         System.out.println("Property deleted successfully.");
     }
 
     private boolean confirmDeletion(Property property) {
         System.out.println("\nAre you sure you want to delete this property?");
-        System.out.println(property.getAddress() + " (" + property.getPropertyType() + ")");
+        System.out.println(
+            property.getAddress()+ " ("
+            + property.getPropertyType() + ")"
+        );
 
         return Helpers.confirm(scanner);
     }
@@ -269,26 +285,19 @@ public class PropertyManager {
             Integer choice = Helpers.readInt(scanner, "Enter your choice: ");
 
             switch (choice) {
-                case 1:
-                    newProperty();
-                    break;
-                case 2:
-                    listProperties(
-                        getUserProperties(session.getCurrentUser().getUsername())
-                    );
-                    break;
-                case 3:
-                    editProperty();
-                    break;
-                case 4:
-                    deleteProperty();
-                    break;
-                case 5:
+                case 1 -> newProperty();
+                case 2 -> listProperties(
+                    getUserProperties(session.getCurrentUser().getUsername())
+                );
+                case 3 -> editProperty();
+                case 4 -> deleteProperty();
+                case 5 -> {
                     System.out.println("Exiting...");
                     return;
-                default:
-                    System.out.println("Invalid choice. Please select an integer between 1-5.");
-                    break;
+                }
+                default -> System.out.println(
+                    "Invalid choice. Please select an integer between 1-5."
+                );
             }
         }
     }

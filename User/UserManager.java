@@ -1,34 +1,35 @@
 package User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import FrontEnd.Session;
 import Helpers.Helpers;
 
 public class UserManager {
-    private List<User> users = new ArrayList<>();
+    private Map<String, User> users = new HashMap<>();
     private Scanner scanner = new Scanner(System.in);
     private Session session;
 
-    public UserManager(List<User> users, Session session, Scanner scanner) {
-        this.users = users;
+    public UserManager(Session session, Scanner scanner) {
         this.session = session;
         this.scanner = scanner;
     }
 
-    // put into helpers class
+    // helpers
+
     private boolean usernameExists(String username) {
-        for (User user : users) {
-            if (user.getUsername().equalsIgnoreCase(username)) { return true; }
-        }
-        return false;
+        return users.containsKey(username.toLowerCase());
     }
 
     private boolean isStudent(User user) {
         return user.getUserType().equals("student");
     }
+
+    // inputs
 
     public void inputUsername(User user) {
         while (true) {
@@ -98,7 +99,7 @@ public class UserManager {
             }
 
             try {
-                user.setPasswordHash(rawPassword); // 🔐 hashing happens here
+                user.setPasswordHash(rawPassword);
                 System.out.println("Password set.");
                 return;
             } catch (Exception e) {
@@ -137,13 +138,14 @@ public class UserManager {
         }
     }
 
-    public void inputCampusID(User user) {
+    public void inputUniversity(User user) {
         while (true) {
-            Integer campusID = Helpers.readInt(scanner, "Enter campus ID: ");
+            System.out.print("Enter university name: ");
+            String university = scanner.nextLine();
 
             try {
-                user.setCampusID(campusID);
-                System.out.println("Campus ID set.");
+                user.setUniversity(university);
+                System.out.println("University name set.");
                 return;
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -166,7 +168,8 @@ public class UserManager {
         }
     }
 
-    // register new user
+    // register
+
     public void register() {
         User user = new User();
 
@@ -178,37 +181,40 @@ public class UserManager {
         inputPhone(user);
         inputPassword(user);
         if (isStudent(user)) {
-            inputCampusID(user);
+            inputUniversity(user);
             inputStudentNumber(user);
         }
 
-        users.add(user);
+        users.put(user.getUsername().toLowerCase(), user);
         System.out.println("Registration successful");
     }
 
-    // user login
+    // login
+
     public void login() {
         System.out.print("Enter username: ");
-        String username = scanner.nextLine();
+        String username = scanner.nextLine().toLowerCase();
+
         System.out.print("Enter password: ");
         String rawPassword = scanner.nextLine();
 
-        for (User user : users) {
-            try {
-                if (user.getUsername().equalsIgnoreCase(username) &&
-                    user.verifyPassword(rawPassword)) {
-                        session.login(user);
-                        System.out.println("Login successful.");
-                        userMenu();
-                    return;
-                }
-            } catch (Exception e) {
-                System.out.println("Login error.");
-            }
+        User user = users.get(username);
+
+        if (user == null) {
+            System.out.println("Login failed.");
+            return;
         }
 
-        System.out.println("Login failed. Username or password incorrect.");
+        try {
+            if (user.verifyPassword(rawPassword)) {
+                session.login(user);
+                System.out.println("Login successful.");
+                userMenu();
+            } else { System.out.println("Login failed."); }
+        } catch (Exception e) { System.out.println("Login error"); }
     }
+
+    // account
 
     private void viewMyDetails() {
         if (!session.isLoggedIn()) {
@@ -225,7 +231,7 @@ public class UserManager {
         System.out.println("Phone: " + user.getPhone());
 
         if (isStudent(user)) {
-            System.out.println("Campus ID: " + user.getCampusID());
+            System.out.println("University: " + user.getUniversity());
             System.out.println("Student number: " + user.getStudentNumber());
         }
     }
@@ -258,7 +264,7 @@ public class UserManager {
                     case 1 -> inputEmail(user);
                     case 2 -> inputPhone(user);
                     case 3 -> inputPassword(user);
-                    case 4 -> inputCampusID(user);
+                    case 4 -> inputUniversity(user);
                     case 5 -> inputStudentNumber(user);
                     case 6 -> { return; }
                     default -> System.out.println("Invalid option.");
@@ -284,9 +290,7 @@ public class UserManager {
             System.out.println("2. Edit my details");
             System.out.println("3. Logout");
 
-            System.out.print("Enter choice: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            Integer choice = Helpers.readInt(scanner, "Choose option: ");
 
             switch (choice) {
                 case 1 -> viewMyDetails();
@@ -305,13 +309,15 @@ public class UserManager {
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
 
-        for (User user : users) {
-            if (user.getUsername().equalsIgnoreCase(username)) {
-                inputPassword(user);
-                return;
-            }
+        User user = users.get(username);
+
+        if (user == null) {
+            System.out.println("User not found.");
+            return;
         }
-        System.out.println("User not found.");
+
+        inputPassword(user);
+        System.out.println("Password reset.");
     }
 
     public void start() {
@@ -322,9 +328,7 @@ public class UserManager {
             System.out.println("3. Forget Password");
             System.out.println("4. Exit");
 
-            System.out.print("Enter choice: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            Integer choice = Helpers.readInt(scanner, "Choose option: ");
 
             switch (choice) {
                 case 1 -> register();

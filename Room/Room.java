@@ -2,7 +2,9 @@ package Room;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import Booking.Booking;
@@ -20,7 +22,7 @@ public class Room {
     private String amenities;
     private LocalDate startDate;
     private LocalDate endDate;
-    private List<Booking> bookings = new ArrayList<>();
+    private Map<String, Booking> bookings = new HashMap<>();
 
     public Integer getRoomID() { return roomID; }
     public void generateRoomID() {
@@ -37,8 +39,14 @@ public class Room {
 
     public String getRoomType() { return roomType; }
     public void setRoomType(String roomType) {
-        if (roomType == null || (!roomType.equals("single") && !roomType.equals("double"))) {
-            throw new IllegalArgumentException("Room must be one of the following types: single, double");
+        if (
+            roomType == null
+            || (!roomType.equals("single")
+            && !roomType.equals("double"))
+        ) {
+            throw new IllegalArgumentException(
+                "Room must be one of the following types: single, double"
+            );
         }
         this.roomType = roomType;
     }
@@ -46,7 +54,9 @@ public class Room {
     public Double getRentPrice() { return rentPrice; }
     public void setRentPrice(Double rentPrice) {
         if (rentPrice == null || rentPrice <= 0) {
-            throw new IllegalArgumentException("RentPrice must be a positive value.");
+            throw new IllegalArgumentException(
+                "RentPrice must be a positive value."
+            );
         }
         this.rentPrice = rentPrice;
     }
@@ -54,7 +64,9 @@ public class Room {
     public Boolean getBillsIncluded() { return billsIncluded; }
     public void setBillsIncluded(Boolean billsIncluded) {
         if (billsIncluded == null) {
-            throw new IllegalArgumentException("BillsIncluded must be either True or False.");
+            throw new IllegalArgumentException(
+                "BillsIncluded must be either True or False."
+            );
         }
         this.billsIncluded = billsIncluded;
     }
@@ -62,7 +74,9 @@ public class Room {
     public String getLocation() { return location; }
     public void setLocation(String location) {
         if (location == null || location.length() > 64) {
-            throw new IllegalArgumentException("Location must be up to 64 characters long.");
+            throw new IllegalArgumentException(
+                "Location must be up to 64 characters long."
+            );
         }
         this.location = location;
     }
@@ -70,12 +84,13 @@ public class Room {
     public String getAmenities() { return amenities; }
     public void setAmenities(String amenities) {
         if (amenities != null && amenities.length() > 256) {
-            throw new IllegalArgumentException("Amenities must be up to 256 characters long.");
+            throw new IllegalArgumentException(
+                "Amenities must be up to 256 characters long."
+            );
         }
         this.amenities = amenities;
     }
 
-    // check if dates have passed
     public LocalDate getStartDate() { return startDate; }
     public void setStartDate(LocalDate startDate) {
         validateDate(startDate, this.endDate);
@@ -88,10 +103,7 @@ public class Room {
         this.endDate = endDate;
     }
 
-    public List<Booking> getBookings() { return bookings; }
-    public void addBooking(Booking booking) { bookings.add(booking); }
-    public void removeBooking(Booking booking) { bookings.remove(booking); }
-
+    // also see abt changing this
     private void validateDate(LocalDate start, LocalDate end) {
         LocalDate today = LocalDate.now();
 
@@ -102,14 +114,45 @@ public class Room {
             throw new IllegalArgumentException("End date cannot be in the past.");
         }
         if (start != null && end != null && end.isBefore(start)) {
-            throw new IllegalArgumentException("End date cannot be before start date.");
+            throw new IllegalArgumentException(
+                "End date cannot be before start date."
+            );
         }
     }
 
-    public boolean completedBookingUser(String username) {
-        for (Booking booking : bookings) {
-            if (booking.getUsername().equalsIgnoreCase(username)) { return true; }
+    // check later, see if getBookings() can still exist similar to the other one
+
+    // public List<Booking> getBookings() { return bookings; }
+
+    public void addBooking(Booking booking) {
+        String username = booking.getUsername();
+
+        if (bookings.containsKey(username)) {
+            throw new IllegalStateException(
+                "You already have a booking for this property"
+            );
         }
-        return false;
+
+        if (!isAvailable(booking.getStartDate(), booking.getEndDate())) {
+            throw new IllegalStateException("Room is not available for these dates.");
+        }
+
+        bookings.put(username, booking);
+    }
+
+    public void removeBooking(String username) { bookings.remove(username); }
+
+    public boolean hasBooking(String username) { return bookings.containsKey(username); }
+
+    public boolean bookingCompletedByUser(String username) {
+        Booking booking = bookings.get(username);
+        return booking != null && booking.hasEnded();
+    }
+
+    public boolean isAvailable(LocalDate from, LocalDate to) {
+        for (Booking booking : bookings.values()) {
+            if (booking.overlaps(from, to)) { return false; }
+        }
+        return true;
     }
 }

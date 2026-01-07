@@ -31,7 +31,9 @@ public class Review {
     public void setUsername(String username) {
         // add regex
         if (username == null || username.length() > 32) {
-            throw new IllegalArgumentException("Username must be up to 32 characters.");
+            throw new IllegalArgumentException(
+                "Username must be up to 32 characters."
+            );
         }
         this.username = username;
     }
@@ -39,7 +41,9 @@ public class Review {
     public Integer getStars() { return stars; }
     public void setStars(Integer stars) {
         if (stars == null || stars < 1 || stars > 5) {
-            throw new IllegalArgumentException("Stars must be an integer between 1 and 5.");
+            throw new IllegalArgumentException(
+                "Stars must be an integer between 1 and 5."
+            );
         }
         this.stars = stars;
     }
@@ -47,7 +51,9 @@ public class Review {
     public String getTitle() { return title; }
     public void setTitle(String title) {
         if (title != null && title.length() > 256) {
-            throw new IllegalArgumentException("Title must be up to 256 characters long.");
+            throw new IllegalArgumentException(
+                "Title must be up to 256 characters long."
+            );
         }
         this.title = title;
     }
@@ -55,7 +61,9 @@ public class Review {
     public String getContent() { return content; }
     public void setContent(String content) {
         if (content != null && content.length() > 1024) {
-            throw new IllegalArgumentException("Content must be up to 1024 characters long.");
+            throw new IllegalArgumentException(
+                "Content must be up to 1024 characters long."
+            );
         }
         this.content = content;
     }

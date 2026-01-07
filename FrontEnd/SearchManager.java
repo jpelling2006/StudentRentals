@@ -4,26 +4,30 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import Properties.*;
 import Room.*;
 import Helpers.*;
 
 public class SearchManager {
-    private List<Property> properties = new ArrayList<>();
-    private List<Room> rooms = new ArrayList<>();
-    private Scanner scanner = new Scanner(System.in);
+    private Scanner scanner;
     private Session session;
     private PropertyManager propertyManager;
+    private List<Room> lastResults = new ArrayList<>();
 
-    public SearchManager(PropertyManager propertyManager, Session session, Scanner scanner) {
+    public SearchManager(
+        PropertyManager propertyManager,
+        Session session,
+        Scanner scanner
+    ) {
         this.propertyManager = propertyManager;
         this.session = session;
         this.scanner = scanner;
     }
 
     private boolean isRoomAvailable(Room room, LocalDate moveIn, LocalDate moveOut) {
-        return !moveIn.isBefore(room.getStartDate()) && !moveOut.isAfter(room.getEndDate());
+        return room.isAvailable(moveIn, moveOut);
     }
 
     private boolean inPriceRange(Room room, Double minPrice, Double maxPrice) {
@@ -38,38 +42,23 @@ public class SearchManager {
         return cityOrArea == null || property.getCity().equalsIgnoreCase(cityOrArea);
     }
 
-    // FOR each room
-    // IF room not available for dates → skip
-    // IF price not in range → skip
-    // IF roomType mismatch → skip
-    // FETCH property
-    // IF city/area mismatch → skip
-    // ADD room to results
-
-    // could vectorise?
     public List<Room> searchRooms(
-        String cityOrArea,
-        Double minPrice,
-        Double maxPrice,
-        LocalDate moveIn,
-        LocalDate moveOut,
+        String city,
+        Double minPrice, 
+        Double maxPrice, 
+        LocalDate moveIn, 
+        LocalDate moveOut, 
         String roomType
     ) {
-        List<Room> results = new ArrayList<>();
+        lastResults = propertyManager.getAllProperties().stream()
+            .filter(property -> matchesLocation(property, city))
+            .flatMap(property -> property.getRooms().stream())
+            .filter(room -> isRoomAvailable(room, moveIn, moveOut))
+            .filter(room -> inPriceRange(room, minPrice, maxPrice))
+            .filter(room -> correctRoomType(room, roomType))
+            .collect(Collectors.toList());
 
-        for (Property property : propertyManager.getAllProperties()) {
-            if (!matchesLocation(property, cityOrArea)) { continue; }
-
-            for (Room room : property.getRooms()) {
-                if (!isRoomAvailable(room, moveIn, moveOut)) { continue; }
-                if (!inPriceRange(room, minPrice, maxPrice)) { continue; }
-                if (!correctRoomType(room, roomType)) { continue; }
-
-                results.add(room);
-            }
-        }
-
-        return results;
+        return lastResults;
     }
 
     // 1. £120/week - Single room - City Centre
@@ -96,11 +85,23 @@ public class SearchManager {
     }
 
     public Room selectRoom() {
-        int choice = Helpers.selectFromList(scanner, rooms.size(), "Select room");
-        return rooms.get(choice - 1);
+        if (lastResults.isEmpty()) {
+            System.out.println("No rooms to select.");
+            return null;
+        }
+
+        Integer choice = Helpers.selectFromList(
+            scanner, 
+            lastResults.size(), 
+            "Select room"
+        );
+
+        return lastResults.get(choice - 1);
     }
 
     public void viewRoomDetails(Room room) {
+        if (room == null) { return; }
+
         Property property = room.getProperty();
 
         System.out.println("\nRoom Details");

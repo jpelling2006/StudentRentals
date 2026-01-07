@@ -14,10 +14,21 @@ public class ReviewManager {
     private Session session;
     private PropertyManager propertyManager;
 
-    public ReviewManager(PropertyManager propertyManager, Session session, Scanner scanner) {
+    public ReviewManager(
+        PropertyManager propertyManager,
+        Session session,
+        Scanner scanner
+    ) {
         this.propertyManager = propertyManager;
         this.session = session;
         this.scanner = scanner;
+    }
+
+    private boolean hasCompletedBooking(Property property, String username) {
+        for (Room room : property.getRooms()) {
+            if (room.bookingCompletedByUser(username)) { return true; }
+        }
+        return false;
     }
 
     public Property inputProperty() {
@@ -28,7 +39,11 @@ public class ReviewManager {
             System.out.println((i + 1) + ". " + properties.get(i).getAddress());
         }
 
-        int choice = Helpers.selectFromList(scanner, properties.size(), "Select property");
+        int choice = Helpers.selectFromList(
+            scanner,
+            properties.size(), 
+            "Select property"
+        );
         return properties.get(choice - 1);
     }
 
@@ -85,16 +100,9 @@ public class ReviewManager {
         Property property = inputProperty();
         if (property == null) { return; }
 
-        boolean eligible = false;
+        String username = session.getCurrentUser().getUsername();
 
-        for (Room room : property.getRooms()) {
-            if (room.completedBookingUser(session.getCurrentUser().getUsername())) {
-                eligible = true;
-                break;
-            }
-        }
-
-        if (!eligible) {
+        if (!hasCompletedBooking(property, username)) {
             System.out.println("You can only review properties you have stayed in.");
             return;
         }
@@ -110,8 +118,10 @@ public class ReviewManager {
         inputTitle(review);
         inputContent(review);
 
-        property.addReview(review);
-        System.out.println("Review created succesfully.");
+        try {
+            property.addReview(review);
+            System.out.println("Review created successfully.");
+        } catch (IllegalStateException e) { System.out.println(e.getMessage()); }
     }
 
     public List<Review> getUserReviews() {
@@ -120,7 +130,9 @@ public class ReviewManager {
 
         for(Property property : propertyManager.getAllProperties()) {
             for (Review review : property.getReviews()) {
-                if (review.getUsername().equalsIgnoreCase(username)) { userReviews.add(review); }
+                if (review.getUsername().equalsIgnoreCase(username)) {
+                    userReviews.add(review);
+                }
             }
         }
 
@@ -137,7 +149,9 @@ public class ReviewManager {
         for (int i = 0; i < userReviews.size(); i++) {
             Review review = userReviews.get(i);
             Property property = review.getProperty();
-            String address = (property != null) ? property.getAddress() : "Unknown property";
+            String address = (property != null)
+                ? property.getAddress() : "Unknown property";
+                
             System.out.println(
                 (i + 1) + ". "
                 + address + " - ("
@@ -157,7 +171,11 @@ public class ReviewManager {
 
         listReviews(userReviews);
 
-        int choice = Helpers.selectFromList(scanner, userReviews.size(), "Select a review to edit");
+        int choice = Helpers.selectFromList(
+            scanner,
+            userReviews.size(),
+            "Select a review to edit"
+        );
 
         editReviewMenu(userReviews.get(choice - 1));
     }
@@ -165,7 +183,8 @@ public class ReviewManager {
     private void editReviewMenu(Review review) {
         while (true) {
             Property property = review.getProperty();
-            String address = (property != null) ? property.getAddress() : "Unknown property";
+            String address = (property != null)
+                ? property.getAddress() : "Unknown property";
 
             System.out.println(
                 "\nEditing review: "
@@ -203,8 +222,11 @@ public class ReviewManager {
 
         listReviews(userReviews);
 
-        int choice = Helpers.selectFromList(scanner, userReviews.size(), "Select a review to delete");
-
+        int choice = Helpers.selectFromList(
+            scanner,
+            userReviews.size(),
+            "Select a review to delete"
+        );
         Review selectedReview = userReviews.get(choice - 1);
 
         if (!confirmDeletion(selectedReview)) {
@@ -212,7 +234,7 @@ public class ReviewManager {
             return;
         }
 
-        reviews.remove(selectedReview); // get to this
+        selectedReview.getProperty().removeReview(selectedReview.getUsername());
         System.out.println("Room deleted successfully.");
     }
 
@@ -221,7 +243,8 @@ public class ReviewManager {
             System.out.println("\nAre you sure you want to delete this review?");
 
             Property property = review.getProperty();
-            String address = (property != null) ? property.getAddress() : "Unknown property";
+            String address = (property != null)
+                ? property.getAddress() : "Unknown property";
 
             System.out.println(
                 address + " - ("
@@ -250,7 +273,7 @@ public class ReviewManager {
                     newReview();
                     break;
                 case 2:
-                    listReviews(reviews);
+                    listReviews(getUserReviews());
                     break;
                 case 3:
                     editReview();
@@ -262,7 +285,9 @@ public class ReviewManager {
                     System.out.println("Exiting...");
                     return;
                 default:
-                    System.out.println("Invalid choice. Please select an integer between 1-5.");
+                    System.out.println(
+                        "Invalid choice. Please select an integer between 1-5."
+                    );
                     break;
             }
         }
