@@ -5,11 +5,11 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Helpers {
-    public static int selectFromList(Scanner scanner, int size, String prompt) {
+    public static Integer selectFromList(Scanner scanner, Integer size, String prompt) {
         while (true) {
             System.out.print(prompt + " (1-" + size + "): ");
             try {
-                int choice = Integer.parseInt(scanner.nextLine());
+                Integer choice = Integer.parseInt(scanner.nextLine());
                 if (choice < 1 || choice > size) {
                     System.out.println("Invalid selection.");
                     continue;

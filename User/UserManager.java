@@ -22,7 +22,7 @@ public class UserManager {
     // helpers
 
     private boolean usernameExists(String username) {
-        return users.containsKey(username.toLowerCase());
+        return users.containsKey(username);
     }
 
     private boolean isStudent(User user) {
@@ -185,7 +185,8 @@ public class UserManager {
             inputStudentNumber(user);
         }
 
-        users.put(user.getUsername().toLowerCase(), user);
+        // if this doesnt work put .tolowercase() back
+        users.put(user.getUsername(), user);
         System.out.println("Registration successful");
     }
 
@@ -193,7 +194,7 @@ public class UserManager {
 
     public void login() {
         System.out.print("Enter username: ");
-        String username = scanner.nextLine().toLowerCase();
+        String username = scanner.nextLine();
 
         System.out.print("Enter password: ");
         String rawPassword = scanner.nextLine();
