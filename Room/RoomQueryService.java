@@ -7,7 +7,7 @@ import Properties.Property;
 import Properties.PropertyManager;
 
 public class RoomQueryService {
-    private final staticPropertyManager propertyManager;
+    private final PropertyManager propertyManager;
 
     public RoomQueryService(PropertyManager propertyManager) {
         this.propertyManager = propertyManager; 
