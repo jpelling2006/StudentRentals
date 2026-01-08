@@ -201,37 +201,29 @@ public class ReviewManager {
 
     public void start() {
         while (true) {
-            System.out.println("\n Review Management System");
+            System.out.println("\nReview Management System");
             System.out.println("1. Create review");
             System.out.println("2. List reviews");
             System.out.println("3. Edit reviews");
             System.out.println("4. Delete reviews");
             System.out.println("5. Exit");
-            System.out.print("Enter your choice: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
 
+            Integer choice = Helpers.readIntInRange(
+                scanner, 
+                "Enter choice: ", 
+                1, 
+                5
+            );
+            
             switch (choice) {
-                case 1:
-                    newReview();
-                    break;
-                case 2:
-                    listReviews(getUserReviews());
-                    break;
-                case 3:
-                    editReview();
-                    break;
-                case 4:
-                    deleteReview();
-                    break;
-                case 5:
+                case 1 -> newReview();
+                case 2 -> listReviews(getUserReviews());
+                case 3 -> editReview();
+                case 4 -> deleteReview();
+                case 5 -> {
                     System.out.println("Exiting...");
                     return;
-                default:
-                    System.out.println(
-                        "Invalid choice. Please select an integer between 1-5."
-                    );
-                    break;
+                }
             }
         }
     }

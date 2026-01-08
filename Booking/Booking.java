@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import Properties.Property;
 import Room.Room;
 
 public class Booking {
