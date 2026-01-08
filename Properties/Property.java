@@ -5,28 +5,26 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.UUID;
 
 import Review.Review;
 import Room.Room;
 
 public class Property {
-    private static final AtomicInteger idGenerator = new AtomicInteger(1);
-
-    private Integer propertyID;
+    private UUID propertyID;
     private String username; // only homeowners
     private String city;
     private String address;
     public String description;
-    private String propertyType;
+    private PropertyType propertyType;
     private Integer bedrooms;
     private Integer bathrooms;
     private List<Room> rooms = new ArrayList<>();
     private Map<String, Review> reviewsByUser = new HashMap<>();
 
-    public Integer getPropertyID() { return propertyID; }
+    public UUID getPropertyID() { return propertyID; }
     public void generatePropertyID() {
-        this.propertyID = idGenerator.getAndIncrement();
+        this.propertyID = UUID.randomUUID();
     }
 
     // if exists too
@@ -71,16 +69,10 @@ public class Property {
         this.description = description;
     }
 
-    public String getPropertyType() { return propertyType; }
-    public void setPropertyType(String propertyType) {
-        if (
-            propertyType == null
-            || (!propertyType.equals("house")
-            && !propertyType.equals("flat"))
-        ) {
-            throw new IllegalArgumentException(
-                "Property must be one of the following types: house, flat"
-            );
+    public PropertyType getPropertyType() { return propertyType; }
+    public void setPropertyType(PropertyType propertyType) {
+        if (propertyType == null) {
+            throw new IllegalArgumentException("Room type is required.");
         }
         this.propertyType = propertyType;
     }
@@ -145,6 +137,4 @@ public class Property {
 
         return (double) sum / reviewsByUser.size();
     }
-
-    public Property() {}
 }

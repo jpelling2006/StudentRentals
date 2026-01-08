@@ -61,7 +61,6 @@ public class SearchManager {
         return lastResults;
     }
 
-    // 1. £120/week - Single room - City Centre
     public void displaySearchResults(List<Room> rooms) {
         if (rooms.isEmpty()) {
             System.out.println("No rooms match your search criteria.");
@@ -90,13 +89,13 @@ public class SearchManager {
             return null;
         }
 
-        Integer choice = Helpers.selectFromList(
+        Room choice = Helpers.selectFromList(
             scanner, 
-            lastResults.size(), 
+            lastResults, 
             "Select room"
         );
 
-        return lastResults.get(choice - 1);
+        return choice;
     }
 
     public void viewRoomDetails(Room room) {

@@ -22,9 +22,9 @@ public class UserManager {
 
     public void inputUsername(User user) {
         while (true) {
-            String username = Helpers.readString(scanner, "Username: ", 32);
+            String username = Helpers.readString(scanner, "Username: ", 32).toLowerCase();
 
-            if (users.containsKey(user)) {
+            if (users.containsKey(username.toLowerCase())) {
                 System.out.println("Username already exists.");
                 continue;
             }
@@ -60,7 +60,11 @@ public class UserManager {
 
         Integer choice = Helpers.readIntInRange(scanner, "Choose user type: ", 1, 2);
 
-        User user = (choice == 1) ? new StudentUser() : new HomeownerUser();
+        UserType type = (choice == 1) ? UserType.STUDENT : UserType.HOMEOWNER;
+
+        UserFactory factory = UserFactoryProvider.getFactory(type);
+
+        User user = factory.createUser();
 
         inputUsername(user);
         inputCommonDetails(user);

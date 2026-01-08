@@ -31,78 +31,23 @@ public class ReviewManager {
         return false;
     }
 
-    public Property inputProperty() {
-        List<Property> properties = propertyManager.getAllProperties();
-        if (properties.isEmpty()) { return null; }
-
-        for (int i = 0; i < properties.size(); i++) {
-            System.out.println((i + 1) + ". " + properties.get(i).getAddress());
-        }
-
-        int choice = Helpers.selectFromList(
-            scanner,
-            properties.size(), 
-            "Select property"
-        );
-        return properties.get(choice - 1);
-    }
-
-    public void inputStars(Review review) {
-        while (true) {
-            Integer stars = Helpers.readInt(scanner, "Star rating (1-5): ");
-
-            try {
-                review.setStars(stars);
-                System.out.println("Star rating set.");
-                return;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    public void inputTitle(Review review) {
-        while (true) {
-            System.out.print("Enter review title: ");
-            String title = scanner.nextLine();
-
-            try {
-                review.setTitle(title);
-                System.out.println("Review title set.");
-                return;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    public void inputContent(Review review) {
-        while (true) {
-            System.out.print("Enter review content: ");
-            String content = scanner.nextLine();
-
-            try {
-                review.setContent(content);
-                System.out.println("Review content set.");
-                return;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
     public void newReview() {
         if (!session.getCurrentUser().getUserType().equals("student")) {
             System.out.println("Only students can post reviews");
             return;
         }
 
-        Property property = inputProperty();
-        if (property == null) { return; }
+        // change to properties user has stayed in
+        Property selectedProperty = Helpers.selectFromList(
+            scanner, 
+            propertyManager.getAllProperties(), 
+            "Select property"
+        );
+        if (selectedProperty == null) { return; }
 
         String username = session.getCurrentUser().getUsername();
 
-        if (!hasCompletedBooking(property, username)) {
+        if (!hasCompletedBooking(selectedProperty, username)) {
             System.out.println("You can only review properties you have stayed in.");
             return;
         }
@@ -112,14 +57,14 @@ public class ReviewManager {
         System.out.println("\nCreating new review");
 
         review.generateReviewID();
-        review.setProperty(property);
+        review.setProperty(selectedProperty);
         review.setUsername(session.getCurrentUser().getUsername());
-        inputStars(review);
-        inputTitle(review);
-        inputContent(review);
+        review.setStars(Helpers.readIntInRange(scanner, "Enter stars: ", 1, 5));
+        review.setTitle(Helpers.readString(scanner, "Enter review title: ", 256));
+        review.setContent(Helpers.readString(scanner, "Enter review content: ", 1024));
 
         try {
-            property.addReview(review);
+            selectedProperty.addReview(review);
             System.out.println("Review created successfully.");
         } catch (IllegalStateException e) { System.out.println(e.getMessage()); }
     }
@@ -171,13 +116,13 @@ public class ReviewManager {
 
         listReviews(userReviews);
 
-        int choice = Helpers.selectFromList(
+        Review choice = Helpers.selectFromList(
             scanner,
-            userReviews.size(),
+            userReviews,
             "Select a review to edit"
         );
 
-        editReviewMenu(userReviews.get(choice - 1));
+        editReviewMenu(choice);
     }
 
     private void editReviewMenu(Review review) {
@@ -197,17 +142,16 @@ public class ReviewManager {
             System.out.println("3. Content");
             System.out.println("4. Cancel");
 
-            Integer choice = Helpers.readInt(scanner, "Choose a field to edit: ");
+            Integer choice = Helpers.readIntInRange(scanner, "Choose a field to edit: ", 1, 4);
 
             switch (choice) {
-                case 1 -> inputStars(review);
-                case 2 -> inputTitle(review);
-                case 3 -> inputContent(review);
+                case 1 -> review.setStars(Helpers.readIntInRange(scanner, "Enter stars: ", 1, 5));
+                case 2 -> review.setTitle(Helpers.readString(scanner, "Enter review title: ", 256));
+                case 3 -> review.setContent(Helpers.readString(scanner, "Enter review content: ", 1024));
                 case 4 -> {
                     System.out.println("Edit cancelled.");
                     return;
                 }
-                default -> System.out.println("Invalid option.");
             }
         }
     }
@@ -222,12 +166,11 @@ public class ReviewManager {
 
         listReviews(userReviews);
 
-        int choice = Helpers.selectFromList(
+        Review selectedReview = Helpers.selectFromList(
             scanner,
-            userReviews.size(),
+            userReviews,
             "Select a review to delete"
         );
-        Review selectedReview = userReviews.get(choice - 1);
 
         if (!confirmDeletion(selectedReview)) {
             System.out.println("Deletion cancelled");

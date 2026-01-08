@@ -18,7 +18,7 @@ public class Main {
 
         UserManager userManager = new UserManager(session, scanner);
         PropertyManager propertyManager = new PropertyManager(session, scanner);
-        RoomManager roomManager = new RoomManager(propertyManager, session, scanner);
+        // RoomManager roomManager = new RoomManager(propertyManager, session, scanner);
         ReviewManager reviewManager = new ReviewManager(propertyManager, session, scanner);
         SearchManager searchManager = new SearchManager(propertyManager, session, scanner);
 
@@ -56,7 +56,7 @@ public class Main {
                         System.out.println("4. Logout");
 
                         // figure out why this isnt working
-                        Integer choice = selectFromList(scanner, 4, "Select choice");
+                        Integer choice = Helpers.readIntInRange(scanner, "Select choice", 1, 4);
 
                         switch (choice) {
                             case 1 -> userManager.start();
@@ -70,7 +70,7 @@ public class Main {
                         System.out.println("5. Rooms");
                         System.out.println("6. Logout");
 
-                        Integer choice = selectFromList(scanner, 6, "Select choice");
+                        Integer choice = Helpers.readIntInRange(scanner, "Select choice", 1, 6);
 
                         switch (choice) {
                             case 1 -> userManager.start();

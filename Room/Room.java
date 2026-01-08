@@ -1,30 +1,30 @@
 package Room;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.UUID;
 
 import Booking.Booking;
 import Properties.Property;
 
 public class Room {
-    private static final AtomicInteger idGenerator = new AtomicInteger(1);
-
-    private Integer roomID;
+    private UUID roomID;
     private Property property;
-    private String roomType;
+    private RoomType roomType;
     private Double rentPrice;
     private Boolean billsIncluded;
     private String location; // as in where it is in the house, what floor etc
     private String amenities;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Map<String, Booking> bookings = new HashMap<>();
+    private Map<String, Booking> bookingsByUser = new HashMap<>();
 
-    public Integer getRoomID() { return roomID; }
+    public UUID getRoomID() { return roomID; }
     public void generateRoomID() {
-        this.roomID = idGenerator.getAndIncrement();
+        this.roomID = UUID.randomUUID();
     }
 
     public Property getProperty() { return property; }
@@ -35,16 +35,11 @@ public class Room {
         this.property = property;
     }
 
-    public String getRoomType() { return roomType; }
-    public void setRoomType(String roomType) {
-        if (
-            roomType == null
-            || (!roomType.equals("single")
-            && !roomType.equals("double"))
-        ) {
-            throw new IllegalArgumentException(
-                "Room must be one of the following types: single, double"
-            );
+    // get to this
+    public RoomType getRoomType() { return roomType; }
+    public void setRoomType(RoomType roomType) {
+        if (roomType == null) {
+            throw new IllegalArgumentException("Room type is required.");
         }
         this.roomType = roomType;
     }
@@ -120,12 +115,16 @@ public class Room {
 
     // check later, see if getBookings() can still exist similar to the other one
 
-    // public List<Booking> getBookings() { return bookings; }
+    public Collection<Booking> getBookings() { return bookingsByUser.values(); }
+
+    public Booking getBookingByUser(String username) {
+        return bookingsByUser.get(username);
+    }
 
     public void addBooking(Booking booking) {
         String username = booking.getUsername();
 
-        if (bookings.containsKey(username)) {
+        if (bookingsByUser.containsKey(username)) {
             throw new IllegalStateException(
                 "You already have a booking for this property"
             );
@@ -135,20 +134,20 @@ public class Room {
             throw new IllegalStateException("Room is not available for these dates.");
         }
 
-        bookings.put(username, booking);
+        bookingsByUser.put(username, booking);
     }
 
-    public void removeBooking(String username) { bookings.remove(username); }
+    public void removeBooking(String username) { bookingsByUser.remove(username); }
 
-    public boolean hasBooking(String username) { return bookings.containsKey(username); }
+    public boolean hasBooking(String username) { return bookingsByUser.containsKey(username); }
 
     public boolean bookingCompletedByUser(String username) {
-        Booking booking = bookings.get(username);
+        Booking booking = bookingsByUser.get(username);
         return booking != null && booking.hasEnded();
     }
 
     public boolean isAvailable(LocalDate from, LocalDate to) {
-        for (Booking booking : bookings.values()) {
+        for (Booking booking : bookingsByUser.values()) {
             if (booking.overlaps(from, to)) { return false; }
         }
         return true;

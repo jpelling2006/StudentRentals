@@ -1,29 +1,36 @@
 package Booking;
 
 import java.time.LocalDate;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import Room.Room;
 
 public class Booking {
-    private static final AtomicInteger idGenerator
-        = new AtomicInteger(1);
-
-    private Integer bookingID;
+    private UUID bookingID;
+    private BookingStatus bookingStatus;
     private Room room;
     private String username; // students only
     private LocalDate startDate;
     private LocalDate endDate;
 
-    public Integer getBookingID() { return bookingID; }
+    public UUID getBookingID() { return bookingID; }
     public void generateBookingID() {
-        this.bookingID = idGenerator.getAndIncrement();
+        this.bookingID = UUID.randomUUID();
     }
 
     public Room getRoom() { return room; }
-    public void setRoom() {
+    public void setRoom(Room room) {
         if (room == null) { throw new IllegalArgumentException("Room required."); }
         this.room = room;
+    }
+
+    public BookingStatus getBookingStatus() { return bookingStatus; }
+    public void setBookingStatus(BookingStatus bookingStatus) {
+        if (bookingStatus == null) {
+            throw new IllegalArgumentException("Booking status is required.");
+        }
+        this.bookingStatus = bookingStatus;
     }
 
     // if exists too

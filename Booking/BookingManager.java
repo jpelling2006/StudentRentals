@@ -10,7 +10,8 @@ public class BookingManager {
     private Session session;
     private RoomManager roomManager;
 
-    public BookingManager(RoomManager roomManager, 
+    public BookingManager(
+        RoomManager roomManager, 
         Session session, 
         Scanner scanner
     ) {
@@ -19,7 +20,9 @@ public class BookingManager {
         this.scanner = scanner;
     }
 
-    private Room inputRoom() {
-       
+    protected void editBookingMenu(Booking booking) {
+        while (true) {
+            Room room = room.get
+        }
     }
 }

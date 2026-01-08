@@ -1,22 +1,21 @@
 package Review;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import Properties.Property;
 
 public class Review {
-    private static final AtomicInteger idGenerator = new AtomicInteger(1);
-
-    private Integer reviewID;
+    private UUID reviewID;
     private Property property;
     private String username;
     private Integer stars;
     private String title;
     private String content;
 
-    public Integer getReviewID() { return reviewID; }
+    public UUID getReviewID() { return reviewID; }
     public void generateReviewID() {
-        this.reviewID = idGenerator.getAndIncrement();
+        this.reviewID = UUID.randomUUID();
     }
 
     public Property getProperty() { return property; }

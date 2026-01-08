@@ -5,157 +5,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.UUID;
 
 import FrontEnd.Session;
 import Helpers.Helpers;
-import User.User;
 
 public class PropertyManager {
-    private Map<Integer, Property> properties = new HashMap<>();
-    private Scanner scanner = new Scanner(System.in);
-    private Session session;
+    protected Map<UUID, Property> properties = new HashMap<>();
+    protected Scanner scanner = new Scanner(System.in);
+    protected Session session;
 
     public PropertyManager(Session session, Scanner scanner) {
         this.session = session;
         this.scanner = scanner;
     }
 
-    // input helpers
-
-    private void inputCity(Property property) {
-        while (true) {
-            System.out.print("New city");
-            String city = scanner.nextLine();
-
-            try {
-                property.setCity(city);
-                System.out.println("City set.");
-                return;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    private void inputAddress(Property property) {
-        while (true) {
-            System.out.print("New address: ");
-            String address = scanner.nextLine();
-
-            try {
-                property.setAddress(address);
-                System.out.println("Address set.");
-                return;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    private void inputDescription(Property property) {
-        while (true) {
-            System.out.print("New description: ");
-            String description = scanner.nextLine();
-
-            try {
-                property.setDescription(description);
-                System.out.println("Description set.");
-                return;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    private void inputPropertyType(Property property) {
-        while (true) {
-            System.out.println("Please pick from the following property types:");
-            System.out.println("1. House");
-            System.out.println("2. Flat");
-
-            Integer choice = Helpers.readInt(scanner, "Enter choice (1/2): ");
-
-            if (choice == 1) {
-                property.setPropertyType("house");
-                System.out.println("Property type set.");
-                return;
-            } else if (choice == 2) {
-                property.setPropertyType("flat");
-                System.out.println("Property type set.");
-                return;
-            } else {
-                System.out.println("Please enter either 1 or 2.");
-            }
-        }
-    }
-
-    private void inputBedrooms(Property property) {
-        while (true) {
-            Integer bedrooms = Helpers.readInt(scanner, "Number of bedrooms: ");
-            try {
-                property.setBedrooms(bedrooms);
-                System.out.println("Bedrooms set.");
-                return;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    private void inputBathrooms(Property property) {
-        while (true) {
-            Integer bathrooms = Helpers.readInt(scanner, "Number of bathrooms: ");
-            try {
-                property.setBathrooms(bathrooms);
-                System.out.println("Bathrooms set.");
-                return;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    // create
-
-
-    public void newProperty() {
-        Property property = new Property();
-
-        System.out.println("\nCreating new property");
-
-        property.generatePropertyID();
-        property.setUsername(session.getCurrentUser().getUsername());
-        inputCity(property);
-        inputAddress(property);
-        inputDescription(property);
-        inputPropertyType(property);
-        inputBedrooms(property);
-        inputBathrooms(property);
-
-        properties.put(property.getPropertyID(), property);
-        System.out.println("Property created successfully");
-    } 
-
     // read
     
-    public Property getPropertyByID(Integer propertyID) {
+    public Property getPropertyByID(UUID propertyID) {
         return properties.get(propertyID);
     }
 
     public List<Property> getAllProperties() {
         return new ArrayList<>(properties.values());
-    }
-
-    public List<Property> getUserProperties(String username) {
-        List<Property> userProperties = new ArrayList<>();
-
-        for(Property property : properties.values()) {
-            if (property.getUsername().equalsIgnoreCase(username)) {
-                userProperties.add(property);
-            }
-        }
-
-        return userProperties;
     }
 
     public void listProperties(List<Property> userProperties) {
@@ -175,32 +47,7 @@ public class PropertyManager {
         }
     }
 
-    // update
-
-    public void editProperty() {
-        User currentUser = session.getCurrentUser();
-        String username = currentUser.getUsername();
-        List<Property> userProperties = getUserProperties(username);
-
-        if (userProperties.isEmpty()) {
-            System.out.println("You have no properties to edit.");
-            return;
-        }
-
-
-        listProperties(userProperties);
-
-        int choice = Helpers.selectFromList(
-            scanner,
-            userProperties.size(), 
-            "Select a property to edit"
-        );
-
-        Property selectedProperty = userProperties.get(choice - 1);
-        editPropertyMenu(selectedProperty);
-    }
-
-    private void editPropertyMenu(Property property) {
+    protected void editPropertyMenu(Property property) {
         while (true) {
             System.out.println("\nEditing property: " + property.getAddress());
             System.out.println("1. Address");
@@ -210,94 +57,46 @@ public class PropertyManager {
             System.out.println("5. Bathrooms");
             System.out.println("6. Cancel");
 
-            System.out.print("Choose a field to edit: ");
-            String input = scanner.nextLine();
-
             try {
-                int choice = Integer.parseInt(input);
+                Integer choice = Helpers.readIntInRange(
+                    scanner, "Enter choice: ", 1, 6
+                );
 
                 switch (choice) {
-                    case 1 -> inputAddress(property);
-                    case 2 -> inputDescription(property);
-                    case 3 -> inputPropertyType(property);
-                    case 4 -> inputBedrooms(property);
-                    case 5 -> inputBathrooms(property);
+                    case 1 -> property.setAddress(
+                        Helpers.readString(
+                            scanner, 
+                            "Enter new address: ", 
+                            512
+                        )
+                    );
+                    case 2 -> property.setDescription(
+                        Helpers.readString(
+                            scanner, 
+                            "Enter new description: ", 
+                            2048
+                        )
+                    );
+                    case 3 -> property.setPropertyType(
+                        Helpers.readEnum(
+                            scanner, 
+                            "Enter new property type: ", 
+                            PropertyType.class
+                        )
+                    );
+                    case 4 -> property.setBedrooms(
+                        Helpers.readInt(scanner, "Enter bedrooms amount: ")
+                    );
+                    case 5 -> property.setBathrooms(
+                        Helpers.readInt(scanner, "Enter bathrooms amount: ")
+                    );
                     case 6 -> {
                         System.out.println("Edit cancelled.");
                         return;
                     }
-                    default -> System.out.println("Invalid option.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a number.");
-            }
-        }
-    }
-
-    // delete
-    
-    public void deleteProperty() {
-        String username = session.getCurrentUser().getUsername();
-        List<Property> userProperties = getUserProperties(username);
-
-        if (userProperties.isEmpty()) {
-            System.out.println("You have no properties to delete.");
-            return;
-        }
-
-        listProperties(userProperties);
-
-        int choice = Helpers.selectFromList(
-            scanner, userProperties.size(),
-            "Select a property to delete"
-        );
-
-        Property selectedProperty = userProperties.get(choice - 1);
-
-        if (!confirmDeletion(selectedProperty)) {
-            System.out.println("Deletion cancelled.");
-            return;
-        }
-
-        properties.remove(selectedProperty.getPropertyID());
-        System.out.println("Property deleted successfully.");
-    }
-
-    private boolean confirmDeletion(Property property) {
-        System.out.println("\nAre you sure you want to delete this property?");
-        System.out.println(
-            property.getAddress()+ " ("
-            + property.getPropertyType() + ")"
-        );
-
-        return Helpers.confirm(scanner);
-    }
-
-
-    public void start() {
-        while (true) {
-            System.out.println("\nProperty Management System");
-            System.out.println("1. Create property");
-            System.out.println("2. List properties");
-            System.out.println("3. Edit properties");
-            System.out.println("4. Delete properties");
-            System.out.println("5. Exit");
-            Integer choice = Helpers.readInt(scanner, "Enter your choice: ");
-
-            switch (choice) {
-                case 1 -> newProperty();
-                case 2 -> listProperties(
-                    getUserProperties(session.getCurrentUser().getUsername())
-                );
-                case 3 -> editProperty();
-                case 4 -> deleteProperty();
-                case 5 -> {
-                    System.out.println("Exiting...");
-                    return;
-                }
-                default -> System.out.println(
-                    "Invalid choice. Please select an integer between 1-5."
-                );
             }
         }
     }

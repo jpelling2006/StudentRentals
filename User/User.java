@@ -14,8 +14,6 @@ public abstract class User {
     private String passwordHash;
     private byte[] salt;
 
-    // add userID back?
-
     public String getUsername() { return username; }
     public void setUsername(String username) {
         // add regex

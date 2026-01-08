@@ -3,6 +3,7 @@ package Helpers;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Scanner;
 
 public final class Helpers {
@@ -19,7 +20,9 @@ public final class Helpers {
             String input = scanner.nextLine().trim();
 
             if (input.isEmpty()) { System.out.println("Input cannot be empty."); }
-            else if (input.length() > maxLength) { System.out.println("Input must be under " + maxLength + " characters."); }
+            else if (input.length() > maxLength) {
+                System.out.println("Input must be under " + maxLength + " characters.");
+            }
             else { return input; }
         }
     }
@@ -29,9 +32,8 @@ public final class Helpers {
             System.out.print(prompt);
             String input = scanner.nextLine();
 
-            try {
-                return Integer.parseInt(input);
-            } catch (NumberFormatException e) {
+            try { return Integer.parseInt(input); }
+            catch (NumberFormatException e) {
                 System.out.println("Please enter a valid number.");
             }
         }
@@ -46,24 +48,45 @@ public final class Helpers {
         while (true) {
             Integer value = readInt(scanner, prompt);
 
-            if (value >= min && value <= max) {
-                return value;
-            }
+            if (value >= min && value <= max) { return value; }
 
-            System.out.println("Please enter a number between " + min + " and " + max + ".");
+            System.out.println(
+                "Please enter a number between " 
+                + min 
+                + " and " 
+                + max + "."
+            );
         }
     }
 
-    public static Integer selectFromList(
+    public static Double readDouble(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine();
+
+            try { return Double.parseDouble(input); }
+            catch (NumberFormatException e) {
+                System.out.println("Please enter a valid decimal number.");
+            }
+        }
+    }
+
+    public static <T> T selectFromList(
         Scanner scanner,
-        Integer listSize,
+        List<T> items,
         String prompt
     ) {
-        if (listSize <= 0) {
-            throw new IllegalArgumentException("List must not be empty.");
+        if (items == null || items.isEmpty()) {
+            System.out.println("No options available.");
+            return null;
         }
 
-        return readIntInRange(scanner, prompt + " (1-" + listSize + "): ", 1, listSize);
+        for (int i = 0; i < items.size(); i++) {
+            System.out.println((i+1) + ". " + items.get(i));
+        }
+
+        Integer choice = readIntInRange(scanner, prompt + ": ", 1, items.size());
+        return items.get(choice - 1);
     }
 
     public static <T extends Enum<T>> T readEnum(
@@ -79,7 +102,12 @@ public final class Helpers {
                 System.out.println((i + 1) + ". " + values[i].name());
             }
 
-            Integer choice = readIntInRange(scanner, "Choose option: ", 1, values.length);
+            Integer choice = readIntInRange(
+                scanner, 
+                "Choose option: ", 
+                1, 
+                values.length
+            );
             return values[choice - 1];
         }
     }
