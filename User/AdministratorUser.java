@@ -2,5 +2,5 @@ package User;
 
 public class AdministratorUser extends User {
     @Override
-    public String getUserType() { return "administrator"; }
+    public UserType getUserType() { return UserType.ADMINISTRATOR; }
 }

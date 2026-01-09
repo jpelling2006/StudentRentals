@@ -12,7 +12,7 @@ import Room.Room;
 
 public class Property {
     private UUID propertyID;
-    private String username; // only homeowners
+    private String username;
     private String city;
     private String address;
     public String description;

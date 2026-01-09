@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Function;
 
 public final class Helpers {
     // prevent instantiation
@@ -154,6 +155,17 @@ public final class Helpers {
             if (input.equals("n")) return false;
 
             System.out.println("Please enter 'y' or 'n'.");
+        }
+    }
+
+    public static <T> void printIndexed(List<T> list, Function<T, String> formatter) {
+        if (list == null || list.isEmpty()) {
+            System.out.println("No items found.");
+            return;
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println((i + 1) + ". " + formatter.apply(list.get(i)));
         }
     }
 }

@@ -29,6 +29,10 @@ public class Booking {
         if (bookingStatus == null) {
             throw new IllegalArgumentException("Booking status is required.");
         }
+        if (this.bookingStatus == bookingStatus.ENDED) {
+            throw new IllegalStateException("Ended bookings cannot be modified.");
+        }
+
         this.bookingStatus = bookingStatus;
     }
 
@@ -64,5 +68,15 @@ public class Booking {
 
     public boolean overlaps(LocalDate from, LocalDate to) {
         return !(to.isBefore(startDate) || from.isAfter(endDate));
+    }
+
+    @Override
+    public String toString() {
+        Room room = getRoom();
+        String address = (room != null && room.getProperty() != null)
+            ? room.getProperty().getAddress()
+            : "Unknown property";
+
+        return startDate + " to " + endDate + " (" + bookingStatus + ")\n" + address;
     }
 }

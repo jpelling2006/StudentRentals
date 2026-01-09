@@ -21,6 +21,15 @@ public class RoomQueryService {
         return rooms;
     }
 
+    public List<Room> getRoomsForUser(String username) {
+        List<Room> rooms = new ArrayList<>();
+
+        for (Property property : propertyManager.getUserProperties(username)) {
+            rooms.addAll(property.getRooms());
+        }
+        return rooms;
+    }
+
     public List<Room> getRoomsByType(RoomType type) {
         List<Room> result = new ArrayList<>();
         for (Room room : getAllRooms()) {
@@ -28,4 +37,5 @@ public class RoomQueryService {
         }
         return result;
     }
+    
 }

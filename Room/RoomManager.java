@@ -71,8 +71,4 @@ public class RoomManager {
             }
         }
     }
-
-    protected Room selectRoom(List<Room> rooms, String prompt) {
-        return Helpers.selectFromList(scanner, rooms, prompt);
-    }
 }

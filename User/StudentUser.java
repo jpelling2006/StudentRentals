@@ -2,14 +2,14 @@ package User;
 
 public class StudentUser extends User {
     @Override
-    public String getUserType() { return "student"; }
+    public UserType getUserType() { return UserType.STUDENT; }
 
     private String university;
     private String studentNumber;
 
     public String getUniversity() { return university; }
     public void setUniversity(String university) {
-        if (!"student".equals(this.getUserType())) {
+        if (!UserType.STUDENT.equals(this.getUserType())) {
             throw new IllegalStateException("Only student can input a university.");
         }
         if (university != null && university.length() > 128) {
@@ -22,7 +22,7 @@ public class StudentUser extends User {
 
     public String getStudentNumber() { return studentNumber; }
     public void setStudentNumber(String studentNumber) {
-        if (!"student".equals(this.getUserType())) {
+        if (!UserType.STUDENT.equals(this.getUserType())) {
             throw new IllegalStateException(
                 "Only students can have a student number."
             );

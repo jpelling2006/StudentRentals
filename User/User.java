@@ -23,7 +23,7 @@ public abstract class User {
         this.username = username;
     }
 
-    public abstract String getUserType(); // enum?
+    public abstract UserType getUserType(); // enum?
 
     public String getEmail() { return email; }
     public void setEmail(String email) {

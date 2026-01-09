@@ -35,7 +35,7 @@ public class SearchManager {
     }
 
     private boolean correctRoomType(Room room, String roomType) {
-        return room.getRoomType().equalsIgnoreCase(roomType);
+        return room.getRoomType().equals(roomType);
     }
 
     private boolean matchesLocation(Property property, String cityOrArea) {

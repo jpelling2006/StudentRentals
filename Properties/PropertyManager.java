@@ -30,6 +30,18 @@ public class PropertyManager {
         return new ArrayList<>(properties.values());
     }
 
+    public List<Property> getUserProperties(String username) {
+        List<Property> userProperties = new ArrayList<>();
+
+        for (Property property : properties.values()) {
+            if (property.getUsername().equals(username)) {
+                userProperties.add(property);
+            }
+        }
+
+        return userProperties;
+    }
+
     public void listProperties(List<Property> userProperties) {
         if (userProperties.isEmpty()) {
             System.out.println("You have no properties.");

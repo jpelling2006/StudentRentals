@@ -65,4 +65,11 @@ public class Review {
         }
         this.content = content;
     }
+
+    @Override
+    public String toString() {
+        Property property = getProperty();
+        String address = (property != null) ? property.getAddress() : "Unknown property";
+        return address + " - (" + stars + ")\n" + title;
+    }
 }
