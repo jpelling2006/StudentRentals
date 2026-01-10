@@ -31,7 +31,7 @@ public class Booking {
         if (bookingStatus == null) {
             throw new IllegalArgumentException("Booking status is required.");
         }
-        if (this.bookingStatus == bookingStatus.ENDED) {
+        if (this.bookingStatus == BookingStatus.ENDED) {
             throw new IllegalStateException("Ended bookings cannot be modified.");
         }
 

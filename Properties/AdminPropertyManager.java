@@ -30,7 +30,7 @@ public class AdminPropertyManager {
         if (selectedProperty == null) { return; }
 
         // fix this
-        properties.remove(selectedProperty.getPropertyID()); // what
+        properties.remove(selectedProperty); // what
         System.out.println("Property deleted successfully.");
     }
 }
