@@ -6,12 +6,13 @@ import java.util.Scanner;
 import Helpers.Helpers;
 
 public class AdminPropertyManager {
-    private final PropertyManager propertyManager;
     private final PropertyQueryService propertyQueryService;
     private final Scanner scanner;
 
-    public AdminPropertyManager(PropertyManager propertyManager, PropertyQueryService propertyQueryService, Scanner scanner) {
-        this.propertyManager = propertyManager;
+    public AdminPropertyManager(
+        PropertyQueryService propertyQueryService, 
+        Scanner scanner
+    ) {
         this.propertyQueryService = propertyQueryService;
         this.scanner = scanner;
     }

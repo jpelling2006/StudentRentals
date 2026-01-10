@@ -6,23 +6,19 @@ import java.util.Scanner;
 import Helpers.Helpers;
 import Properties.Property;
 import Room.Room;
-import Room.RoomQueryService;
 import Session.Session;
 
 public class HomeownerBookingManager {
     private final BookingQueryService bookingQueryService;
-    private final RoomQueryService roomQueryService;
     private final Session session;
     private final Scanner scanner;
 
     public HomeownerBookingManager(
         BookingQueryService bookingQueryService,
-        RoomQueryService roomQueryService,
         Session session,
         Scanner scanner
     ) {
         this.bookingQueryService = bookingQueryService;
-        this.roomQueryService = roomQueryService;
         this.session = session;
         this.scanner = scanner;
     }

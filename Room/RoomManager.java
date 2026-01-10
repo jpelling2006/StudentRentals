@@ -1,73 +1,81 @@
 package Room;
 
-import java.util.List;
 import java.util.Scanner;
 
 import Helpers.Helpers;
-import Properties.Property;
+import Session.Session;
 
 public class RoomManager {
-    protected final Scanner scanner;
+    private final HomeownerRoomManager homeownerRoomManager;
+    private final AdminRoomManager adminRoomManager;
 
-    protected RoomManager(Scanner scanner) {
+    protected final Scanner scanner;
+    protected final Session session;
+
+    protected RoomManager(
+        HomeownerRoomManager homeownerRoomManager,
+        AdminRoomManager adminRoomManager,
+        Scanner scanner,
+        Session session
+    ) {
+        this.homeownerRoomManager = homeownerRoomManager;
+        this.adminRoomManager = adminRoomManager;
         this.scanner = scanner;
+        this.session = session;
     }
 
-    protected void editRoomMenu(Room room) {
+    public void start() {
+        if (!session.isLoggedIn()) {
+            System.out.println("Please log in first.");
+            return;
+        }
+
+        switch (session.getCurrentUser().getUserType()) {
+            case STUDENT -> System.out.println("Access denied.");
+            case HOMEOWNER -> homeownerMenu();
+            case ADMINISTRATOR -> adminMenu();
+        }
+    }
+
+    private void homeownerMenu() {
         while (true) {
-            Property property = room.getProperty();
-            String address = (property != null) 
-                ? property.getAddress() : "Unknown property";
+            System.out.println("\nHomeowner Room Menu");
+            System.out.println("1. Create room");
+            System.out.println("2. View rooms");
+            System.out.println("3. Edit room");
+            System.out.println("4. Delete room");
+            System.out.println("5. Back");
 
-            System.out.println(
-                "\nEditing room: "
-                + address + " - "
-                + room.getLocation()
-            );
-            System.out.println("1. Room type");
-            System.out.println("2. Rent price");
-            System.out.println("3. Bills included");
-            System.out.println("4. Location");
-            System.out.println("5. Amenities");
-            System.out.println("6. Dates");
-            System.out.println("7. Cancel");
+            switch (
+                Helpers.readIntInRange(
+                    scanner,
+                    "Choose option: ",
+                    1,
+                    5
+                )
+            ) {
+                case 1 -> homeownerRoomManager.createRoom();
+                case 2 -> homeownerRoomManager.listRooms();
+                case 3 -> homeownerRoomManager.editRoom();
+                case 4 -> homeownerRoomManager.deleteRoom();
+                case 5 -> { return; }
+            }
+        }
+    }
 
-            int choice = Helpers.readIntInRange(scanner, "Choose option: ", 1, 7);
+    private void adminMenu() {
+        while (true) {
+            System.out.println("\nAdmin Room Menu");
+            System.out.println("1. View rooms");
+            System.out.println("2. Delete room");
+            System.out.println("3. Back"); 
 
-            try {
-                switch (choice) {
-                    case 1 ->
-                        room.setRoomType(
-                            Helpers.readEnum(scanner, "Room type", RoomType.class)
-                        );
-                    case 2 ->
-                        room.setRentPrice(
-                            Helpers.readDouble(scanner, "Rent per week: ")
-                        );
-                    case 3 ->
-                        room.setBillsIncluded(
-                            Helpers.confirm(scanner)
-                        );
-                    case 4 ->
-                        room.setLocation(
-                            Helpers.readString(scanner, "Location: ", 64)
-                        );
-                    case 5 ->
-                        room.setAmenities(
-                            Helpers.readString(scanner, "Amenities: ", 256)
-                        );
-                    case 6 -> {
-                        room.setStartDate(
-                            Helpers.readFutureDate(scanner, "Start date")
-                        );
-                        room.setEndDate(
-                            Helpers.readFutureDate(scanner, "End date")
-                        );
-                    }
-                    case 7 -> { return; }
-                }
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+            switch (
+                Helpers.readIntInRange(scanner, "Choose option: ", 1, 3) 
+            ) {
+                case 1 -> adminRoomManager.listAllRooms();
+                case 2 -> adminRoomManager.deleteAnyRoom();
+                case 3 -> { return; }
             }
         }
     }

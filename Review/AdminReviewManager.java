@@ -27,19 +27,6 @@ public class AdminReviewManager {
         }
 
         System.out.println("\nAll reviews:");
-        for (int i = 0; i < reviews.size(); i++) {
-            Review review = reviews.get(i);
-            Property property = review.getProperty();
-            String address = (property != null)
-                ? property.getAddress() : "Unknown property";
-                
-            System.out.println(
-                (i + 1) + ". "
-                + address + " - ("
-                + review.getStars() + ")\n"
-                + review.getTitle()
-            ); // change to tostring
-        }
 
         Helpers.printIndexed(reviews, Review::toString);
     }

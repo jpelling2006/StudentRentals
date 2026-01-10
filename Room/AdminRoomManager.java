@@ -14,9 +14,17 @@ public class AdminRoomManager {
         this.scanner = scanner;
     }
 
-    public void editAnyRoom() {
+    public void listAllRooms() {
         List<Room> rooms = roomQueryService.getAllRooms();
-        Room room = Helpers.selectFromList(scanner, rooms, "Select room to edit");
+
+        if (rooms.isEmpty()) {
+            System.out.println("There are no rooms.");
+            return;
+        }
+
+        System.out.println("\nAll rooms:");
+
+        Helpers.printIndexed(rooms, Room::toString);
     }
 
     public void deleteAnyRoom() {

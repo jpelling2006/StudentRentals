@@ -13,28 +13,26 @@ import Session.Session;
 
 public class HomeownerRoomManager {
     private final PropertyQueryService propertyQueryService;
+    private final RoomQueryService roomQueryService;
     private final Session session;
     private final Scanner scanner;
 
     public HomeownerRoomManager(
         PropertyQueryService propertyQueryService,
-        PropertyManager propertyManager, 
+        RoomQueryService roomQueryService,
         Session session, 
         Scanner scanner
     ) {
         this.propertyQueryService = propertyQueryService;
+        this.roomQueryService = roomQueryService;
         this.session = session;
         this.scanner = scanner;
     }
 
-    private List<Room> getUserRooms() {
-        List<Room> rooms = new ArrayList<>();
-        String username = session.getCurrentUser().getUsername();
-
-        for (Property property : propertyQueryService.getUserProperties(username)) {
-            rooms.addAll(property.getRooms());
-        }
-        return rooms;
+    public void listRooms() {
+        List<Room> rooms = roomQueryService.getUserRooms(session.getCurrentUser().getUsername());
+        System.out.println("\nYour rooms:");
+        Helpers.printIndexed(rooms, Room::toString);
     }
 
     public void createRoom() {
@@ -76,7 +74,7 @@ public class HomeownerRoomManager {
     }
 
     public void editRoom() {
-        List<Room> rooms = getUserRooms();
+        List<Room> rooms = roomQueryService.getUserRooms(session.getCurrentUser().getUsername());
         Room room = Helpers.selectFromList(scanner, rooms, "Select room");
         if (room != null) { editRoomMenu(room); }
     }
@@ -136,7 +134,7 @@ public class HomeownerRoomManager {
     }
 
     public void deleteRoom() {
-        List<Room> rooms = getUserRooms();
+        List<Room> rooms = roomQueryService.getUserRooms(session.getCurrentUser().getUsername());
         Room room = Helpers.selectFromList(scanner, rooms, "Select room to delete");
         if (room == null) return;
 

@@ -21,13 +21,7 @@ public class RoomQueryService {
         return rooms;
     }
 
-    // private List<Room> getAllRooms() {
-    //     return propertyManager.getAllProperties().stream()
-    //         .flatMap(property -> property.getRooms().steam())
-    //         .collect(Collectors.toList());
-    // }
-
-    public List<Room> getRoomsForUser(String username) {
+    public List<Room> getUserRooms(String username) {
         List<Room> rooms = new ArrayList<>();
 
         for (Property property : propertyQueryService.getUserProperties(username)) {
