@@ -1,13 +1,13 @@
-package Room;
+package room;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
-import Helpers.Helpers;
-import Properties.Property;
-import Properties.PropertyQueryService;
 import Session.Session;
+import helpers.Helpers;
+import properties.Property;
+import session.Session;rtyQueryService;
 
 public class HomeownerRoomManager {
     private final PropertyQueryService propertyQueryService;

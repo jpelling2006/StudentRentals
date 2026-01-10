@@ -1,8 +1,8 @@
-package Review;
+package review;
 
 import java.util.UUID;
 
-import Properties.Property;
+import properties.Property;
 
 public class Review {
     private UUID reviewID;

@@ -1,9 +1,9 @@
-package User;
+package user;
 
 import java.util.List;
 import java.util.Scanner;
 
-import Helpers.Helpers;
+import helpers.Helpers;
 
 public class AdminUserManager {
     private final UserQueryService userQueryService;

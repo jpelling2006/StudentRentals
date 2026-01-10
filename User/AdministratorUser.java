@@ -1,4 +1,4 @@
-package User;
+package user;
 
 public class AdministratorUser extends User {
     @Override

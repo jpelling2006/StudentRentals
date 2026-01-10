@@ -1,9 +1,9 @@
-package Review;
+package review;
 
 import java.util.Scanner;
 
-import Helpers.Helpers;
 import Session.Session;
+import session.Session;
 
 public class ReviewManager {
     private final StudentReviewManager studentReviewManager;

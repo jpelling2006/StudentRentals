@@ -1,12 +1,12 @@
-package Properties;
+package properties;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 
-import Helpers.Helpers;
 import Session.Session;
+import session.Session;
 
 public class PropertyManager {
     protected Map<UUID, Property> properties = new HashMap<>();

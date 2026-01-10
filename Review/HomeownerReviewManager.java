@@ -1,9 +1,9 @@
-package Review;
+package review;
 
 import java.util.List;
 
-import Helpers.Helpers;
 import Session.Session;
+import session.Session;
 
 public class HomeownerReviewManager {
     private final ReviewQueryService reviewQueryService;

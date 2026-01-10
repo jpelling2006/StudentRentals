@@ -1,4 +1,4 @@
-package Search;
+package search;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import Helpers.Helpers;
-import Properties.Property;
-import Properties.PropertyQueryService;
-import Room.Room;
+import helpers.Helpers;
+import properties.Property;
+import properties.PropertyQueryService;
+import room.Room;
 
 public class SearchManager {
     private Scanner scanner;

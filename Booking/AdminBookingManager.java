@@ -1,12 +1,12 @@
-package Booking;
+package booking;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import Helpers.Helpers;
-import Room.Room;
-import Room.RoomQueryService;
+import helpers.Helpers;
+import room.Room;
+import room.RoomQueryService;
 
 public class AdminBookingManager {
 

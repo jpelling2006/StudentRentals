@@ -1,4 +1,4 @@
-package User;
+package user;
 
 public final class UserFactoryProvider {
     private UserFactoryProvider() {}

@@ -1,4 +1,4 @@
-package User;
+package user;
 
 public final class HomeownerUserFactory extends UserFactory {
     private static final HomeownerUserFactory INSTANCE = new HomeownerUserFactory();

@@ -1,14 +1,14 @@
-package Booking;
+package booking;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
-import Helpers.Helpers;
-import Properties.Property;
+import Properties.Prope
 import Room.Room;
-import Room.RoomQueryService;
 import Session.Session;
+import room.Room;
+import session.Session;rvice;rty;
 
 public class StudentBookingManager {
     private final BookingQueryService bookingQueryService;

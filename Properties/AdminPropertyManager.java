@@ -1,9 +1,9 @@
-package Properties;
+package properties;
 
 import java.util.List;
 import java.util.Scanner;
 
-import Helpers.Helpers;
+import helpers.Helpers;
 
 public class AdminPropertyManager {
     private final PropertyQueryService propertyQueryService;

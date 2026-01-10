@@ -1,4 +1,4 @@
-package Properties;
+package properties;
 
 public enum PropertyType {
     HOUSE,

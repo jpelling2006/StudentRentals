@@ -1,12 +1,12 @@
-package Booking;
+package booking;
 
 import java.util.List;
 import java.util.Scanner;
 
-import Helpers.Helpers;
-import Properties.Property;
+import Properties.Prope
 import Room.Room;
-import Session.Session;
+import Session.Se
+import session.Session;
 
 public class HomeownerBookingManager {
     private final BookingQueryService bookingQueryService;

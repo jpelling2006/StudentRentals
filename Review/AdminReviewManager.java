@@ -1,10 +1,10 @@
-package Review;
+package review;
 
 import java.util.List;
 import java.util.Scanner;
 
-import Helpers.Helpers;
-import Properties.Property;
+import helpers.Helpers;
+import properties.Property;
 
 public class AdminReviewManager {
     private final ReviewQueryService reviewQueryService;

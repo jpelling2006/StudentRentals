@@ -1,4 +1,4 @@
-package Booking;
+package booking;
 
 public class BookingStatusBackgroundService implements Runnable {
     private final BookingStatusUpdater bookingStatusUpdater;

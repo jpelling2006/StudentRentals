@@ -1,10 +1,10 @@
-package Room;
+package room;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Properties.Property;
-import Properties.PropertyQueryService;
+import properties.Property;
+import properties.PropertyQueryService;
 
 public class RoomQueryService {
     private final PropertyQueryService propertyQueryService;

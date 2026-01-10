@@ -1,10 +1,10 @@
-package Booking;
+package booking;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Room.Room;
-import Room.RoomQueryService;
+import room.Room;
+import room.RoomQueryService;
 
 public class BookingQueryService {
     private final RoomQueryService roomQueryService;

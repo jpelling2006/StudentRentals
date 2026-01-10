@@ -1,4 +1,4 @@
-package User;
+package user;
 
 public final class StudentUserFactory extends UserFactory {
     private static final StudentUserFactory INSTANCE = new StudentUserFactory();

@@ -1,9 +1,9 @@
-package Booking;
+package booking;
 
 import java.time.LocalDate;
 
-import Room.Room;
-import Room.RoomQueryService;
+import room.Room;
+import room.RoomQueryService;
 
 public class BookingStatusUpdater {
     private final RoomQueryService roomQueryService;

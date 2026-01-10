@@ -1,9 +1,9 @@
-package Booking;
+package booking;
 
 import java.util.Scanner;
 
-import Helpers.Helpers;
 import Session.Session;
+import session.Session;
 
 public class BookingManager {
     private final StudentBookingManager studentBookingManager;

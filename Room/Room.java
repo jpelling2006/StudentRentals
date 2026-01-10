@@ -1,4 +1,4 @@
-package Room;
+package room;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import Booking.Booking;
-import Properties.Property;
+import booking.Booking;
+import properties.Property;
 
 public class Room {
     private UUID roomID;

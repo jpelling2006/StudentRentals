@@ -1,9 +1,9 @@
-package Booking;
+package booking;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-import Room.Room;
+import room.Room;
 
 public class Booking {
     private UUID bookingID;

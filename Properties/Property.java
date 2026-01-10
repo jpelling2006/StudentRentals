@@ -1,4 +1,4 @@
-package Properties;
+package properties;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import Review.Review;
-import Room.Room;
+import review.Review;
+import room.Room;
 
 public class Property {
     private UUID propertyID;

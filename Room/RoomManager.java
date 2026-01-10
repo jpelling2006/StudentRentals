@@ -1,9 +1,9 @@
-package Room;
+package room;
 
 import java.util.Scanner;
 
-import Helpers.Helpers;
 import Session.Session;
+import session.Session;
 
 public class RoomManager {
     private final HomeownerRoomManager homeownerRoomManager;

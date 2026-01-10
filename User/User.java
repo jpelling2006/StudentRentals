@@ -1,4 +1,4 @@
-package User;
+package user;
 
 import java.security.SecureRandom;
 import java.util.Base64;

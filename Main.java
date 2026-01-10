@@ -1,6 +1,6 @@
-import UI.HomeownerState;
-import UI.StudentState;
-import UI.UIContext;
+import ui.HomeownerState;
+import ui.StudentState;
+import ui.UIContext;
 
 public class Main {
     public static void main(String[] args) {

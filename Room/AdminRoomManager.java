@@ -1,9 +1,9 @@
-package Room;
+package room;
 
 import java.util.List;
 import java.util.Scanner;
 
-import Helpers.Helpers;
+import helpers.Helpers;
 
 public class AdminRoomManager {
     private final RoomQueryService roomQueryService;
