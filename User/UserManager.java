@@ -1,7 +1,5 @@
 package user;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 import helpers.Helpers;
@@ -9,6 +7,8 @@ import session.Session;
 
 public class UserManager {
     private LoggedOutManager loggedOutManager;
+    private NonAdminUserManager nonAdminUserManager;
+    private AdminUserManager adminUserManager;
     private Scanner scanner;
     private Session session;
 
@@ -18,42 +18,77 @@ public class UserManager {
     }
     // account
 
-    private void userMenu() {
+    private void nonAdminMenu() {
         while (session.isLoggedIn()) {
-            System.out.println("\n1. View details");
+            System.out.println("\nUser Management System");
+            System.out.println("1. View details");
             System.out.println("2. Edit details");
             System.out.println("3. Logout");
 
-            int choice = Helpers.readIntInRange(scanner, "Choose option: ", 1, 3);
+            int choice = Helpers.readIntInRange(
+                scanner, 
+                "Choose option: ", 
+                1, 
+                3
+            );
 
             switch (choice) {
-                case 1 -> viewDetails();
-                case 2 -> editDetails();
+                case 1 -> nonAdminUserManager.viewDetails();
+                case 2 -> nonAdminUserManager.editDetails();
                 case 3 -> session.logout();
             }
         }
     }
 
-    public void loggedOutMenu() {
+    private void loggedOutMenu() {
         while (true) {
             System.out.println("\nUser Management System");
             System.out.println("1. Register");
             System.out.println("2. Login");
-            System.out.println("3. Forget Password");
+            System.out.println("3. Forgot Password");
             System.out.println("4. Exit");
 
-            Integer choice = Helpers.readInt(scanner, "Choose option: ");
+            Integer choice = Helpers.readIntInRange(
+                scanner, 
+                "Choose option: ", 
+                1, 
+                4
+            );
 
             switch (choice) {
                 case 1 -> loggedOutManager.register();
-                case 2 -> login();
-                case 3 -> forgetPassword();
-                case 4 -> {
-                    System.out.println("Exiting...");
-                    return;
-                }
-                default -> System.out.println("Invalid choice.");
+                case 2 -> loggedOutManager.login();
+                case 3 -> loggedOutManager.forgetPassword();
+                case 4 -> { return; }
             }
+        }
+    }
+
+    private void adminMenu() {
+        while (true) {
+            System.out.println("\nAdmin User Management System");
+            System.out.println("1. List all users");
+            System.out.println("2. Delete user");
+            System.out.println("3. Back");
+
+            Integer choice = Helpers.readIntInRange(scanner, "Choose option: ", 1, 3);
+
+            switch (choice) {
+                case 1 -> adminUserManager.listAllUsers();
+                case 2 -> adminUserManager.deleteUser();
+                case 3 -> { return; }
+            }
+        }
+    }
+
+    public void start() {
+        if (!session.isLoggedIn()) {
+            loggedOutMenu();
+        }
+
+        switch (session.getCurrentUser().getUserType()) {
+            case STUDENT, HOMEOWNER -> nonAdminMenu();
+            case ADMINISTRATOR -> adminMenu();
         }
     }
 }
