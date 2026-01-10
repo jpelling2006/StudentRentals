@@ -1,6 +1,6 @@
 package Session;
 
-import User.*;
+import User.User;
 
 public class Session {
     private User currentUser;

@@ -1,13 +1,11 @@
 package Room;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import Helpers.Helpers;
 import Properties.Property;
-import Properties.PropertyManager;
 import Properties.PropertyQueryService;
 import Session.Session;
 

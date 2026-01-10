@@ -6,24 +6,21 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import Properties.*;
-import Room.*;
-import Session.Session;
-import Helpers.*;
+import Helpers.Helpers;
+import Properties.Property;
+import Properties.PropertyQueryService;
+import Room.Room;
 
 public class SearchManager {
     private Scanner scanner;
-    private Session session;
     private PropertyQueryService propertyQueryService;
     private List<Room> lastResults = new ArrayList<>();
 
     public SearchManager(
         PropertyQueryService propertyQueryService,
-        Session session,
         Scanner scanner
     ) {
         this.propertyQueryService = propertyQueryService;
-        this.session = session;
         this.scanner = scanner;
     }
 
