@@ -1,38 +1,24 @@
 package booking;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import helpers.Helpers;
-import room.Room;
-import room.RoomQueryService;
 
 public class AdminBookingManager {
-
-    private final RoomQueryService roomQueryService;
+    private final BookingQueryService bookingQueryService;
     private final Scanner scanner;
 
     public AdminBookingManager(
-        RoomQueryService roomQueryService,
+        BookingQueryService bookingQueryService,
         Scanner scanner
     ) {
-        this.roomQueryService = roomQueryService;
+        this.bookingQueryService = bookingQueryService;
         this.scanner = scanner;
     }
 
-    private List<Booking> getAllBookings() {
-        List<Booking> bookings = new ArrayList<>();
-
-        for (Room room : roomQueryService.getAllRooms()) {
-            bookings.addAll(room.getBookings());
-        }
-
-        return bookings;
-    }
-
     public void listAllBookings() {
-        List<Booking> bookings = getAllBookings();
+        List<Booking> bookings = bookingQueryService.getAllBookings();
 
         if (bookings.isEmpty()) {
             System.out.println("No bookings exist.");
@@ -55,7 +41,7 @@ public class AdminBookingManager {
     }
 
     public void forceEditStatus() {
-        List<Booking> bookings = getAllBookings();
+        List<Booking> bookings = bookingQueryService.getAllBookings();
         if (bookings.isEmpty()) return;
 
         listAllBookings();
@@ -84,7 +70,7 @@ public class AdminBookingManager {
     }
 
     public void deleteBooking() {
-        List<Booking> bookings = getAllBookings();
+        List<Booking> bookings = bookingQueryService.getAllBookings();
         if (bookings.isEmpty()) return;
 
         listAllBookings();

@@ -16,7 +16,6 @@ public class UserManager {
         this.session = session;
         this.scanner = scanner;
     }
-    // account
 
     private void nonAdminMenu() {
         while (session.isLoggedIn()) {
@@ -25,7 +24,7 @@ public class UserManager {
             System.out.println("2. Edit details");
             System.out.println("3. Logout");
 
-            int choice = Helpers.readIntInRange(
+            Integer choice = Helpers.readIntInRange(
                 scanner, 
                 "Choose option: ", 
                 1, 
