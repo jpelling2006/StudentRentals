@@ -14,15 +14,15 @@ import Helpers.*;
 public class SearchManager {
     private Scanner scanner;
     private Session session;
-    private PropertyManager propertyManager;
+    private PropertyQueryService propertyQueryService;
     private List<Room> lastResults = new ArrayList<>();
 
     public SearchManager(
-        PropertyManager propertyManager,
+        PropertyQueryService propertyQueryService,
         Session session,
         Scanner scanner
     ) {
-        this.propertyManager = propertyManager;
+        this.propertyQueryService = propertyQueryService;
         this.session = session;
         this.scanner = scanner;
     }
@@ -51,7 +51,7 @@ public class SearchManager {
         LocalDate moveOut, 
         String roomType
     ) {
-        lastResults = propertyManager.getAllProperties().stream()
+        lastResults = propertyQueryService.getAllProperties().stream()
             .filter(property -> matchesLocation(property, city))
             .flatMap(property -> property.getRooms().stream())
             .filter(room -> isRoomAvailable(room, moveIn, moveOut))
