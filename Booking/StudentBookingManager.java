@@ -4,11 +4,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
-import Properties.Prope
-import Room.Room;
-import Session.Session;
+import helpers.Helpers;
+import properties.Property;
 import room.Room;
-import session.Session;rvice;rty;
+import room.RoomQueryService;
+import session.Session;
 
 public class StudentBookingManager {
     private final BookingQueryService bookingQueryService;

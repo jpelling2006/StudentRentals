@@ -3,11 +3,11 @@ package review;
 import java.util.List;
 import java.util.Scanner;
 
-import Room.Room;
-import Session.Session;
 import helpers.Helpers;
-import Session.Se
-import session.Session;ryService;
+import properties.Property;
+import properties.PropertyQueryService;
+import room.Room;
+import session.Session;
 
 public class StudentReviewManager {
     private final ReviewQueryService reviewQueryService;

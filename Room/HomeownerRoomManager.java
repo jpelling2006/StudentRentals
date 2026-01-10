@@ -4,10 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
-import Session.Session;
 import helpers.Helpers;
 import properties.Property;
-import session.Session;rtyQueryService;
+import properties.PropertyQueryService;
+import session.Session;
 
 public class HomeownerRoomManager {
     private final PropertyQueryService propertyQueryService;

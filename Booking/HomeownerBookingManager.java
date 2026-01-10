@@ -3,9 +3,9 @@ package booking;
 import java.util.List;
 import java.util.Scanner;
 
-import Properties.Prope
-import Room.Room;
-import Session.Se
+import helpers.Helpers;
+import properties.Property;
+import room.Room;
 import session.Session;
 
 public class HomeownerBookingManager {

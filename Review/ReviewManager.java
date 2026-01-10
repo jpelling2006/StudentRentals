@@ -2,7 +2,7 @@ package review;
 
 import java.util.Scanner;
 
-import Session.Session;
+import helpers.Helpers;
 import session.Session;
 
 public class ReviewManager {

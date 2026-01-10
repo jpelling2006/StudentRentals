@@ -2,8 +2,8 @@ package booking;
 
 import java.util.Scanner;
 
-import Session.Session;
 import session.Session;
+import helpers.Helpers;
 
 public class BookingManager {
     private final StudentBookingManager studentBookingManager;

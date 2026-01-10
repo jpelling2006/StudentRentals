@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 
-import Session.Session;
+import helpers.Helpers;
 import session.Session;
 
 public class PropertyManager {

@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 
-import Session.Session;
-import User.User;
-import user.User;ssion;lpers;
+import helpers.Helpers;
+import session.Session;
+import user.User;
 
 public class HomeownerPropertyManager {
     private final Map<UUID, Property> properties = new HashMap<>();
