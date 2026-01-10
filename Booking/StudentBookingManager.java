@@ -4,11 +4,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
-import FrontEnd.Session;
 import Helpers.Helpers;
 import Properties.Property;
 import Room.Room;
 import Room.RoomQueryService;
+import Session.Session;
 
 public class StudentBookingManager {
     private final BookingQueryService bookingQueryService;
@@ -65,7 +65,11 @@ public class StudentBookingManager {
 
         Helpers.printIndexed(userBookings, Booking::toString);
 
-        Booking choice = Helpers.selectFromList(scanner, userBookings, "Select a booking to edit");
+        Booking choice = Helpers.selectFromList(
+            scanner, 
+            userBookings, 
+            "Select a booking to edit"
+        );
 
         editBookingMenu(choice);
     }
@@ -94,11 +98,20 @@ public class StudentBookingManager {
             System.out.println("2. End date"); // student only
             System.out.println("3. Cancel");
 
-            Integer choice = Helpers.readIntInRange(scanner, "Choose a field to edit: ", 1, 3);
+            Integer choice = Helpers.readIntInRange(
+                scanner, 
+                "Choose a field to edit: ", 
+                1, 
+                3
+            );
 
             switch (choice) {
-                case 1 -> booking.setStartDate(Helpers.readFutureDate(scanner, "Enter start date: ")); // must be before end date
-                case 2 -> booking.setEndDate(Helpers.readFutureDate(scanner, "Enter end date: "));
+                case 1 -> booking.setStartDate(
+                    Helpers.readFutureDate(scanner, "Enter start date: ")
+                ); // must be before end date
+                case 2 -> booking.setEndDate(
+                    Helpers.readFutureDate(scanner, "Enter end date: ")
+                );
                 case 3 -> {
                     System.out.println("Edit cancelled.");
                     return;

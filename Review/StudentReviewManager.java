@@ -1,29 +1,28 @@
 package Review;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import FrontEnd.Session;
 import Helpers.Helpers;
 import Properties.Property;
-import Properties.PropertyManager;
+import Properties.PropertyQueryService;
 import Room.Room;
+import Session.Session;
 
 public class StudentReviewManager {
     private final ReviewQueryService reviewQueryService;
-    private final PropertyManager propertyManager;
+    private final PropertyQueryService propertyQueryService;
     private final Session session;
     private final Scanner scanner;
 
     public StudentReviewManager(
         ReviewQueryService reviewQueryService,
-        PropertyManager propertyManager,
+        PropertyQueryService propertyQueryService,
         Session session,
         Scanner scanner
     ) {
         this.reviewQueryService = reviewQueryService;
-        this.propertyManager = propertyManager;
+        this.propertyQueryService = propertyQueryService;
         this.session = session;
         this.scanner = scanner;
     }
@@ -38,7 +37,7 @@ public class StudentReviewManager {
     public void createReview() {
         Property selectedProperty = Helpers.selectFromList(
             scanner, 
-            propertyManager.getAllProperties(), 
+            propertyQueryService.getAllProperties(), 
             "Select property"
         );
         if (selectedProperty == null) { return; }
@@ -46,7 +45,9 @@ public class StudentReviewManager {
         String username = session.getCurrentUser().getUsername();
 
         if (!hasCompletedBooking(selectedProperty, username)) {
-            System.out.println("You can only review properties you have stayed in.");
+            System.out.println(
+                "You can only review properties you have stayed in."
+            );
             return;
         }
 
@@ -87,20 +88,22 @@ public class StudentReviewManager {
     }
 
     public void listReviews() {
-        List<Review> userReviews = reviewQueryService.getStudentReviews(session.getCurrentUser().getUsername());
+        List<Review> userReviews = reviewQueryService.getStudentReviews(
+            session.getCurrentUser().getUsername()
+        );
         System.out.println("\nYour reviews:");
         Helpers.printIndexed(userReviews, Review::toString);
     }
 
     public void editReview() {
-        List<Review> userReviews = getUserReviews();
+        List<Review> userReviews = reviewQueryService.getStudentReviews(session.getCurrentUser().getUsername());
 
         if (userReviews.isEmpty()) {
             System.out.println("You have no reviews to edit.");
             return;
         }
 
-        listReviews(userReviews);
+        listReviews();
 
         Review choice = Helpers.selectFromList(
             scanner,
@@ -151,7 +154,13 @@ public class StudentReviewManager {
                         256
                     )
                 );
-                case 3 -> review.setContent(Helpers.readString(scanner, "Enter review content: ", 1024));
+                case 3 -> review.setContent(
+                    Helpers.readString(
+                        scanner, 
+                        "Enter review content: ", 
+                        1024
+                    )
+                );
                 case 4 -> {
                     System.out.println("Edit cancelled.");
                     return;
@@ -161,14 +170,14 @@ public class StudentReviewManager {
     }
 
     public void deleteReview() {
-        List<Review> userReviews = getUserReviews();
+        List<Review> userReviews = reviewQueryService.getStudentReviews(session.getCurrentUser().getUsername());
 
         if (userReviews.isEmpty()) {
             System.out.println("You have no reviews to delete");
             return;
         }
 
-        listReviews(userReviews);
+        listReviews();
 
         Review selectedReview = Helpers.selectFromList(
             scanner,

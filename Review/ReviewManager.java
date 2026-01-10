@@ -1,14 +1,9 @@
 package Review;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import Helpers.Helpers;
-import Properties.Property;
-import Properties.PropertyManager;
-import Room.Room;
-import FrontEnd.Session;
+import Session.Session;
 
 public class ReviewManager {
     private final StudentReviewManager studentReviewManager;
@@ -17,20 +12,17 @@ public class ReviewManager {
 
     private Scanner scanner = new Scanner(System.in);
     private Session session;
-    private PropertyManager propertyManager;
 
     public ReviewManager(
         StudentReviewManager studentReviewManager,
         HomeownerReviewManager homeownerReviewManager,
         AdminReviewManager adminReviewManager,
-        PropertyManager propertyManager,
         Session session,
         Scanner scanner
     ) {
         this.studentReviewManager = studentReviewManager;
         this.homeownerReviewManager = homeownerReviewManager;
         this.adminReviewManager = adminReviewManager;
-        this.propertyManager = propertyManager;
         this.session = session;
         this.scanner = scanner;
     }
@@ -110,7 +102,7 @@ public class ReviewManager {
                     3
                 )
             ) {
-                case 1 -> adminReviewManager.listReviews(); // create query service
+                case 1 -> adminReviewManager.listAllReviews();
                 case 2 -> adminReviewManager.deleteAnyReview();
                 case 3 -> { return; }
             }

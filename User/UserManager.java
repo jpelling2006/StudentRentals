@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import FrontEnd.Session;
 import Helpers.Helpers;
+import Session.Session;
 
 public class UserManager {
     private Map<String, User> users = new HashMap<>();

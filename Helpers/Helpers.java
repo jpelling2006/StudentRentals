@@ -22,7 +22,11 @@ public final class Helpers {
 
             if (input.isEmpty()) { System.out.println("Input cannot be empty."); }
             else if (input.length() > maxLength) {
-                System.out.println("Input must be under " + maxLength + " characters.");
+                System.out.println(
+                    "Input must be under " 
+                    + maxLength 
+                    + " characters."
+                );
             }
             else { return input; }
         }

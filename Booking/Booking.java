@@ -20,7 +20,9 @@ public class Booking {
 
     public Room getRoom() { return room; }
     public void setRoom(Room room) {
-        if (room == null) { throw new IllegalArgumentException("Room required."); }
+        if (room == null) {
+            throw new IllegalArgumentException("Room required.");
+        }
         this.room = room;
     }
 

@@ -1,4 +1,4 @@
-package FrontEnd;
+package Search;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import Properties.*;
 import Room.*;
+import Session.Session;
 import Helpers.*;
 
 public class SearchManager {

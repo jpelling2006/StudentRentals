@@ -5,28 +5,31 @@ import java.util.Scanner;
 
 import Helpers.Helpers;
 
-public class AdminPropertyManager extends PropertyManager {
+public class AdminPropertyManager {
     private final PropertyManager propertyManager;
+    private final PropertyQueryService propertyQueryService;
     private final Scanner scanner;
 
-    public AdminPropertyManager(PropertyManager propertyManager, Scanner scanner) {
+    public AdminPropertyManager(PropertyManager propertyManager, PropertyQueryService propertyQueryService, Scanner scanner) {
         this.propertyManager = propertyManager;
+        this.propertyQueryService = propertyQueryService;
         this.scanner = scanner;
     }
 
-    public void editAnyProperty() {
-        List<Property> properties = getAllProperties();
-        Property property = Helpers.selectFromList(scanner, properties, "Select a property to edit");
-    }
+    public void listAllProperties() {}
 
     public void deleteAnyProperty() {
-        List<Property> properties = getAllProperties();
-        Property selectedProperty = Helpers.selectFromList(scanner, properties, "Select a property to delete");
+        List<Property> properties = propertyQueryService.getAllProperties();
+        Property selectedProperty = Helpers.selectFromList(
+            scanner, 
+            properties, 
+            "Select a property to delete"
+        );
 
         if (selectedProperty == null) { return; }
 
         // fix this
-        properties.remove(selectedProperty.getPropertyID());
+        properties.remove(selectedProperty.getPropertyID()); // what
         System.out.println("Property deleted successfully.");
     }
 }

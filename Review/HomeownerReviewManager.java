@@ -1,30 +1,20 @@
 package Review;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-import FrontEnd.Session;
 import Helpers.Helpers;
-import Properties.Property;
-import Properties.PropertyManager;
+import Session.Session;
 
 public class HomeownerReviewManager {
     private final ReviewQueryService reviewQueryService;
-    private final PropertyManager propertyManager;
     private final Session session;
-    private final Scanner scanner;
 
     public HomeownerReviewManager(
         ReviewQueryService reviewQueryService,
-        PropertyManager propertyManager,
-        Session session,
-        Scanner scanner
+        Session session
     ) {
         this.reviewQueryService = reviewQueryService;
-        this.propertyManager = propertyManager;
         this.session = session;
-        this.scanner = scanner;
     }
 
     public void listReviews() {

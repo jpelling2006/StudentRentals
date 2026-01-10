@@ -17,7 +17,10 @@ public class BookingStatusUpdater {
         
         for (Room room : roomQueryService.getAllRooms()) {
             for (Booking booking : room.getBookings()) {
-                if (booking.getBookingStatus() != BookingStatus.ENDED && booking.getEndDate().isBefore(today)) {
+                if (
+                    booking.getBookingStatus() != BookingStatus.ENDED
+                    && booking.getEndDate().isBefore(today)
+                ) {
                     booking.setBookingStatus(BookingStatus.ENDED);
                 }
             }

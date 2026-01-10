@@ -2,11 +2,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import FrontEnd.*;
 import Properties.PropertyManager;
 import Review.ReviewManager;
 import Room.RoomManager;
-import User.*;
+import Search.SearchManager;
+import Session.Session;
+import User.User;
+import User.UserManager;
 import Helpers.Helpers;
 
 public class Main {

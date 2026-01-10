@@ -3,26 +3,22 @@ package Review;
 import java.util.ArrayList;
 import java.util.List;
 
-import FrontEnd.Session;
 import Properties.Property;
-import Properties.PropertyManager;
+import Properties.PropertyQueryService;
 
 public class ReviewQueryService {
-    private final PropertyManager propertyManager;
-    private final Session session;
+    private final PropertyQueryService propertyQueryService;
     
     public ReviewQueryService(
-        PropertyManager propertyManager,
-        Session session
+        PropertyQueryService propertyQueryService
     ) {
-        this.propertyManager = propertyManager;
-        this.session = session;
+        this.propertyQueryService = propertyQueryService;
     }
 
     public List<Review> getAllReviews() {
         List<Review> reviews = new ArrayList<>();
 
-        for(Property property : propertyManager.getAllProperties()) {
+        for(Property property : propertyQueryService.getAllProperties()) {
             for (Review review : property.getReviews()) { reviews.add(review); }
         }
 
@@ -32,7 +28,7 @@ public class ReviewQueryService {
     public List<Review> getStudentReviews(String username) {
         List<Review> userReviews = new ArrayList<>();
 
-        for(Property property : propertyManager.getAllProperties()) {
+        for(Property property : propertyQueryService.getAllProperties()) {
             for (Review review : property.getReviews()) {
                 if (review.getUsername().equalsIgnoreCase(username)) {
                     userReviews.add(review);
@@ -45,7 +41,7 @@ public class ReviewQueryService {
     public List<Review> getHomeownerReviews(String username) {
         List<Review> propertiesReviews = new ArrayList<>();
         
-        for (Property property : propertyManager.getUserProperties(username)) {
+        for (Property property : propertyQueryService.getUserProperties(username)) {
             for (Review review : property.getReviews()) {
                 propertiesReviews.add(review);
             }

@@ -1,4 +1,4 @@
-package FrontEnd;
+package Session;
 
 import User.*;
 

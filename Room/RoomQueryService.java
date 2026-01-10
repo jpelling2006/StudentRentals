@@ -4,27 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Properties.Property;
-import Properties.PropertyManager;
+import Properties.PropertyQueryService;
 
 public class RoomQueryService {
-    private final PropertyManager propertyManager;
+    private final PropertyQueryService propertyQueryService;
 
-    public RoomQueryService(PropertyManager propertyManager) {
-        this.propertyManager = propertyManager; 
+    public RoomQueryService(PropertyQueryService propertyQueryService) {
+        this.propertyQueryService = propertyQueryService; 
     }
 
     public List<Room> getAllRooms() {
         List<Room> rooms = new ArrayList<>();
-        for (Property property : propertyManager.getAllProperties()) { 
+        for (Property property : propertyQueryService.getAllProperties()) { 
             rooms.addAll(property.getRooms()); 
         }
         return rooms;
     }
 
+    // private List<Room> getAllRooms() {
+    //     return propertyManager.getAllProperties().stream()
+    //         .flatMap(property -> property.getRooms().steam())
+    //         .collect(Collectors.toList());
+    // }
+
     public List<Room> getRoomsForUser(String username) {
         List<Room> rooms = new ArrayList<>();
 
-        for (Property property : propertyManager.getUserProperties(username)) {
+        for (Property property : propertyQueryService.getUserProperties(username)) {
             rooms.addAll(property.getRooms());
         }
         return rooms;

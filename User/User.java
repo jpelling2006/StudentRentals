@@ -9,6 +9,7 @@ import javax.crypto.spec.PBEKeySpec;
 
 public abstract class User {
     private String username;
+    private UserType userType;
     private String email;
     private String phone;
     private String passwordHash;
@@ -89,5 +90,10 @@ public abstract class User {
 
     public boolean verifyPassword(String rawPassword) throws Exception {
         return hashPassword(rawPassword, salt).equals(passwordHash);
+    }
+
+    @Override
+    public String toString() {
+        return username + " (" + userType + ") - " + email + " - " + phone;
     }
 }

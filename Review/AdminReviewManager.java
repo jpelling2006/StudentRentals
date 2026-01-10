@@ -1,39 +1,32 @@
 package Review;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import FrontEnd.Session;
 import Helpers.Helpers;
 import Properties.Property;
-import Properties.PropertyManager;
 
 public class AdminReviewManager {
-    private final PropertyManager propertyManager;
     private final ReviewQueryService reviewQueryService;
-    private final Session session;
     private final Scanner scanner;
 
     public AdminReviewManager(
-        PropertyManager propertyManager,
         ReviewQueryService reviewQueryService,
-        Session session,
         Scanner scanner
     ) {
-        this.propertyManager = propertyManager;
         this.reviewQueryService = reviewQueryService;
-        this.session = session;
         this.scanner = scanner;
     }
 
-    public void listAllReviews(List<Review> reviews) {
+    public void listAllReviews() {
+        List<Review> reviews = reviewQueryService.getAllReviews();
+
         if (reviews.isEmpty()) {
-            System.out.println("You have no reviews.");
+            System.out.println("There are no reviews.");
             return;
         }
 
-        System.out.println("\nYour reviews:");
+        System.out.println("\nAll reviews:");
         for (int i = 0; i < reviews.size(); i++) {
             Review review = reviews.get(i);
             Property property = review.getProperty();
@@ -45,8 +38,10 @@ public class AdminReviewManager {
                 + address + " - ("
                 + review.getStars() + ")\n"
                 + review.getTitle()
-            );
+            ); // change to tostring
         }
+
+        Helpers.printIndexed(reviews, Review::toString);
     }
 
     public void deleteAnyReview() {
@@ -57,7 +52,7 @@ public class AdminReviewManager {
             return;
         }
 
-        listAllReviews(reviews);
+        listAllReviews();
 
         Review selectedReview = Helpers.selectFromList(
             scanner,

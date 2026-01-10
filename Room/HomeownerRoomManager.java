@@ -5,22 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import FrontEnd.Session;
 import Helpers.Helpers;
 import Properties.Property;
 import Properties.PropertyManager;
+import Properties.PropertyQueryService;
+import Session.Session;
 
-public class HomeownerRoomManager extends RoomManager {
-    private final PropertyManager propertyManager;
+public class HomeownerRoomManager {
+    private final PropertyQueryService propertyQueryService;
     private final Session session;
     private final Scanner scanner;
 
     public HomeownerRoomManager(
+        PropertyQueryService propertyQueryService,
         PropertyManager propertyManager, 
         Session session, 
         Scanner scanner
     ) {
-        this.propertyManager = propertyManager;
+        this.propertyQueryService = propertyQueryService;
         this.session = session;
         this.scanner = scanner;
     }
@@ -29,7 +31,7 @@ public class HomeownerRoomManager extends RoomManager {
         List<Room> rooms = new ArrayList<>();
         String username = session.getCurrentUser().getUsername();
 
-        for (Property property : propertyManager.getUserProperties(username)) {
+        for (Property property : propertyQueryService.getUserProperties(username)) {
             rooms.addAll(property.getRooms());
         }
         return rooms;
@@ -40,7 +42,7 @@ public class HomeownerRoomManager extends RoomManager {
         room.generateRoomID();
 
         // create this method
-        Property property = Helpers.selectFromList(scanner, propertyManager.getUserProperties(session.getCurrentUser().getUsername()), "Select property");
+        Property property = Helpers.selectFromList(scanner, propertyQueryService.getUserProperties(session.getCurrentUser().getUsername()), "Select property");
 
         if (property == null) { return; }
 
