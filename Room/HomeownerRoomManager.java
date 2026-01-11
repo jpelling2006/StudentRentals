@@ -28,7 +28,7 @@ public class HomeownerRoomManager {
     }
 
     public void listRooms() {
-        List<Room> rooms = roomQueryService.getUserRooms(session.getCurrentUser().getUsername());
+        List<Room> rooms = roomQueryService.getUserRooms(session.getCurrentUser());
         System.out.println("\nYour rooms:");
         Helpers.printIndexed(rooms, Room::toString);
     }
@@ -38,7 +38,11 @@ public class HomeownerRoomManager {
         room.generateRoomID();
 
         // create this method
-        Property property = Helpers.selectFromList(scanner, propertyQueryService.getUserProperties(session.getCurrentUser().getUsername()), "Select property");
+        Property property = Helpers.selectFromList(
+            scanner, 
+            propertyQueryService.getUserProperties(session.getCurrentUser()), 
+            "Select property"
+        );
 
         if (property == null) { return; }
 
@@ -72,7 +76,7 @@ public class HomeownerRoomManager {
     }
 
     public void editRoom() {
-        List<Room> rooms = roomQueryService.getUserRooms(session.getCurrentUser().getUsername());
+        List<Room> rooms = roomQueryService.getUserRooms(session.getCurrentUser());
         Room room = Helpers.selectFromList(scanner, rooms, "Select room");
         if (room != null) { editRoomMenu(room); }
     }
@@ -132,7 +136,7 @@ public class HomeownerRoomManager {
     }
 
     public void deleteRoom() {
-        List<Room> rooms = roomQueryService.getUserRooms(session.getCurrentUser().getUsername());
+        List<Room> rooms = roomQueryService.getUserRooms(session.getCurrentUser());
         Room room = Helpers.selectFromList(scanner, rooms, "Select room to delete");
         if (room == null) return;
 

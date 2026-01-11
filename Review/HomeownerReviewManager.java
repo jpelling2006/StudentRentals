@@ -19,7 +19,7 @@ public class HomeownerReviewManager {
 
     public void listReviews() {
         List<Review> reviews = reviewQueryService.getHomeownerReviews(
-            session.getCurrentUser().getUsername()
+            session.getCurrentUser()
         );
         System.out.println("\nYour reviews:");
         Helpers.printIndexed(reviews, Review::toString);

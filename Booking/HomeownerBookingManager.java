@@ -25,7 +25,7 @@ public class HomeownerBookingManager {
 
     public void listBookings() {
         List<Booking> bookings = bookingQueryService.getBookingsForHomeowner(
-            session.getCurrentUser().getUsername()
+            session.getCurrentUser()
         );
 
         Helpers.printIndexed(bookings, Booking::toString); // make this
@@ -33,7 +33,7 @@ public class HomeownerBookingManager {
 
     public void editBookingStatus() {
         List<Booking> userBookings = bookingQueryService.getBookingsForHomeowner(
-            session.getCurrentUser().getUsername()
+            session.getCurrentUser()
         );
 
         if (userBookings.isEmpty()) {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import properties.Property;
 import properties.PropertyQueryService;
+import user.User;
 
 public class ReviewQueryService {
     private final PropertyQueryService propertyQueryService;
@@ -38,10 +39,10 @@ public class ReviewQueryService {
         return userReviews;
     }
 
-    public List<Review> getHomeownerReviews(String username) {
+    public List<Review> getHomeownerReviews(User user) {
         List<Review> propertiesReviews = new ArrayList<>();
         
-        for (Property property : propertyQueryService.getUserProperties(username)) {
+        for (Property property : propertyQueryService.getUserProperties(user)) {
             for (Review review : property.getReviews()) {
                 propertiesReviews.add(review);
             }

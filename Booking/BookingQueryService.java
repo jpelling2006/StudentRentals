@@ -5,6 +5,7 @@ import java.util.List;
 
 import room.Room;
 import room.RoomQueryService;
+import user.User;
 
 public class BookingQueryService {
     private final RoomQueryService roomQueryService;
@@ -32,11 +33,11 @@ public class BookingQueryService {
         return studentBookings;
     }
 
-    public List<Booking> getBookingsForHomeowner(String username) {
+    public List<Booking> getBookingsForHomeowner(User user) {
         List<Booking> homeownerBookings = new ArrayList<>();
 
         for (Room room : roomQueryService.getAllRooms()) {
-            if (room.getProperty().getUsername().equals(username)) {
+            if (room.getProperty().getUser().equals(user)) {
                 homeownerBookings.addAll(room.getBookings());
             }
         }

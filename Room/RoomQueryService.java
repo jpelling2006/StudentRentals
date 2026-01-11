@@ -5,6 +5,7 @@ import java.util.List;
 
 import properties.Property;
 import properties.PropertyQueryService;
+import user.User;
 
 public class RoomQueryService {
     private final PropertyQueryService propertyQueryService;
@@ -21,10 +22,10 @@ public class RoomQueryService {
         return rooms;
     }
 
-    public List<Room> getUserRooms(String username) {
+    public List<Room> getUserRooms(User user) {
         List<Room> rooms = new ArrayList<>();
 
-        for (Property property : propertyQueryService.getUserProperties(username)) {
+        for (Property property : propertyQueryService.getUserProperties(user)) {
             rooms.addAll(property.getRooms());
         }
         return rooms;
