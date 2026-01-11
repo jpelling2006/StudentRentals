@@ -5,5 +5,9 @@ public enum BookingStatus {
     ACCEPTED,
     REJECTED,
     CANCELLED,
-    ENDED
+    ENDED;
+
+    public boolean blocksAvailability() {
+        return this == PENDING || this == ACCEPTED;
+    }
 }

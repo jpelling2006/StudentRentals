@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import booking.Booking;
+import booking.BookingStatus;
 import properties.Property;
 
 public class Room {
@@ -136,7 +137,15 @@ public class Room {
         bookingsByUser.put(username, booking);
     }
 
-    public void removeBooking(String username) { bookingsByUser.remove(username); }
+    public void cancelBooking(String username) {
+        Booking booking = bookingsByUser.get(username);
+        if (booking == null) { return; }
+        booking.setBookingStatus(BookingStatus.CANCELLED);
+    }
+
+    public void forceRemoveBooking(String username) {
+        bookingsByUser.remove(username);
+    }
 
     public boolean hasBooking(String username) { return bookingsByUser.containsKey(username); }
 
@@ -146,8 +155,16 @@ public class Room {
     }
 
     public boolean isAvailable(LocalDate from, LocalDate to) {
+        if (
+            startDate != null && from.isBefore(startDate)
+            || endDate != null && to.isAfter(endDate)
+        ) { return false; }
+
         for (Booking booking : bookingsByUser.values()) {
-            if (booking.overlaps(from, to)) { return false; }
+            if (
+                booking.getBookingStatus().blocksAvailability()
+                && booking.overlaps(from, to)
+            ) { return false; }
         }
         return true;
     }

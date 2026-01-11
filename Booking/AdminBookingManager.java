@@ -95,7 +95,7 @@ public class AdminBookingManager {
             return;
         }
 
-        booking.getRoom().removeBooking(booking.getUsername());
+        booking.getRoom().forceRemoveBooking(booking.getUsername());
         System.out.println("Booking deleted.");
     }
 }

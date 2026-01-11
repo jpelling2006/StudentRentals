@@ -32,6 +32,28 @@ public final class Helpers {
         }
     }
 
+    public static String readOptionalString(
+        Scanner scanner,
+        String prompt,
+        Integer maxLength
+    ) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) { return null; }
+
+            else if (input.length() > maxLength) {
+                System.out.println(
+                    "Input must be under " 
+                    + maxLength 
+                    + " characters."
+                );
+            }
+            else { return input; }
+        }
+    }
+
     public static Integer readInt(Scanner scanner, String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -68,6 +90,20 @@ public final class Helpers {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine();
+
+            try { return Double.parseDouble(input); }
+            catch (NumberFormatException e) {
+                System.out.println("Please enter a valid decimal number.");
+            }
+        }
+    }
+
+    public static Double readOptionalDouble(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine();
+
+            if (input == null) { return null; }
 
             try { return Double.parseDouble(input); }
             catch (NumberFormatException e) {
