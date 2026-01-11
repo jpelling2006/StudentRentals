@@ -1,11 +1,20 @@
 package user;
 
-public class StudentUser extends User {
+import access.BookingAccess;
+import access.ReviewAccess;
+import booking.BookingManager;
+import review.ReviewManager;
+
+public class StudentUser extends User implements BookingAccess, ReviewAccess {
     @Override
     public UserType getUserType() { return UserType.STUDENT; }
 
     private String university;
     private String studentNumber;
+
+    // init these
+    private final BookingManager bookingManager;
+    private final ReviewManager reviewManager;
 
     public String getUniversity() { return university; }
     public void setUniversity(String university) {
@@ -35,5 +44,15 @@ public class StudentUser extends User {
         }
 
         this.studentNumber = studentNumber;
+    }
+
+    @Override
+    public boolean handleBooking() {
+        return bookingManager.handleOnce();
+    }
+
+    @Override
+    public boolean handleReview() {
+        return reviewManager.handleOnce();
     }
 }

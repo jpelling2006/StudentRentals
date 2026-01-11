@@ -35,24 +35,24 @@ public class StudentState implements UIState {
         while (true) {
             System.out.println("\nAdmin Menu:");
             System.out.println("1. User Manager");
-            System.out.println("3. Room searcher");
-            System.out.println("4. Booking manager");
-            System.out.println("5. Review manager");
-            System.out.println("6. Exit");
+            System.out.println("2. Room searcher");
+            System.out.println("3. Booking manager");
+            System.out.println("4. Review manager");
+            System.out.println("5. Exit");
 
             Integer choice = Helpers.readIntInRange(
                 scanner, 
                 "Choose option: ", 
                 1, 
-                6
+                5
             );
 
             switch (choice) {
                 case 1 -> userManager.start();
-                case 3 -> searchManager.start(); // fix pls
-                case 4 -> bookingManager.start();
-                case 5 -> reviewManager.start();
-                case 6 -> { return; }
+                case 2 -> searchManager.start();
+                case 3 -> {  while (!bookingManager.handleOnce()) {} }
+                case 4 -> reviewManager.start();
+                case 5 -> { return; }
             }
         }
     }

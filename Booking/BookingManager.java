@@ -27,86 +27,107 @@ public class BookingManager {
         this.scanner = scanner;
     }
 
-    public void start() {
+    public boolean handleOnce() {
         if (!session.isLoggedIn()) {
             System.out.println("Please log in first.");
-            return;
+            return true;
         }
 
-        switch (session.getCurrentUser().getUserType()) {
-            case STUDENT -> studentMenu();
-            case HOMEOWNER -> homeownerMenu();
-            case ADMINISTRATOR -> adminMenu();
-        }
+        return switch (session.getCurrentUser().getUserType()) {
+            case STUDENT -> handleStudent();
+            case HOMEOWNER -> handleHomeowner();
+            case ADMINISTRATOR -> handleAdmin();
+        };
     }
 
-    private void studentMenu() {
-        while (true) {
-            System.out.println("\nStudent Booking Menu");
-            System.out.println("1. Create booking");
-            System.out.println("2. View bookings");
-            System.out.println("3. Cancel booking");
-            System.out.println("4. Back");
+    private boolean handleStudent() {
+        System.out.println("\nStudent Booking Menu");
+        System.out.println("1. Create booking");
+        System.out.println("2. View bookings");
+        System.out.println("3. Cancel booking");
+        System.out.println("4. Back");
 
-            switch (
-                Helpers.readIntInRange(
-                    scanner, 
-                    "Choose option: ", 
-                    1, 
-                    4
-                )
-            ) {
-                case 1 -> studentBookingManager.createBooking();
-                case 2 -> studentBookingManager.listBookings();
-                case 3 -> studentBookingManager.cancelBooking();
-                case 4 -> { return; }
+        return switch (
+            Helpers.readIntInRange(
+                scanner, 
+                "Choose option: ", 
+                1, 
+                4
+            )
+        ) {
+            case 1 -> {
+                studentBookingManager.createBooking();
+                yield false;
             }
-        }
+            case 2 -> {
+                studentBookingManager.listBookings();
+                yield false;
+            }
+            case 3 -> {
+                studentBookingManager.cancelBooking();
+                yield false;
+            }
+            case 4 -> true;
+            default -> false;
+        };
     }
 
-    private void homeownerMenu() {
-        while (true) {
-            System.out.println("\nHomeowner Booking Menu");
-            System.out.println("1. View bookings for properties");
-            System.out.println("2. Update booking status");
-            System.out.println("3. Back");
+    private boolean handleHomeowner() {
+        System.out.println("\nHomeowner Booking Menu");
+        System.out.println("1. View bookings for properties");
+        System.out.println("2. Update booking status");
+        System.out.println("3. Back");
 
-            switch (
-                Helpers.readIntInRange(
-                    scanner, 
-                    "Choose option: ", 
-                    1, 
-                    3
-                )
-            ) {
-                case 1 -> homeownerBookingManager.listBookings();
-                case 2 -> homeownerBookingManager.editBookingStatus();
-                case 3 -> { return; }
+        return switch (
+            Helpers.readIntInRange(
+                scanner, 
+                "Choose option: ", 
+                1, 
+                3
+            )
+        ) {
+            case 1 -> {
+                homeownerBookingManager.listBookings();
+                yield false;
             }
-        }
+            case 2 -> {
+                homeownerBookingManager.editBookingStatus();
+                yield false;
+            }
+            case 3 -> true;
+            default -> false;
+        };
     }
 
-    private void adminMenu() {
-        while (true) {
-            System.out.println("\nAdmin Booking Menu");
-            System.out.println("1. View all bookings");
-            System.out.println("2. Force update status");
-            System.out.println("3. Delete booking");
-            System.out.println("4. Back");
+    private boolean handleAdmin() {
+        System.out.println("\nAdmin Booking Menu");
+        System.out.println("1. View all bookings");
+        System.out.println("2. Force update status");
+        System.out.println("3. Delete booking");
+        System.out.println("4. Back");
 
-            switch (
-                Helpers.readIntInRange(
-                    scanner, 
-                    "Choose option: ", 
-                    1, 
-                    4
-                )
-            ) {
-                case 1 -> adminBookingManager.listAllBookings();
-                case 2 -> adminBookingManager.forceEditStatus();
-                case 3 -> adminBookingManager.deleteBooking();
-                case 4 -> { return; }
+        return switch (
+            Helpers.readIntInRange(
+                scanner, 
+                "Choose option: ", 
+                1, 
+                4
+            )
+        ) {
+            case 1 -> {
+                adminBookingManager.listAllBookings();
+                yield false;
             }
-        }
+            case 2 -> {
+                adminBookingManager.forceEditStatus();
+                yield false;
+            }
+            case 3 -> {
+                adminBookingManager.deleteBooking();
+                yield false;
+            }
+            case 4 -> true;
+            default -> false;
+        };
     }
 }
