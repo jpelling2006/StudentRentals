@@ -3,9 +3,10 @@ package booking;
 import java.util.List;
 import java.util.Scanner;
 
+import access.BookingAccess;
 import helpers.Helpers;
 
-public class AdminBookingManager {
+public class AdminBookingManager implements BookingHandler {
     private final BookingQueryService bookingQueryService;
     private final Scanner scanner;
 
@@ -61,5 +62,22 @@ public class AdminBookingManager {
 
         selectedBooking.getRoom().forceRemoveBooking(selectedBooking.getUsername());
         System.out.println("Booking deleted.");
+    }
+
+    @Override
+    public boolean handleOnce() {
+        System.out.println("\nAdmin Booking Menu");
+        System.out.println("1. View all bookings");
+        System.out.println("2. Delete booking");
+        System.out.println("3. Back");
+
+        return switch (
+            Helpers.readIntInRange(scanner, "Choose option: ", 1, 3)
+        ) {
+            case 1 -> { listAllBookings(); yield false; }
+            case 2 -> { deleteBooking(); yield false; }
+            case 3 -> true;
+            default -> false;
+        };
     }
 }

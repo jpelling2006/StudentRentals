@@ -3,10 +3,11 @@ package booking;
 import java.util.List;
 import java.util.Scanner;
 
+import access.BookingAccess;
 import helpers.Helpers;
 import session.Session;
 
-public class HomeownerBookingManager {
+public class HomeownerBookingManager implements BookingHandler {
     private final BookingQueryService bookingQueryService;
     private final Session session;
     private final Scanner scanner;
@@ -85,5 +86,22 @@ public class HomeownerBookingManager {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean handleOnce() {
+        System.out.println("\nHomeowner Booking Menu");
+        System.out.println("1. View bookings for properties");
+        System.out.println("2. Update booking status");
+        System.out.println("3. Back");
+
+        return switch (
+            Helpers.readIntInRange(scanner, "Choose option: ", 1, 3)
+        ) {
+            case 1 -> { listBookings(); yield false; }
+            case 2 -> { editBookingStatus(); yield false; }
+            case 3 -> true;
+            default -> false;
+        };
     }
 }

@@ -24,7 +24,6 @@ public class NonAdminUserManager {
 
         System.out.println("\nYour details");
         System.out.println("Username: " + user.getUsername());
-        System.out.println("Type: " + user.getUserType());
         System.out.println("Email: " + user.getEmail());
         System.out.println("Phone: " + user.getPhone());
 

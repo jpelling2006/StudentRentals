@@ -9,11 +9,18 @@ import javax.crypto.spec.PBEKeySpec;
 
 public abstract class User {
     private String username;
-    private UserType userType;
     private String email;
     private String phone;
     private String passwordHash;
     private byte[] salt;
+
+    public User(String username, String email, String phone, String passwordHash) throws Exception {
+        setUsername(username);
+        setEmail(email);
+        setPhone(phone);
+        setPasswordHash(passwordHash); // uses the setter to hash
+    }
+
 
     public String getUsername() { return username; }
     public void setUsername(String username) {
@@ -23,8 +30,6 @@ public abstract class User {
         }
         this.username = username;
     }
-
-    public abstract UserType getUserType(); // enum?
 
     public String getEmail() { return email; }
     public void setEmail(String email) {
@@ -96,8 +101,13 @@ public abstract class User {
         return hashPassword(rawPassword, salt).equals(passwordHash);
     }
 
+    // get user type from class name
+    private String getRoleName() {
+        return getClass().getSimpleName().replace("User","");
+    }
+
     @Override
     public String toString() {
-        return username + " (" + userType + ") - " + email + " - " + phone;
+        return username + " (" + getRoleName() + ") - " + email + " - " + phone;
     }
 }

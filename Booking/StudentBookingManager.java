@@ -3,12 +3,13 @@ package booking;
 import java.util.List;
 import java.util.Scanner;
 
+import access.BookingAccess;
 import helpers.Helpers;
 import room.Room;
 import room.RoomQueryService;
 import session.Session;
 
-public class StudentBookingManager {
+public class StudentBookingManager implements BookingHandler {
     private final BookingQueryService bookingQueryService;
     private final RoomQueryService roomQueryService;
     private final Session session;
@@ -143,5 +144,33 @@ public class StudentBookingManager {
 
         selectedBooking.setBookingStatus(BookingStatus.CANCELLED);
         System.out.println("Booking cancelled.");
+    }
+
+    @Override
+    public boolean handleOnce() {
+        System.out.println("\nStudent Booking Menu");
+        System.out.println("1. Create booking");
+        System.out.println("2. View bookings");
+        System.out.println("3. Cancel booking");
+        System.out.println("4. Back");
+
+        return switch (
+            Helpers.readIntInRange(scanner, "Choose option: ", 1, 4)
+        ) {
+            case 1 -> {
+                createBooking();
+                yield false;
+            }
+            case 2 -> {
+                listBookings();
+                yield false;
+            }
+            case 3 -> {
+                cancelBooking();
+                yield false;
+            }
+            case 4 -> true;
+            default -> false;
+        };
     }
 }

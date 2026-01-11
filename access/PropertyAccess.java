@@ -1,5 +1,7 @@
 package access;
 
+import properties.PropertiesHandler;
+
 public interface PropertyAccess {
-    boolean handleProperty();
+    PropertiesHandler getPropertiesHandler();
 }

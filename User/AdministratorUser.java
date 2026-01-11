@@ -4,37 +4,43 @@ import access.BookingAccess;
 import access.PropertyAccess;
 import access.ReviewAccess;
 import access.RoomAccess;
-import booking.AdminBookingManager;
-import properties.PropertyManager;
-import review.ReviewManager;
-import room.RoomManager;
+import booking.BookingHandler;
+import properties.PropertiesHandler;
+import review.ReviewHandler;
+import room.RoomHandler;
 
 public class AdministratorUser extends User implements BookingAccess, PropertyAccess, RoomAccess, ReviewAccess {
-    @Override
-    public UserType getUserType() { return UserType.ADMINISTRATOR; }
+    private final BookingHandler bookingHandler;
+    private final PropertiesHandler propertiesHandler;
+    private final RoomHandler roomHandler;
+    private final ReviewHandler reviewHandler;
 
-    private final AdminBookingManager bookingManager;
-    private final PropertyManager propertyManager;
-    private final RoomManager roomManager;
-    private final ReviewManager reviewManager;
-
-    @Override
-    public boolean handleBooking() {
-        return bookingManager.handleOnce();
+    public AdministratorUser(
+        String username,
+        String email,
+        String phone,
+        String passwordHash,
+        BookingHandler bookingHandler,
+        PropertiesHandler propertiesHandler,
+        RoomHandler roomHandler,
+        ReviewHandler reviewHandler
+    ) throws Exception {
+        super(username, email, phone, passwordHash);
+        this.bookingHandler = bookingHandler;
+        this.propertiesHandler = propertiesHandler;
+        this.roomHandler = roomHandler;
+        this.reviewHandler = reviewHandler;
     }
 
     @Override
-    public boolean handleProperty() {
-        return propertyManager.handleOnce();
-    }
+    public BookingHandler getBookingHandler() { return bookingHandler; }
 
     @Override
-    public boolean handleRoom() {
-        return roomManager.handleOnce();
-    }
+    public PropertiesHandler getPropertiesHandler() { return propertiesHandler; }
 
     @Override
-    public boolean handleReview() {
-        return reviewManager.handleOnce();
-    }
+    public RoomHandler getRoomHandler() { return roomHandler; }
+
+    @Override
+    public ReviewHandler getReviewHandler() { return reviewHandler; }
 }

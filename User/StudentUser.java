@@ -2,25 +2,37 @@ package user;
 
 import access.BookingAccess;
 import access.ReviewAccess;
-import booking.BookingManager;
-import review.ReviewManager;
+import booking.BookingHandler;
+import review.ReviewHandler;
 
 public class StudentUser extends User implements BookingAccess, ReviewAccess {
-    @Override
-    public UserType getUserType() { return UserType.STUDENT; }
-
     private String university;
     private String studentNumber;
 
-    // init these
-    private final BookingManager bookingManager;
-    private final ReviewManager reviewManager;
+    private final BookingHandler bookingHandler;
+    private final ReviewHandler reviewHandler;
 
+    public StudentUser(
+        String username,
+        String email,
+        String phone,
+        String passwordHash,
+        String university,
+        String studentNumber,
+        BookingHandler bookingHandler,
+        ReviewHandler reviewHandler
+    ) throws Exception {
+        super(username, email, phone, passwordHash);
+        setUniversity(university);
+        setStudentNumber(studentNumber);
+        this.bookingHandler = bookingHandler;
+        this.reviewHandler = reviewHandler;
+    }
+
+
+    // Getters / Setters with validation
     public String getUniversity() { return university; }
     public void setUniversity(String university) {
-        if (!UserType.STUDENT.equals(this.getUserType())) {
-            throw new IllegalStateException("Only student can input a university.");
-        }
         if (university != null && university.length() > 128) {
             throw new IllegalArgumentException(
                 "University name must be up to 128 characters long."
@@ -31,28 +43,18 @@ public class StudentUser extends User implements BookingAccess, ReviewAccess {
 
     public String getStudentNumber() { return studentNumber; }
     public void setStudentNumber(String studentNumber) {
-        if (!UserType.STUDENT.equals(this.getUserType())) {
-            throw new IllegalStateException(
-                "Only students can have a student number."
-            );
-        }
-
         if (studentNumber == null || !studentNumber.matches("^\\d{1,32}$")) {
             throw new IllegalArgumentException(
                 "Student number must be up to 32 digits long."
             );
         }
-
         this.studentNumber = studentNumber;
     }
 
+    // Implement interfaces
     @Override
-    public boolean handleBooking() {
-        return bookingManager.handleOnce();
-    }
+    public BookingHandler getBookingHandler() { return bookingHandler; }
 
     @Override
-    public boolean handleReview() {
-        return reviewManager.handleOnce();
-    }
+    public ReviewHandler getReviewHandler() { return reviewHandler; }
 }

@@ -1,5 +1,7 @@
 package access;
 
+import review.ReviewHandler;
+
 public interface ReviewAccess {
-    boolean handleReview();
+    ReviewHandler getReviewHandler();
 }

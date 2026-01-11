@@ -38,65 +38,63 @@ public class LoggedOutManager {
         System.out.println("1. Student");
         System.out.println("2. Homeowner");
 
-        Integer choice = Helpers.readIntInRange(
-            scanner, 
-            "Choose user type: ", 
-            1, 
-            2
-        );
+        Integer choice = Helpers.readIntInRange(scanner, "Choose user type: ", 1, 2);
 
-        UserType type = (choice == 1) ? UserType.STUDENT : UserType.HOMEOWNER;
+        UserFactory factory;
+        boolean isStudent = choice == 1;
+        if (isStudent) {
+            factory = StudentUserFactory.getInstance();
+        } else {
+            factory = HomeownerUserFactory.getInstance();
+        }
 
-        UserFactory factory = UserFactoryProvider.getFactory(type);
-
-        User user = factory.createUser();
-
+        // common user info
         String username;
         while (true) {
-            username = Helpers.readString(
-                scanner, 
-                "Username: ", 
-                32
-            ).toLowerCase();
-
-            if (users.containsKey(username.toLowerCase())) {
+            username = Helpers.readString(scanner, "Username: ", 32).toLowerCase();
+            if (users.containsKey(username)) {
                 System.out.println("Username already exists.");
                 continue;
             }
-
             break;
         }
 
-        user.setUsername(username);
+        String email = Helpers.readString(scanner, "Enter email: ", 64);
+        String phone = Helpers.readString(scanner, "Enter phone number: ", 10);
 
-        user.setEmail(
-            Helpers.readString(scanner, "Enter email: ", 64)
-        );
-        user.setPhone(
-            Helpers.readString(scanner, "Enter phone number: ", 10)
-        );
-        
+        String password;
         while (true) {
             try {
-                user.setPasswordHash(
-                    Helpers.readString(
-                        scanner, 
-                        "Enter password (minimum 8 characters): ", 
-                        128
-                    )
-                );
+                password = Helpers.readString(scanner, "Enter password (minimum 8 characters): ", 128);
                 break;
             } catch (Exception e) {
-                System.out.println("Password error.");
+                System.out.println("Password error. Try again.");
             }
         }
 
-        // if user is student, student details are input
-        if (user instanceof StudentUser student) { inputStudentDetails(student); }
+        // student-specific info
+        String university = null;
+        String studentNumber = null;
+        if (isStudent) {
+            university = Helpers.readString(scanner, "Enter university: ", 128);
+            studentNumber = Helpers.readString(scanner, "Enter student number: ", 32);
+        }
 
-        users.put(user.getUsername().toLowerCase(), user);
+        // create user via factory
+        User user = factory.createUser(
+            username,
+            email,
+            phone,
+            password,
+            university,
+            studentNumber
+        );
+
+        users.put(username, user);
+
         System.out.println("Registration successful.");
     }
+
 
     public void login() {
         String username = Helpers.readString(

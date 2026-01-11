@@ -1,5 +1,7 @@
 package access;
 
+import room.RoomHandler;
+
 public interface RoomAccess {
-    boolean handleRoom();
+    RoomHandler getRoomHandler();
 }

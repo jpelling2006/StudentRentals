@@ -1,5 +1,7 @@
 package access;
 
+import booking.BookingHandler;
+
 public interface BookingAccess {
-    boolean handleBooking();
+    BookingHandler getBookingHandler();
 }
