@@ -87,12 +87,11 @@ public class HomeownerPropertyManager {
             return;
         }
 
-        listUserProperties();
-
         Property selectedProperty = Helpers.selectFromList(
             scanner,
             userProperties, 
-            "Select a property to edit"
+            "Select a property to edit",
+            Property::toString
         );
         editPropertyMenu(selectedProperty);
     }
@@ -161,12 +160,11 @@ public class HomeownerPropertyManager {
             return;
         }
 
-        listUserProperties();
-
         Property selectedProperty = Helpers.selectFromList(
             scanner, 
             userProperties, 
-            "Select a property to delete"
+            "Select a property to delete",
+            Property::toString
         );
 
         if (!confirmDeletion(selectedProperty)) {

@@ -1,11 +1,9 @@
 package booking;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
 import helpers.Helpers;
-import properties.Property;
 import room.Room;
 import room.RoomQueryService;
 import session.Session;
@@ -32,7 +30,8 @@ public class StudentBookingManager {
         Room room = Helpers.selectFromList(
             scanner,
             roomQueryService.getAllRooms(),
-            "Select room"
+            "Select room",
+            Room::toString
         );
 
         // automatically generated values
@@ -59,14 +58,13 @@ public class StudentBookingManager {
             System.out.println("You have no bookings to edit.");
             return;
         }
-
-        Helpers.printIndexed(userBookings, Booking::toString);
-
+        
         editBookingMenu(
             Helpers.selectFromList(
                 scanner, 
                 userBookings, 
-                "Select a booking to edit"
+                "Select a booking to edit",
+                Booking::toString
             )
         );
     }
@@ -117,12 +115,20 @@ public class StudentBookingManager {
     }
 
     public void cancelBooking() {
+        List<Booking> userBookings = bookingQueryService.getBookingsForStudent(
+            session.getCurrentUser().getUsername()
+        );
+
+        if (userBookings.isEmpty()) {
+            System.out.println("You have no bookings to cancel.");
+            return;
+        }
+
         Booking selectedBooking = Helpers.selectFromList(
             scanner,
-            bookingQueryService.getBookingsForStudent(
-                session.getCurrentUser().getUsername()
-            ),
-            "Select booking"
+            userBookings,
+            "Select booking",
+            Booking::toString
         );
 
         if (selectedBooking == null) { return; }

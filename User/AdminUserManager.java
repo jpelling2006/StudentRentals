@@ -28,9 +28,23 @@ public class AdminUserManager {
     // maybe also delete all info linked to this user?
     public void deleteUser() {
         List<User> users = userQueryService.getAllUsers();
-        User selectedUser = Helpers.selectFromList(scanner, users, "Select a user to delete");
 
-        if (selectedUser == null) { return; }
+        if (users.isEmpty()) {
+            System.out.println("There are no users. How are you here?");
+            return;
+        }
+
+        User selectedUser = Helpers.selectFromList(
+            scanner, 
+            users, 
+            "Select a user to delete", 
+            User::toString
+        );
+
+        if (selectedUser == null) {
+            System.out.println("User doesn't exist.");
+            return;
+        }
 
         users.remove(selectedUser);
         System.out.println("User deleted successfully");

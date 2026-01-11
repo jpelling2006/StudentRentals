@@ -31,42 +31,6 @@ public class AdminBookingManager {
         Helpers.printIndexed(bookings, Booking::toString);
     }
 
-    public void forceEditStatus() {
-        List<Booking> bookings = bookingQueryService.getAllBookings();
-
-        if (bookings.isEmpty()) {
-            System.out.println("No bookings exist.");
-            return;
-        }
-
-        listAllBookings();
-
-        // user selects booking from list
-        Booking booking = Helpers.selectFromList(
-            scanner,
-            bookings,
-            "Select booking to update"
-        );
-
-        if (booking == null) {
-            System.out.println("Booking doesn't exist.");
-            return;
-        } else if (booking.hasEnded()) {
-            System.out.println("Booking has already ended. Status is locked.");
-            return;
-        }
-
-        // update status
-        booking.setBookingStatus(
-            Helpers.readEnum(
-                scanner, 
-                "Select new status", 
-                BookingStatus.class
-            )
-        );
-        System.out.println("Booking status updated.");
-    }
-
     public void deleteBooking() {
         List<Booking> bookings = bookingQueryService.getAllBookings();
         if (bookings.isEmpty()) {
@@ -74,16 +38,18 @@ public class AdminBookingManager {
             return;
         }
 
-        listAllBookings();
-
         // user selects booking from list
         Booking selectedBooking = Helpers.selectFromList(
             scanner,
             bookings,
-            "Select booking to delete"
+            "Select booking to delete",
+            Booking::toString
         );
 
-        if (selectedBooking == null) { return; }
+        if (selectedBooking == null) {
+            System.out.println("Booking doesn't exist.");
+            return;
+        }
 
         System.out.println("Are you sure you want to delete this booking?");
         System.out.println(selectedBooking.toString());

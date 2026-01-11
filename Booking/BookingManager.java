@@ -102,16 +102,15 @@ public class BookingManager {
     private boolean handleAdmin() {
         System.out.println("\nAdmin Booking Menu");
         System.out.println("1. View all bookings");
-        System.out.println("2. Force update status");
-        System.out.println("3. Delete booking");
-        System.out.println("4. Back");
+        System.out.println("2. Delete booking");
+        System.out.println("3. Back");
 
         return switch (
             Helpers.readIntInRange(
                 scanner, 
                 "Choose option: ", 
                 1, 
-                4
+                3
             )
         ) {
             case 1 -> {
@@ -119,14 +118,10 @@ public class BookingManager {
                 yield false;
             }
             case 2 -> {
-                adminBookingManager.forceEditStatus();
-                yield false;
-            }
-            case 3 -> {
                 adminBookingManager.deleteBooking();
                 yield false;
             }
-            case 4 -> true;
+            case 3 -> true;
             default -> false;
         };
     }

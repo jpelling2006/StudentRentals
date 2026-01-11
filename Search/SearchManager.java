@@ -76,15 +76,6 @@ public class SearchManager {
         Helpers.printIndexed(rooms, Room::toString);
     }
 
-    public Room selectRoom() {
-        if (lastResults.isEmpty()) {
-            System.out.println("No rooms to select.");
-            return null;
-        }
-
-        return Helpers.selectFromList(scanner, lastResults, "Select room");
-    }
-
     // different to toString format - more detailed which wouldnt be convinient elsewhere
     public void viewRoomDetails(Room room) {
         if (room == null) { return; }
@@ -105,8 +96,24 @@ public class SearchManager {
     }
 
     private void viewSelectedRoom() {
-        Room room = selectRoom();
-        if (room != null) { viewRoomDetails(room); }
+        if (lastResults.isEmpty()) {
+            System.out.println("No rooms to select.");
+            return;
+        }
+
+        Room selectedRoom = Helpers.selectFromList(
+            scanner,
+            lastResults, 
+            "Select room", 
+            Room::toString
+        );
+
+        if (selectedRoom == null) {
+            System.out.println("Room doesn't exist.");
+            return;
+        }
+
+        viewRoomDetails(selectedRoom);
     }
 
     private void performSearch() {

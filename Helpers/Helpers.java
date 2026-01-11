@@ -117,17 +117,15 @@ public final class Helpers {
     public static <T> T selectFromList(
         Scanner scanner,
         List<T> items,
-        String prompt
+        String prompt,
+        Function<T, String> formatter
     ) {
         if (items == null || items.isEmpty()) {
             System.out.println("No options available.");
             return null;
         }
 
-        // prints out items in list
-        for (int i = 0; i < items.size(); i++) {
-            System.out.println((i+1) + ". " + items.get(i));
-        }
+        printIndexed(items, formatter);
 
         Integer choice = readIntInRange(scanner, prompt + ": ", 1, items.size());
         return items.get(choice - 1);

@@ -38,12 +38,11 @@ public class AdminReviewManager {
             return;
         }
 
-        listAllReviews();
-
         Review selectedReview = Helpers.selectFromList(
             scanner,
             reviews,
-            "Select a review to delete"
+            "Select a review to delete",
+            Review::toString
         );
 
         if (selectedReview == null) { return; }

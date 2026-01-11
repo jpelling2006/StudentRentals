@@ -38,7 +38,8 @@ public class StudentReviewManager {
         Property selectedProperty = Helpers.selectFromList(
             scanner, 
             propertyQueryService.getAllProperties(), 
-            "Select property"
+            "Select property",
+            Property::toString
         );
 
         if (selectedProperty == null) { return; }
@@ -125,7 +126,8 @@ public class StudentReviewManager {
             Helpers.selectFromList(
                 scanner,
                 userReviews,
-                "Select a review to edit"
+                "Select a review to edit",
+                Review::toString
             )
         );
     }
@@ -193,7 +195,8 @@ public class StudentReviewManager {
         Review selectedReview = Helpers.selectFromList(
             scanner,
             userReviews,
-            "Select a review to delete"
+            "Select a review to delete",
+            Review::toString
         );
 
         if (selectedReview == null) { return; }

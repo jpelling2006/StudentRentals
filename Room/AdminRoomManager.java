@@ -38,7 +38,8 @@ public class AdminRoomManager {
         Room selectedRoom = Helpers.selectFromList(
             scanner, 
             rooms, 
-            "Select room to delete"
+            "Select room to delete",
+            Room::toString
         );
 
         if (selectedRoom == null) { return; }

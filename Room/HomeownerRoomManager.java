@@ -40,7 +40,8 @@ public class HomeownerRoomManager {
         Property property = Helpers.selectFromList(
             scanner, 
             propertyQueryService.getUserProperties(session.getCurrentUser()), 
-            "Select property"
+            "Select property",
+            Property::toString
         );
 
         if (property == null) { return; }
@@ -76,8 +77,25 @@ public class HomeownerRoomManager {
 
     public void editRoom() {
         List<Room> rooms = roomQueryService.getUserRooms(session.getCurrentUser());
-        Room room = Helpers.selectFromList(scanner, rooms, "Select room");
-        if (room != null) { editRoomMenu(room); }
+
+        if (rooms.isEmpty()) {
+            System.out.println("You have no rooms to edit.");
+            return;
+        }
+
+        Room room = Helpers.selectFromList(
+            scanner, 
+            rooms, 
+            "Select room", 
+            Room::toString
+        );
+
+        if (room == null) { 
+            System.out.println("Room doesn't exist");
+            return;
+        }
+
+        editRoomMenu(room);
     }
 
     protected void editRoomMenu(Room room) {
@@ -149,7 +167,8 @@ public class HomeownerRoomManager {
         Room selectedRoom = Helpers.selectFromList(
             scanner, 
             rooms, 
-            "Select room to delete"
+            "Select room to delete",
+            Room::toString
         );
 
         if (selectedRoom == null) return;

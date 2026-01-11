@@ -35,7 +35,8 @@ public class AdminPropertyManager {
         Property selectedProperty = Helpers.selectFromList(
             scanner, 
             properties, 
-            "Select a property to delete"
+            "Select a property to delete",
+            Property::toString
         );
 
         if (selectedProperty == null) { return; }

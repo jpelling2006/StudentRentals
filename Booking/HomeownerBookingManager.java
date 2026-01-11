@@ -32,7 +32,6 @@ public class HomeownerBookingManager {
         }
 
         System.out.println("\nYour bookings:");
-
         // prints list of bookings
         Helpers.printIndexed(bookings, Booking::toString);
     }
@@ -47,14 +46,13 @@ public class HomeownerBookingManager {
             return;
         }
 
-        listBookings();
-
         // edit selected booking
         editStatusMenu(
             Helpers.selectFromList(
                 scanner, 
                 userBookings, 
-                "Select a booking to edit"
+                "Select a booking to edit",
+                Booking::toString
             )
         );
     }
