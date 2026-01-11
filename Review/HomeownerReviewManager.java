@@ -17,13 +17,13 @@ public class HomeownerReviewManager {
         this.session = session;
     }
 
-    public void listReviews() {
-        List<Review> reviews = reviewQueryService.getHomeownerReviews(
+    public void listUserReviews() {
+        List<Review> userReviews = reviewQueryService.getHomeownerReviews(
             session.getCurrentUser()
         );
-        System.out.println("\nYour reviews:");
-        Helpers.printIndexed(reviews, Review::toString);
-    }
 
-    
+        // prints list of all user reviews
+        System.out.println("\nYour reviews:");
+        Helpers.printIndexed(userReviews, Review::toString);
+    }
 }

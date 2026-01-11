@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import room.RoomType;
 
+// since searchRooms() had too many parameters
 public class RoomSearchCriteria {
     public String city;
     public Double minPrice;

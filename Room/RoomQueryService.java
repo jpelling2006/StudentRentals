@@ -13,20 +13,20 @@ public class RoomQueryService {
     }
 
     public List<Room> getAllRooms() {
-        return propertyQueryService.getAllProperties().stream()
-            .flatMap(property -> property.getRooms().stream())
+        return propertyQueryService.getAllProperties().stream() // gets all properties
+            .flatMap(property -> property.getRooms().stream()) // gets all rooms for each property
             .toList();
     }
 
     public List<Room> getUserRooms(User user) {
-        return propertyQueryService.getUserProperties(user).stream()
-            .flatMap(property -> property.getRooms().stream())
+        return propertyQueryService.getUserProperties(user).stream() // gets all properties made by user
+            .flatMap(property -> property.getRooms().stream()) // gets all rooms for each user property
             .toList();
     }
 
     public List<Room> getRoomsByType(RoomType type) {
-        return getAllRooms().stream()
-            .filter(room -> room.getRoomType() == type)
+        return getAllRooms().stream() // gets all rooms
+            .filter(room -> room.getRoomType() == type) // gets all rooms that have a certain type
             .toList();
     }
     

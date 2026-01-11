@@ -17,7 +17,18 @@ public class AdminPropertyManager {
         this.scanner = scanner;
     }
 
-    public void listAllProperties() {}
+    public void listAllProperties() {
+        List<Property> properties = propertyQueryService.getAllProperties();
+
+        if (properties.isEmpty()) {
+            System.out.println("There are no properties");
+            return;
+        }
+
+        // prints list of all properties
+        System.out.println("\nAll properties:");
+        Helpers.printIndexed(properties, Property::toString);
+    }
 
     public void deleteAnyProperty() {
         List<Property> properties = propertyQueryService.getAllProperties();
@@ -29,8 +40,7 @@ public class AdminPropertyManager {
 
         if (selectedProperty == null) { return; }
 
-        // fix this
-        properties.remove(selectedProperty); // what
+        properties.remove(selectedProperty);
         System.out.println("Property deleted successfully.");
     }
 }

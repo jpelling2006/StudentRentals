@@ -66,7 +66,7 @@ public class PropertyManager {
                 yield false;
             }
             case 2 -> {
-                homeownerPropertyManager.listProperties();
+                homeownerPropertyManager.listUserProperties();
                 yield false;
             }
             case 3 -> {

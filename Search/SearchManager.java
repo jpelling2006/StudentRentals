@@ -25,11 +25,13 @@ public class SearchManager {
         this.scanner = scanner;
     }
 
+    // checks if room is available between two dates
     private boolean isRoomAvailable(Room room, LocalDate moveIn, LocalDate moveOut) {
         if (moveIn == null || moveOut == null) { return true; }
         return room.isAvailable(moveIn, moveOut);
     }
 
+    // checks if room is in price range
     private boolean inPriceRange(Room room, Double minPrice, Double maxPrice) {
         Double price = room.getRentPrice();
 
@@ -41,21 +43,23 @@ public class SearchManager {
         return true;
     }
 
+    // checks if room is a certain type
     private boolean correctRoomType(Room room, RoomType roomType) {
         return roomType == null || room.getRoomType() == roomType;
     }
 
-    private boolean matchesLocation(Property property, String cityOrArea) {
-        return cityOrArea == null || property.getCity().equalsIgnoreCase(cityOrArea);
+    // checks if room is in a property in a certain city
+    private boolean matchesLocation(Property property, String city) {
+        return city == null || property.getCity().equalsIgnoreCase(city);
     }
 
     public List<Room> searchRooms(RoomSearchCriteria criteria) {
-        lastResults = propertyQueryService.getAllProperties().stream()
-            .filter(property -> matchesLocation(property, criteria.city))
-            .flatMap(property -> property.getRooms().stream())
-            .filter(room -> isRoomAvailable(room, criteria.moveIn, criteria.moveOut))
-            .filter(room -> inPriceRange(room, criteria.minPrice, criteria.maxPrice))
-            .filter(room -> correctRoomType(room, criteria.roomType))
+        lastResults = propertyQueryService.getAllProperties().stream() // gets all properties
+            .filter(property -> matchesLocation(property, criteria.city)) // gets all properties in certain city
+            .flatMap(property -> property.getRooms().stream()) // gets all rooms for selected properties
+            .filter(room -> isRoomAvailable(room, criteria.moveIn, criteria.moveOut)) // selects rooms available in date range
+            .filter(room -> inPriceRange(room, criteria.minPrice, criteria.maxPrice)) // selects rooms in price range
+            .filter(room -> correctRoomType(room, criteria.roomType)) // selects rooms of a certain type
             .collect(Collectors.toList());
 
         return lastResults;
@@ -67,20 +71,9 @@ public class SearchManager {
             return;
         }
 
+        // prints list of search results
         System.out.println("\nSearch results");
-
-        for (int i = 0; i < rooms.size(); i++) {
-            Room room = rooms.get(i);
-            Property property = room.getProperty();
-
-            System.out.println(
-                (i + 1) + ". £" + room.getRentPrice() + "/week - "
-                + property.getAverageRating() + " stars - "
-                + room.getLocation() + " - "
-                + property.getCity() + " - "
-                + property.getAddress()
-            );
-        }
+        Helpers.printIndexed(rooms, Room::toString);
     }
 
     public Room selectRoom() {
@@ -89,15 +82,10 @@ public class SearchManager {
             return null;
         }
 
-        Room choice = Helpers.selectFromList(
-            scanner, 
-            lastResults, 
-            "Select room"
-        );
-
-        return choice;
+        return Helpers.selectFromList(scanner, lastResults, "Select room");
     }
 
+    // different to toString format - more detailed which wouldnt be convinient elsewhere
     public void viewRoomDetails(Room room) {
         if (room == null) { return; }
 
@@ -108,7 +96,9 @@ public class SearchManager {
         System.out.println("City: " + property.getCity());
         System.out.println("Room type: " + room.getRoomType());
         System.out.println("Rent: £" + room.getRentPrice() + "/week");
-        System.out.println("Bills included: " + (room.getBillsIncluded() ? "Yes" : "No"));
+        System.out.println("Bills included: " + (
+            room.getBillsIncluded() ? "Yes" : "No")
+        );
         System.out.println("Amenities: " + room.getAmenities());
         System.out.println("Available from: " + room.getStartDate());
         System.out.println("Available until: " + room.getEndDate());
@@ -146,6 +136,7 @@ public class SearchManager {
                 "Move out date (blank for any): "
             );
 
+            // only checks if endDate is after startDate if both are given
             if (
                 (criteria.moveIn != null) ||
                 (

@@ -41,6 +41,7 @@ public final class Helpers {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
 
+            // allows null values
             if (input.isEmpty()) { return null; }
 
             else if (input.length() > maxLength) {
@@ -103,6 +104,7 @@ public final class Helpers {
             System.out.print(prompt);
             String input = scanner.nextLine();
 
+            // allows null values
             if (input == null) { return null; }
 
             try { return Double.parseDouble(input); }
@@ -122,6 +124,7 @@ public final class Helpers {
             return null;
         }
 
+        // prints out items in list
         for (int i = 0; i < items.size(); i++) {
             System.out.println((i+1) + ". " + items.get(i));
         }
@@ -153,34 +156,25 @@ public final class Helpers {
         }
     }
 
-    public static LocalDate readDate(
-        Scanner scanner,
-        String prompt
-    ) {
+    public static LocalDate readDate(Scanner scanner, String prompt) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         while (true) {
             System.out.print(prompt + " (yyyy-mm-dd): ");
             String input = scanner.nextLine();
 
-            try {
-                return LocalDate.parse(input, formatter);
-            } catch (DateTimeParseException e) {
+            try { return LocalDate.parse(input, formatter); }
+            catch (DateTimeParseException e) {
                 System.out.println("Invalid date format.");
             }
         }
     }
 
-    public static LocalDate readFutureDate(
-        Scanner scanner,
-        String prompt
-    ) {
+    public static LocalDate readFutureDate(Scanner scanner, String prompt) {
         while (true) {
             LocalDate date = readDate(scanner, prompt);
 
-            if (!date.isBefore(LocalDate.now())) {
-                return date;
-            }
+            if (!date.isBefore(LocalDate.now())) { return date; }
 
             System.out.println("Date must be today or in the future.");
         }
@@ -189,21 +183,25 @@ public final class Helpers {
     public static boolean confirm(Scanner scanner) {
         while (true) {
             System.out.print("Confirm (y/n): ");
+
+            // converts to lowercase just in case user inputs "Y" or "N"
             String input = scanner.nextLine().trim().toLowerCase();
 
-            if (input.equals("y")) return true;
-            if (input.equals("n")) return false;
+            if (input.equals("y")) { return true; }
+            if (input.equals("n")) { return false; }
 
             System.out.println("Please enter 'y' or 'n'.");
         }
     }
 
+    // prints formatted list using .toString() overrides given in object classes
     public static <T> void printIndexed(List<T> list, Function<T, String> formatter) {
         if (list == null || list.isEmpty()) {
             System.out.println("No items found.");
             return;
         }
 
+        // applies format for each item in list
         for (int i = 0; i < list.size(); i++) {
             System.out.println((i + 1) + ". " + formatter.apply(list.get(i)));
         }

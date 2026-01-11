@@ -98,8 +98,6 @@ public class Property {
     public void addRoom(Room room) { rooms.add(room); }
     public void removeRoom(Room room) { rooms.remove(room); }
 
-    // reviews
-
     public Collection<Review> getReviews() { return reviewsByUser.values(); }
 
     public Review getReviewByUser(String username) {
@@ -127,11 +125,18 @@ public class Property {
     public double getAverageRating() {
         if (reviewsByUser.isEmpty()) { return 0; }
 
+        // counts values of all reviews
         Integer sum = 0;
         for (Review review : reviewsByUser.values()) {
             sum += review.getStars();
         }
 
+        // returns mean average
         return (double) sum / reviewsByUser.size();
+    }
+
+    @Override
+    public String toString() {
+        return address + " (" + propertyType + ")";
     }
 }

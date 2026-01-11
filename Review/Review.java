@@ -70,6 +70,8 @@ public class Review {
     public String toString() {
         Property property = getProperty();
         String address = (property != null) ? property.getAddress() : "Unknown property";
+
+        // formats string
         return address + " - (" + stars + ")\n" + title;
     }
 }

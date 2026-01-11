@@ -38,7 +38,6 @@ public class Booking {
         this.bookingStatus = bookingStatus;
     }
 
-    // if exists too
     public String getUsername() { return username; }
     public void setUsername(String username) {
         if (username == null || username.length() > 32) {
@@ -49,7 +48,6 @@ public class Booking {
         this.username = username;
     }
 
-    // check if dates have passed
     public LocalDate getStartDate() { return startDate; }
     public void setStartDate(LocalDate startDate) {
         if (startDate == null) {
@@ -66,8 +64,10 @@ public class Booking {
         this.endDate = endDate;
     }
 
+    // true if endDate is before now
     public boolean hasEnded() { return endDate.isBefore(LocalDate.now()); }
 
+    // checks if bookings overlap
     public boolean overlaps(LocalDate from, LocalDate to) {
         return !(to.isBefore(startDate) || from.isAfter(endDate));
     }
@@ -75,10 +75,13 @@ public class Booking {
     @Override
     public String toString() {
         Room room = getRoom();
+
+        // gets address from property object room is assigned to
         String address = (room != null && room.getProperty() != null)
             ? room.getProperty().getAddress()
             : "Unknown property";
 
+        // format
         return startDate + " to " + endDate + " (" + bookingStatus + ")\n" + address;
     }
 }

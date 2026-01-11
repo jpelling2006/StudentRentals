@@ -59,7 +59,7 @@ public class ReviewManager {
                 )
             ) {
                 case 1 -> studentReviewManager.createReview();
-                case 2 -> studentReviewManager.listReviews(); // create query service
+                case 2 -> studentReviewManager.listReviews();
                 case 3 -> studentReviewManager.editReview();
                 case 4 -> studentReviewManager.deleteReview();
                 case 5 -> { return; }
@@ -81,7 +81,7 @@ public class ReviewManager {
                     2
                 )
             ) {
-                case 1 -> homeownerReviewManager.listReviews(); // create query service
+                case 1 -> homeownerReviewManager.listUserReviews();
                 case 2 -> { return; }
             }
         }

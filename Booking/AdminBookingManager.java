@@ -26,76 +26,74 @@ public class AdminBookingManager {
         }
 
         System.out.println("\nAll bookings:");
-        for (int i = 0; i < bookings.size(); i++) {
-            Booking b = bookings.get(i);
 
-            System.out.println(
-                (i + 1) + ". "
-                + b.getUsername() + " | "
-                + b.getStartDate() + " → "
-                + b.getEndDate() + " | "
-                + b.getRoom().getProperty().getAddress() + " | "
-                + b.getBookingStatus()
-            );
-        }
+        // prints list of all bookings
+        Helpers.printIndexed(bookings, Booking::toString);
     }
 
     public void forceEditStatus() {
         List<Booking> bookings = bookingQueryService.getAllBookings();
-        if (bookings.isEmpty()) return;
+
+        if (bookings.isEmpty()) {
+            System.out.println("No bookings exist.");
+            return;
+        }
 
         listAllBookings();
 
+        // user selects booking from list
         Booking booking = Helpers.selectFromList(
             scanner,
             bookings,
             "Select booking to update"
         );
 
-        if (booking == null) return;
-
-        if (booking.hasEnded()) {
+        if (booking == null) {
+            System.out.println("Booking doesn't exist.");
+            return;
+        } else if (booking.hasEnded()) {
             System.out.println("Booking has already ended. Status is locked.");
             return;
         }
 
-        BookingStatus newStatus = Helpers.readEnum(
-            scanner,
-            "Select new status",
-            BookingStatus.class
+        // update status
+        booking.setBookingStatus(
+            Helpers.readEnum(
+                scanner, 
+                "Select new status", 
+                BookingStatus.class
+            )
         );
-
-        booking.setBookingStatus(newStatus);
         System.out.println("Booking status updated.");
     }
 
     public void deleteBooking() {
         List<Booking> bookings = bookingQueryService.getAllBookings();
-        if (bookings.isEmpty()) return;
+        if (bookings.isEmpty()) {
+            System.out.println("No bookings exist.");
+            return;
+        }
 
         listAllBookings();
 
-        Booking booking = Helpers.selectFromList(
+        // user selects booking from list
+        Booking selectedBooking = Helpers.selectFromList(
             scanner,
             bookings,
             "Select booking to delete"
         );
 
-        if (booking == null) return;
+        if (selectedBooking == null) { return; }
 
         System.out.println("Are you sure you want to delete this booking?");
-        System.out.println(
-            booking.getUsername() + " | "
-            + booking.getStartDate() + " → "
-            + booking.getEndDate()
-        );
+        System.out.println(selectedBooking.toString());
 
         if (!Helpers.confirm(scanner)) {
             System.out.println("Deletion cancelled.");
             return;
         }
 
-        booking.getRoom().forceRemoveBooking(booking.getUsername());
+        selectedBooking.getRoom().forceRemoveBooking(selectedBooking.getUsername());
         System.out.println("Booking deleted.");
     }
 }

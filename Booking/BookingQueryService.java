@@ -13,22 +13,22 @@ public class BookingQueryService {
     }
 
     public List<Booking> getAllBookings() {
-        return roomQueryService.getAllRooms().stream()
-            .flatMap(room -> room.getBookings().stream())
+        return roomQueryService.getAllRooms().stream() // gets all rooms
+            .flatMap(room -> room.getBookings().stream()) // gets bookings for each room
             .toList();
     }
 
     public List<Booking> getBookingsForStudent(String username) {
-        return roomQueryService.getAllRooms().stream()
-            .map(room -> room.getBookingByUser(username))
-            .filter(booking -> booking != null)
+        return roomQueryService.getAllRooms().stream() // gets all rooms
+            .map(room -> room.getBookingByUser(username)) // gets all bookings by user
+            .filter(booking -> booking != null) // gets rid of null bookings
             .toList();
     }
 
     public List<Booking> getBookingsForHomeowner(User user) {
-        return roomQueryService.getAllRooms().stream()
-            .filter(room -> room.getProperty().getUser().equals(user))
-            .flatMap(room -> room.getBookings().stream())
+        return roomQueryService.getAllRooms().stream() // gets all rooms
+            .filter(room -> room.getProperty().getUser().equals(user)) // gets all rooms by user
+            .flatMap(room -> room.getBookings().stream()) // gets all bookings for rooms
             .toList();
     }
 }

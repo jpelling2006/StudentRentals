@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import helpers.Helpers;
-import properties.Property;
-import room.Room;
 import session.Session;
 
 public class HomeownerBookingManager {
@@ -28,7 +26,15 @@ public class HomeownerBookingManager {
             session.getCurrentUser()
         );
 
-        Helpers.printIndexed(bookings, Booking::toString); // make this
+        if (bookings.isEmpty()) {
+            System.out.println("You have no bookings.");
+            return;
+        }
+
+        System.out.println("\nYour bookings:");
+
+        // prints list of bookings
+        Helpers.printIndexed(bookings, Booking::toString);
     }
 
     public void editBookingStatus() {
@@ -43,42 +49,33 @@ public class HomeownerBookingManager {
 
         listBookings();
 
-        Booking choice = Helpers.selectFromList(
-            scanner, 
-            userBookings, 
-            "Select a booking to edit"
+        // edit selected booking
+        editStatusMenu(
+            Helpers.selectFromList(
+                scanner, 
+                userBookings, 
+                "Select a booking to edit"
+            )
         );
-
-        editStatusMenu(choice);
     }
 
     private void editStatusMenu(Booking booking) {
-        while (true) {
-            Room room = booking.getRoom();
-            Property property = room.getProperty();
-            String address = (property != null)
-                ? property.getAddress() : "Unknown property";
-            
-            System.out.println(
-                "\n Editing booking: "
-                + booking.getStartDate().toString() + " to "
-                + booking.getEndDate().toString() + " - "
-                + address + " ("
-                + room.getLocation() + ")"
-            );
-            System.out.println("1. Status"); // homeowner only
+        while (true) {            
+            System.out.println( "\n Editing booking: ");
+            System.out.println(booking.toString());
+            System.out.println("1. Status");
             System.out.println("2. Cancel");
 
-            Integer choice = Helpers.readIntInRange(
-                scanner, 
-                "Choose a field to edit: ", 
-                1, 
-                2
-            );
-
-            switch (choice) {
+            switch (
+                Helpers.readIntInRange(
+                    scanner, 
+                    "Choose a field to edit: ", 
+                    1, 
+                    2
+                )
+            ) {
                 case 1 -> booking.setBookingStatus(
-                    Helpers.readEnum(
+                    Helpers.readEnum( // select booking status from BookingStatus enum
                         scanner, 
                         "Set booking status: ", 
                         BookingStatus.class

@@ -13,6 +13,7 @@ public class BookingStatusBackgroundService implements Runnable {
         this.interval = interval;
     }
 
+    // updates bookings every given period
     @Override
     public void run() {
         while (running) {
@@ -23,5 +24,6 @@ public class BookingStatusBackgroundService implements Runnable {
         }
     }
 
+    // if interrupted, stops instead of crashing the application
     public void stop() { running = false; }
 }

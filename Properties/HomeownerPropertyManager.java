@@ -63,7 +63,7 @@ public class HomeownerPropertyManager {
         System.out.println("Property created successfully");
     } 
 
-    public void listProperties() {
+    public void listUserProperties() {
         List<Property> userProperties = propertyQueryService.getUserProperties(
             session.getCurrentUser()
         );
@@ -74,14 +74,7 @@ public class HomeownerPropertyManager {
         }
 
         System.out.println("\nYour properties:");
-        for (int i = 0; i < userProperties.size(); i++) {
-            Property property = userProperties.get(i);
-            System.out.println(
-                (i+1) + ". "
-                + property.getAddress() + " ("
-                + property.getPropertyType() + ")"
-            );
-        }
+        Helpers.printIndexed(userProperties, Property::toString);
     }
 
     public void editProperty() {
@@ -94,7 +87,7 @@ public class HomeownerPropertyManager {
             return;
         }
 
-        listProperties();
+        listUserProperties();
 
         Property selectedProperty = Helpers.selectFromList(
             scanner,
@@ -168,7 +161,7 @@ public class HomeownerPropertyManager {
             return;
         }
 
-        listProperties();
+        listUserProperties();
 
         Property selectedProperty = Helpers.selectFromList(
             scanner, 
@@ -193,33 +186,5 @@ public class HomeownerPropertyManager {
         );
 
         return Helpers.confirm(scanner);
-    }
-
-    public void start() {
-        while (true) {
-            System.out.println("\nProperty Management System");
-            System.out.println("1. Create property");
-            System.out.println("2. List properties");
-            System.out.println("3. Edit properties");
-            System.out.println("4. Delete properties");
-            System.out.println("5. Exit");
-            Integer choice = Helpers.readIntInRange(
-                scanner, 
-                "Enter your choice: ", 
-                1, 
-                5
-            );
-
-            switch (choice) {
-                case 1 -> newProperty();
-                case 2 -> listProperties();
-                case 3 -> editProperty();
-                case 4 -> deleteProperty();
-                case 5 -> {
-                    System.out.println("Exiting...");
-                    return;
-                }
-            }
-        }
     }
 }

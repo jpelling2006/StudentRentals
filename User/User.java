@@ -54,9 +54,9 @@ public abstract class User {
     }
 
     public static boolean isValidEmail(String email) {
-        // https://www.baeldung.com/java-email-validation-regex
-        String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-        Pattern pattern = Pattern.compile(emailRegex);
+        Pattern pattern = Pattern.compile(
+            "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"
+        ); // https://www.baeldung.com/java-email-validation-regex
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
@@ -69,10 +69,12 @@ public abstract class User {
 
     public byte[] getSalt() { return salt; }
 
-    public static String hashPassword(String password, byte[] salt) throws Exception {
+    public static String hashPassword(
+        String password, byte[] salt
+    ) throws Exception {
         // PBKDF2 hash configuration
-        int iterations = 65536;
-        int keyLength = 256;
+        Integer iterations = 65536;
+        Integer keyLength = 256;
 
         // PBKDF2WithHmacSHA256 algorithm
         PBEKeySpec spec = new PBEKeySpec(
@@ -82,7 +84,9 @@ public abstract class User {
             keyLength
         );
         
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+        SecretKeyFactory factory = SecretKeyFactory.getInstance(
+            "PBKDF2WithHmacSHA256"
+        );
         byte[] hash = factory.generateSecret(spec).getEncoded();
 
         return Base64.getEncoder().encodeToString(hash);

@@ -2,7 +2,6 @@ package booking;
 
 import java.time.LocalDate;
 
-import room.Room;
 import room.RoomQueryService;
 
 public class BookingStatusUpdater {
@@ -14,16 +13,13 @@ public class BookingStatusUpdater {
 
     public void updateEndedBookings() {
         LocalDate today = LocalDate.now();
-        
-        for (Room room : roomQueryService.getAllRooms()) {
-            for (Booking booking : room.getBookings()) {
-                if (
-                    booking.getBookingStatus() != BookingStatus.ENDED
-                    && booking.getEndDate().isBefore(today)
-                ) {
-                    booking.setBookingStatus(BookingStatus.ENDED);
-                }
-            }
-        }
+
+        roomQueryService.getAllRooms().stream() // gets all rooms
+            .flatMap(room -> room.getBookings().stream()) // gets all bookings for each room
+            .filter( // only bookings to update
+                booking -> booking.getBookingStatus() != BookingStatus.ENDED
+                && booking.getEndDate().isBefore(today)
+            )
+            .forEach(booking -> booking.setBookingStatus(BookingStatus.ENDED)); //update
     }
 }

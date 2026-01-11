@@ -22,8 +22,8 @@ public class PropertyQueryService {
     }
 
     public List<Property> getUserProperties(User user) {
-        return properties.values().stream()
-            .filter(property -> property.getUser().equals(user))
+        return properties.values().stream() // gets all properties
+            .filter(property -> property.getUser().equals(user)) // gets all properties for user
             .toList();
     }
 }

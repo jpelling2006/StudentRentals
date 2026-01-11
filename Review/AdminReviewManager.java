@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import helpers.Helpers;
-import properties.Property;
 
 public class AdminReviewManager {
     private final ReviewQueryService reviewQueryService;
@@ -26,8 +25,8 @@ public class AdminReviewManager {
             return;
         }
 
+        // prints list of all reviews
         System.out.println("\nAll reviews:");
-
         Helpers.printIndexed(reviews, Review::toString);
     }
 
@@ -47,30 +46,17 @@ public class AdminReviewManager {
             "Select a review to delete"
         );
 
-        if (!confirmDeletion(selectedReview)) {
+        if (selectedReview == null) { return; }
+
+        System.out.println("Are you sure you want to delete this review?");
+        selectedReview.toString();
+
+        if (!Helpers.confirm(scanner)) {
             System.out.println("Deletion cancelled");
             return;
         }
 
         selectedReview.getProperty().removeReview(selectedReview.getUsername());
         System.out.println("Room deleted successfully.");
-    }
-
-    private boolean confirmDeletion(Review review) {
-        while (true) {
-            System.out.println("\nAre you sure you want to delete this review?");
-
-            Property property = review.getProperty();
-            String address = (property != null)
-                ? property.getAddress() : "Unknown property";
-
-            System.out.println(
-                address + " - ("
-                + review.getStars() + ")\n"
-                + review.getTitle()
-            );
-
-            return Helpers.confirm(scanner);
-        }
     }
 }

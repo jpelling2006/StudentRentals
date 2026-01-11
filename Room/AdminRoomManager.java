@@ -29,11 +29,24 @@ public class AdminRoomManager {
 
     public void deleteAnyRoom() {
         List<Room> rooms = roomQueryService.getAllRooms();
-        Room room = Helpers.selectFromList(scanner, rooms, "Select room to delete");
 
-        if (room == null) { return; }
+        if (rooms.isEmpty()) {
+            System.out.println("There are no rooms.");
+            return;
+        }
 
-        room.getProperty().removeRoom(room);
+        Room selectedRoom = Helpers.selectFromList(
+            scanner, 
+            rooms, 
+            "Select room to delete"
+        );
+
+        if (selectedRoom == null) { return; }
+
+        System.out.println("Are you sure you want to delete this room?");
+        selectedRoom.toString();
+
+        selectedRoom.getProperty().removeRoom(selectedRoom);
         System.out.println("Room deleted by admin");
     }
 }

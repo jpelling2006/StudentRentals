@@ -20,6 +20,7 @@ public class AdminUserManager {
     public void listAllUsers() {
         List<User> users = userQueryService.getAllUsers();
 
+        // prints a list of all users
         System.out.println("\nAll users:");
         Helpers.printIndexed(users, User::toString);
     }

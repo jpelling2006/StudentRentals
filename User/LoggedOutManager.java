@@ -21,8 +21,16 @@ public class LoggedOutManager {
     }
 
     private void inputStudentDetails(StudentUser student) {
-        student.setUniversity(Helpers.readString(scanner, "Enter university: ", 128));
-        student.setStudentNumber(Helpers.readString(scanner, "Enter student number: ", 32));
+        student.setUniversity(
+            Helpers.readString(scanner, "Enter university: ", 128)
+        );
+        student.setStudentNumber(
+            Helpers.readString(
+                scanner, 
+                "Enter student number: ", 
+                32
+            )
+        );
     }
 
     public void register() {
@@ -30,7 +38,12 @@ public class LoggedOutManager {
         System.out.println("1. Student");
         System.out.println("2. Homeowner");
 
-        Integer choice = Helpers.readIntInRange(scanner, "Choose user type: ", 1, 2);
+        Integer choice = Helpers.readIntInRange(
+            scanner, 
+            "Choose user type: ", 
+            1, 
+            2
+        );
 
         UserType type = (choice == 1) ? UserType.STUDENT : UserType.HOMEOWNER;
 
@@ -40,7 +53,11 @@ public class LoggedOutManager {
 
         String username;
         while (true) {
-            username = Helpers.readString(scanner, "Username: ", 32).toLowerCase();
+            username = Helpers.readString(
+                scanner, 
+                "Username: ", 
+                32
+            ).toLowerCase();
 
             if (users.containsKey(username.toLowerCase())) {
                 System.out.println("Username already exists.");
@@ -52,18 +69,29 @@ public class LoggedOutManager {
 
         user.setUsername(username);
 
-        user.setEmail(Helpers.readString(scanner, "Enter email: ", 64));
-        user.setPhone(Helpers.readString(scanner, "Enter phone number: ", 10));
+        user.setEmail(
+            Helpers.readString(scanner, "Enter email: ", 64)
+        );
+        user.setPhone(
+            Helpers.readString(scanner, "Enter phone number: ", 10)
+        );
         
         while (true) {
             try {
-                user.setPasswordHash(Helpers.readString(scanner, "Enter password (minimum 8 characters): ", 128));
+                user.setPasswordHash(
+                    Helpers.readString(
+                        scanner, 
+                        "Enter password (minimum 8 characters): ", 
+                        128
+                    )
+                );
                 break;
             } catch (Exception e) {
                 System.out.println("Password error.");
             }
         }
 
+        // if user is student, student details are input
         if (user instanceof StudentUser student) { inputStudentDetails(student); }
 
         users.put(user.getUsername().toLowerCase(), user);
@@ -71,13 +99,21 @@ public class LoggedOutManager {
     }
 
     public void login() {
-        String username = Helpers.readString(scanner, "Username: ", 32).toLowerCase();
-        String password = Helpers.readString(scanner, "Password: ", 128);
+        String username = Helpers.readString(
+            scanner, 
+            "Username: ", 
+            32
+        ).toLowerCase();
+        String password = Helpers.readString(
+            scanner, 
+            "Password: ", 
+            128
+        );
 
         User user = users.get(username);
 
         if (user == null) {
-            System.out.println("Login failed.");
+            System.out.println("Username doesn't exist.");
             return;
         }
 
@@ -92,7 +128,11 @@ public class LoggedOutManager {
     }
 
     public void forgetPassword() {
-        String username = Helpers.readString(scanner, "Username: ", 32).toLowerCase();
+        String username = Helpers.readString(
+            scanner, 
+            "Username: ", 
+            32
+        ).toLowerCase();
         User user = users.get(username);
 
         if (user == null) {
@@ -102,7 +142,13 @@ public class LoggedOutManager {
 
         while (true) {
             try {
-                user.setPasswordHash(Helpers.readString(scanner, "New password: ", 128));
+                user.setPasswordHash(
+                    Helpers.readString(
+                        scanner, 
+                        "New password: ", 
+                        128
+                    )
+                );
                 System.out.println("Password reset.");
                 return;
             } catch (Exception e) { System.out.println("Password error."); }

@@ -40,11 +40,15 @@ public class StudentReviewManager {
             propertyQueryService.getAllProperties(), 
             "Select property"
         );
+
         if (selectedProperty == null) { return; }
 
-        String username = session.getCurrentUser().getUsername();
-
-        if (!hasCompletedBooking(selectedProperty, username)) {
+        if ( // if user hasn't completed booking on selected property
+            !hasCompletedBooking(
+                selectedProperty, 
+                session.getCurrentUser().getUsername()
+            )
+        ) {
             System.out.println(
                 "You can only review properties you have stayed in."
             );
@@ -55,9 +59,12 @@ public class StudentReviewManager {
 
         System.out.println("\nCreating new review");
 
+        // automatically filled fields
         review.generateReviewID();
         review.setProperty(selectedProperty);
         review.setUsername(session.getCurrentUser().getUsername());
+
+        // user inputted fields
         review.setStars(
             Helpers.readIntInRange(
                 scanner, 
@@ -91,12 +98,21 @@ public class StudentReviewManager {
         List<Review> userReviews = reviewQueryService.getStudentReviews(
             session.getCurrentUser().getUsername()
         );
+
+        if (userReviews.isEmpty()) {
+            System.out.println("You have no reviews.");
+            return;
+        }
+
+        // prints list of reviews made by user
         System.out.println("\nYour reviews:");
         Helpers.printIndexed(userReviews, Review::toString);
     }
 
     public void editReview() {
-        List<Review> userReviews = reviewQueryService.getStudentReviews(session.getCurrentUser().getUsername());
+        List<Review> userReviews = reviewQueryService.getStudentReviews(
+            session.getCurrentUser().getUsername()
+        );
 
         if (userReviews.isEmpty()) {
             System.out.println("You have no reviews to edit.");
@@ -105,40 +121,32 @@ public class StudentReviewManager {
 
         listReviews();
 
-        Review choice = Helpers.selectFromList(
-            scanner,
-            userReviews,
-            "Select a review to edit"
+        editReviewMenu(
+            Helpers.selectFromList(
+                scanner,
+                userReviews,
+                "Select a review to edit"
+            )
         );
-
-        editReviewMenu(choice);
     }
 
     private void editReviewMenu(Review review) {
         while (true) {
-            Property property = review.getProperty();
-            String address = (property != null)
-                ? property.getAddress() : "Unknown property";
-
-            System.out.println(
-                "\nEditing review: "
-                + address + " - ("
-                + review.getStars() + ")\n"
-                + review.getTitle()
-            );
+            System.out.println( "\nEditing review: ");
+            System.out.println(review.toString());
             System.out.println("1. Star rating");
             System.out.println("2. Title");
             System.out.println("3. Content");
             System.out.println("4. Cancel");
 
-            Integer choice = Helpers.readIntInRange(
-                scanner, 
-                "Choose a field to edit: ",
-                1, 
-                4
-            );
-
-            switch (choice) {
+            switch (
+                Helpers.readIntInRange(
+                    scanner, 
+                    "Choose a field to edit: ",
+                    1, 
+                    4
+                )
+            ) {
                 case 1 -> review.setStars(
                     Helpers.readIntInRange(
                         scanner, 
@@ -170,7 +178,9 @@ public class StudentReviewManager {
     }
 
     public void deleteReview() {
-        List<Review> userReviews = reviewQueryService.getStudentReviews(session.getCurrentUser().getUsername());
+        List<Review> userReviews = reviewQueryService.getStudentReviews(
+            session.getCurrentUser().getUsername()
+        );
 
         if (userReviews.isEmpty()) {
             System.out.println("You have no reviews to delete");
@@ -179,36 +189,24 @@ public class StudentReviewManager {
 
         listReviews();
 
+        // user selects review from list
         Review selectedReview = Helpers.selectFromList(
             scanner,
             userReviews,
             "Select a review to delete"
         );
 
-        if (!confirmDeletion(selectedReview)) {
+        if (selectedReview == null) { return; }
+
+        System.out.println("Are you sure you want to delete this review?");
+        selectedReview.toString();
+
+        if (!Helpers.confirm(scanner)) {
             System.out.println("Deletion cancelled");
             return;
         }
 
         selectedReview.getProperty().removeReview(selectedReview.getUsername());
         System.out.println("Room deleted successfully.");
-    }
-
-    private boolean confirmDeletion(Review review) {
-        while (true) {
-            System.out.println("\nAre you sure you want to delete this review?");
-
-            Property property = review.getProperty();
-            String address = (property != null)
-                ? property.getAddress() : "Unknown property";
-
-            System.out.println(
-                address + " - ("
-                + review.getStars() + ")\n"
-                + review.getTitle()
-            );
-
-            return Helpers.confirm(scanner);
-        }
     }
 }

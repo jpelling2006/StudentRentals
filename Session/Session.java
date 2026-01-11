@@ -2,6 +2,7 @@ package session;
 
 import user.User;
 
+// exists to store the current logged in user
 public class Session {
     private User currentUser;
 

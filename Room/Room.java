@@ -35,7 +35,6 @@ public class Room {
         this.property = property;
     }
 
-    // get to this
     public RoomType getRoomType() { return roomType; }
     public void setRoomType(RoomType roomType) {
         if (roomType == null) {
@@ -96,7 +95,6 @@ public class Room {
         this.endDate = endDate;
     }
 
-    // also see abt changing this
     private void validateDate(LocalDate start, LocalDate end) {
         LocalDate today = LocalDate.now();
 
@@ -113,8 +111,6 @@ public class Room {
         }
     }
 
-    // check later, see if getBookings() can still exist similar to the other one
-
     public Collection<Booking> getBookings() { return bookingsByUser.values(); }
 
     public Booking getBookingByUser(String username) {
@@ -124,9 +120,10 @@ public class Room {
     public void addBooking(Booking booking) {
         String username = booking.getUsername();
 
+        // if user has already made booking for selected room
         if (bookingsByUser.containsKey(username)) {
             throw new IllegalStateException(
-                "You already have a booking for this property"
+                "You already have a booking for this room"
             );
         }
 
@@ -167,5 +164,16 @@ public class Room {
             ) { return false; }
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "£" + rentPrice + "/week - "
+        + property.getAverageRating() + " stars\n"
+        + property.getCity() + " - "
+        + property.getAddress() + " - "
+        + location
+        + "\n" + startDate + " - "
+        + endDate;
     }
 }

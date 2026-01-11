@@ -5,6 +5,8 @@ import java.util.Scanner;
 import helpers.Helpers;
 import session.Session;
 
+// non admin meaning students or homeowners
+// they require extremely similar functionality, hence why they both use this class
 public class NonAdminUserManager {
     private final Scanner scanner;
     private final Session session;
@@ -46,6 +48,7 @@ public class NonAdminUserManager {
             System.out.println("2. Phone");
             System.out.println("3. Password");
 
+            // if user is student
             if (user instanceof StudentUser) {
                 System.out.println("4. University");
                 System.out.println("5. Student Number");
@@ -54,9 +57,14 @@ public class NonAdminUserManager {
                 System.out.println("4. Cancel");
             }
 
-            Integer choice = Helpers.readInt(scanner, "Choose option: ");
-
-            switch (choice) {
+            switch (
+                Helpers.readIntInRange(
+                    scanner, 
+                    "Choose option: ", 
+                    1, 
+                    6
+                )
+            ) {
                 case 1 -> user.setEmail(Helpers.readString(scanner, "Enter new email: ", 64));
                 case 2 -> user.setPhone(Helpers.readString(scanner, "Enter new phone number: ", 10));
                 case 3 -> {
@@ -70,10 +78,9 @@ public class NonAdminUserManager {
                     else { return; }
                 }
                 case 5 -> {
-                    if (user instanceof StudentUser student) { student.setStudentNumber(Helpers.readString(scanner, "Enter new student number: ", choice));}
+                    if (user instanceof StudentUser student) { student.setStudentNumber(Helpers.readString(scanner, "Enter new student number: ", 32));}
                 }
                 case 6 -> { return; }
-                default -> System.out.println("Invalid option.");
             }
         }
     }
