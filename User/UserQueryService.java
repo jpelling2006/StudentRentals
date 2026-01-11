@@ -1,6 +1,5 @@
 package user;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +14,6 @@ public class UserQueryService {
     }
 
     public List<User> getAllUsers() {
-        return new ArrayList<>(users.values());
+        return users.values().stream().toList();
     }
 }

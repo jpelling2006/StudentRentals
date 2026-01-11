@@ -22,15 +22,8 @@ public class PropertyQueryService {
     }
 
     public List<Property> getUserProperties(User user) {
-        List<Property> userProperties = new ArrayList<>();
-
-        // change to streams i am BEGGING you
-        for(Property property : properties.values()) {
-            if (property.getUser().equals(user)) {
-                userProperties.add(property);
-            }
-        }
-
-        return userProperties;
+        return properties.values().stream()
+            .filter(property -> property.getUser().equals(user))
+            .toList();
     }
 }

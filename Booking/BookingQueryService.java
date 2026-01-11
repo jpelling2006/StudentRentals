@@ -1,9 +1,7 @@
 package booking;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import room.Room;
 import room.RoomQueryService;
 import user.User;
 
@@ -15,32 +13,22 @@ public class BookingQueryService {
     }
 
     public List<Booking> getAllBookings() {
-        List<Booking> bookings = new ArrayList<>();
-
-        for (Room room : roomQueryService.getAllRooms()) {
-            bookings.addAll(room.getBookings());
-        }
-        return bookings;
+        return roomQueryService.getAllRooms().stream()
+            .flatMap(room -> room.getBookings().stream())
+            .toList();
     }
 
     public List<Booking> getBookingsForStudent(String username) {
-        List<Booking> studentBookings = new ArrayList<>();
-
-        for (Room room : roomQueryService.getAllRooms()) {
-            Booking booking = room.getBookingByUser(username);
-            if (booking != null) { studentBookings.add(booking); }
-        }
-        return studentBookings;
+        return roomQueryService.getAllRooms().stream()
+            .map(room -> room.getBookingByUser(username))
+            .filter(booking -> booking != null)
+            .toList();
     }
 
     public List<Booking> getBookingsForHomeowner(User user) {
-        List<Booking> homeownerBookings = new ArrayList<>();
-
-        for (Room room : roomQueryService.getAllRooms()) {
-            if (room.getProperty().getUser().equals(user)) {
-                homeownerBookings.addAll(room.getBookings());
-            }
-        }
-        return homeownerBookings;
+        return roomQueryService.getAllRooms().stream()
+            .filter(room -> room.getProperty().getUser().equals(user))
+            .flatMap(room -> room.getBookings().stream())
+            .toList();
     }
 }

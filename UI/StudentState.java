@@ -4,9 +4,7 @@ import java.util.Scanner;
 
 import booking.BookingManager;
 import helpers.Helpers;
-import properties.PropertyManager;
 import review.ReviewManager;
-import room.RoomManager;
 import search.SearchManager;
 import user.UserManager;
 
