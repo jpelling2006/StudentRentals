@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import user.User;
+
 public class PropertyQueryService {
     protected Map<UUID, Property> properties = new HashMap<>();
 
@@ -19,12 +21,12 @@ public class PropertyQueryService {
         return new ArrayList<>(properties.values());
     }
 
-    public List<Property> getUserProperties(String username) {
+    public List<Property> getUserProperties(User user) {
         List<Property> userProperties = new ArrayList<>();
 
         // change to streams i am BEGGING you
         for(Property property : properties.values()) {
-            if (property.getUsername().equalsIgnoreCase(username)) {
+            if (property.getUser().equals(user)) {
                 userProperties.add(property);
             }
         }

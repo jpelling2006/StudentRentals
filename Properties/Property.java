@@ -9,10 +9,11 @@ import java.util.UUID;
 
 import review.Review;
 import room.Room;
+import user.User;
 
 public class Property {
     private UUID propertyID;
-    private String username;
+    private User user;
     private String city;
     private String address;
     public String description;
@@ -27,16 +28,12 @@ public class Property {
         this.propertyID = UUID.randomUUID();
     }
 
-    // if exists too
-    public String getUsername() { return username; }
-    public void setUsername(String username) {
-        // add regex
-        if (username == null || username.length() > 32) {
-            throw new IllegalArgumentException(
-                "Username must be up to 32 characters."
-            );
+    public User getUser() { return user; }
+    public void setUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User required");
         }
-        this.username = username;
+        this.user = user;
     }
 
     public String getCity() { return city; }

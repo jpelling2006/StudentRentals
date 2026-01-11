@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import helpers.Helpers;
 import session.Session;
-import user.User;
 
 public class HomeownerPropertyManager {
     private final Map<UUID, Property> properties = new HashMap<>();
@@ -33,7 +32,7 @@ public class HomeownerPropertyManager {
         System.out.println("\nCreating new property");
 
         property.generatePropertyID();
-        property.setUsername(session.getCurrentUser().getUsername());
+        property.setUser(session.getCurrentUser());
         property.setCity(
             Helpers.readString(scanner, "Enter city: ", 64)
         );
@@ -65,7 +64,9 @@ public class HomeownerPropertyManager {
     } 
 
     public void listProperties() {
-        List<Property> userProperties = propertyQueryService.getUserProperties(session.getCurrentUser().getUsername());
+        List<Property> userProperties = propertyQueryService.getUserProperties(
+            session.getCurrentUser()
+        );
 
         if (userProperties.isEmpty()) {
             System.out.println("You have no properties.");
@@ -84,9 +85,9 @@ public class HomeownerPropertyManager {
     }
 
     public void editProperty() {
-        User currentUser = session.getCurrentUser();
-        String username = currentUser.getUsername();
-        List<Property> userProperties = propertyQueryService.getUserProperties(username);
+        List<Property> userProperties = propertyQueryService.getUserProperties(
+            session.getCurrentUser()
+        );
 
         if (userProperties.isEmpty()) {
             System.out.println("You have no properties to edit.");
@@ -158,8 +159,9 @@ public class HomeownerPropertyManager {
     }
 
     public void deleteProperty() {
-        String username = session.getCurrentUser().getUsername();
-        List<Property> userProperties = propertyQueryService.getUserProperties(username);
+        List<Property> userProperties = propertyQueryService.getUserProperties(
+            session.getCurrentUser()
+        );
 
         if (userProperties.isEmpty()) {
             System.out.println("You have no properties to delete.");
