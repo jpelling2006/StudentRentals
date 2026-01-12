@@ -2,35 +2,27 @@ package user;
 
 import session.Session;
 
-public class UserManager {
-    private final LoggedOutManager loggedOutManager;
-    private final NonAdminUserManager nonAdminUserManager;
-    private final AdminUserManager adminUserManager;
-    private final Session session;
+public final class UserManager {
+    private static UserManager instance;
 
-    public UserManager(
-        LoggedOutManager loggedOutManager,
-        NonAdminUserManager nonAdminUserManager,
-        AdminUserManager adminUserManager,
-        Session session
-    ) {
-        this.loggedOutManager = loggedOutManager;
-        this.nonAdminUserManager = nonAdminUserManager;
-        this.adminUserManager = adminUserManager;
-        this.session = session;
+    public static UserManager getInstance() {
+        if (instance == null) { instance = new UserManager(); }
+        return instance;
     }
 
-    public boolean handleOnce() {
-        if (!session.isLoggedIn()) {
-            return loggedOutManager.handleOnce();
+    private UserManager() {}
+
+    public static boolean handleOnce() {
+        if (!Session.isLoggedIn()) {
+            return LoggedOutManager.handleOnce();
         }
 
-        User user = session.getCurrentUser();
+        User user = Session.getCurrentUser();
 
         if (user instanceof StudentUser || user instanceof HomeownerUser) {
-            return nonAdminUserManager.handleOnce();
+            return NonAdminUserManager.handleOnce();
         } else if (user instanceof AdministratorUser) {
-            return adminUserManager.handleOnce();
+            return AdminUserManager.handleOnce();
         }
 
         System.out.println("You do not have access to users.");

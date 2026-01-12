@@ -5,20 +5,19 @@ import java.util.Scanner;
 
 import helpers.Helpers;
 
-public class AdminPropertyManager implements PropertiesHandler {
-    private final PropertyQueryService propertyQueryService;
-    private final Scanner scanner;
+public final class AdminPropertyManager implements PropertiesHandler {
+    private final static Scanner scanner = new Scanner(System.in);
+    private static AdminPropertyManager instance;
 
-    public AdminPropertyManager(
-        PropertyQueryService propertyQueryService, 
-        Scanner scanner
-    ) {
-        this.propertyQueryService = propertyQueryService;
-        this.scanner = scanner;
+    public static AdminPropertyManager getInstance() {
+        if (instance == null) { instance = new AdminPropertyManager(); }
+        return instance;
     }
 
-    public void listAllProperties() {
-        List<Property> properties = propertyQueryService.getAllProperties();
+    private AdminPropertyManager() {}
+
+    public static void listAllProperties() {
+        List<Property> properties = PropertyQueryService.getAllProperties();
 
         if (properties.isEmpty()) {
             System.out.println("There are no properties");
@@ -30,8 +29,8 @@ public class AdminPropertyManager implements PropertiesHandler {
         Helpers.printIndexed(properties, Property::toString);
     }
 
-    public void deleteAnyProperty() {
-        List<Property> properties = propertyQueryService.getAllProperties();
+    public static void deleteAnyProperty() {
+        List<Property> properties = PropertyQueryService.getAllProperties();
         Property selectedProperty = Helpers.selectFromList(
             scanner, 
             properties, 
@@ -46,7 +45,7 @@ public class AdminPropertyManager implements PropertiesHandler {
     }
 
     @Override
-    public boolean handleOnce() {
+    public static boolean handleOnce() {
         System.out.println("\nAdmin Property Menu");
         System.out.println("1. List properties");
         System.out.println("2. Delete property");

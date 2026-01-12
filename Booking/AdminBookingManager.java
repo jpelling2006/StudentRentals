@@ -5,20 +5,19 @@ import java.util.Scanner;
 
 import helpers.Helpers;
 
-public class AdminBookingManager implements BookingHandler {
-    private final BookingQueryService bookingQueryService;
-    private final Scanner scanner;
+public final class AdminBookingManager implements BookingHandler {
+    private final static Scanner scanner = new Scanner(System.in);
+    private static AdminBookingManager instance;
 
-    public AdminBookingManager(
-        BookingQueryService bookingQueryService,
-        Scanner scanner
-    ) {
-        this.bookingQueryService = bookingQueryService;
-        this.scanner = scanner;
+    public static AdminBookingManager getInstance() {
+        if (instance == null) { instance = new AdminBookingManager(); }
+        return instance;
     }
 
-    public void listAllBookings() {
-        List<Booking> bookings = bookingQueryService.getAllBookings();
+    private AdminBookingManager() {}
+
+    private static void listAllBookings() {
+        List<Booking> bookings = BookingQueryService.getAllBookings();
 
         if (bookings.isEmpty()) {
             System.out.println("No bookings exist.");
@@ -31,8 +30,8 @@ public class AdminBookingManager implements BookingHandler {
         Helpers.printIndexed(bookings, Booking::toString);
     }
 
-    public void deleteBooking() {
-        List<Booking> bookings = bookingQueryService.getAllBookings();
+    private static void deleteBooking() {
+        List<Booking> bookings = BookingQueryService.getAllBookings();
         if (bookings.isEmpty()) {
             System.out.println("No bookings exist.");
             return;
@@ -64,7 +63,7 @@ public class AdminBookingManager implements BookingHandler {
     }
 
     @Override
-    public boolean handleOnce() {
+    public static boolean handleOnce() {
         System.out.println("\nAdmin Booking Menu");
         System.out.println("1. View all bookings");
         System.out.println("2. Delete booking");

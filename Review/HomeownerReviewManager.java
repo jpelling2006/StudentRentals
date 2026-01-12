@@ -6,24 +6,20 @@ import java.util.Scanner;
 import helpers.Helpers;
 import session.Session;
 
-public class HomeownerReviewManager implements ReviewHandler {
-    private final ReviewQueryService reviewQueryService;
-    private final Scanner scanner;
-    private final Session session;
+public final class HomeownerReviewManager implements ReviewHandler {
+    private final static Scanner scanner = new Scanner(System.in);
+    private static HomeownerReviewManager instance;
 
-    public HomeownerReviewManager(
-        ReviewQueryService reviewQueryService,
-        Session session,
-        Scanner scanner
-    ) {
-        this.reviewQueryService = reviewQueryService;
-        this.session = session;
-        this.scanner = scanner;
+    public static HomeownerReviewManager getInstance() {
+        if (instance == null) { instance = new HomeownerReviewManager(); }
+        return instance;
     }
 
-    public void listUserReviews() {
-        List<Review> userReviews = reviewQueryService.getHomeownerReviews(
-            session.getCurrentUser()
+    private HomeownerReviewManager() {}
+
+    public static void listUserReviews() {
+        List<Review> userReviews = ReviewQueryService.getHomeownerReviews(
+            Session.getCurrentUser()
         );
 
         // prints list of all user reviews
@@ -32,7 +28,7 @@ public class HomeownerReviewManager implements ReviewHandler {
     }
 
     @Override
-    public boolean handleOnce() {
+    public static boolean handleOnce() {
         System.out.println("\nHomeowner Review Menu");
         System.out.println("1. View reviews");
         System.out.println("2. Back");

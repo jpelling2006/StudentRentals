@@ -6,24 +6,20 @@ import java.util.Scanner;
 import helpers.Helpers;
 import session.Session;
 
-public class HomeownerBookingManager implements BookingHandler {
-    private final BookingQueryService bookingQueryService;
-    private final Session session;
-    private final Scanner scanner;
+public final class HomeownerBookingManager implements BookingHandler {
+    private final static Scanner scanner = new Scanner(System.in);
+    private static HomeownerBookingManager instance;
 
-    public HomeownerBookingManager(
-        BookingQueryService bookingQueryService,
-        Session session,
-        Scanner scanner
-    ) {
-        this.bookingQueryService = bookingQueryService;
-        this.session = session;
-        this.scanner = scanner;
+    public static HomeownerBookingManager getInstance() {
+        if (instance == null) { instance = new HomeownerBookingManager(); }
+        return instance;
     }
 
-    public void listBookings() {
-        List<Booking> bookings = bookingQueryService.getBookingsForHomeowner(
-            session.getCurrentUser()
+    public HomeownerBookingManager() {}
+
+    private static void listBookings() {
+        List<Booking> bookings = BookingQueryService.getBookingsForHomeowner(
+            Session.getCurrentUser()
         );
 
         if (bookings.isEmpty()) {
@@ -36,9 +32,9 @@ public class HomeownerBookingManager implements BookingHandler {
         Helpers.printIndexed(bookings, Booking::toString);
     }
 
-    public void editBookingStatus() {
-        List<Booking> userBookings = bookingQueryService.getBookingsForHomeowner(
-            session.getCurrentUser()
+    private static void editBookingStatus() {
+        List<Booking> userBookings = BookingQueryService.getBookingsForHomeowner(
+            Session.getCurrentUser()
         );
 
         if (userBookings.isEmpty()) {
@@ -57,7 +53,7 @@ public class HomeownerBookingManager implements BookingHandler {
         );
     }
 
-    private void editStatusMenu(Booking booking) {
+    private static void editStatusMenu(Booking booking) {
         while (true) {            
             System.out.println( "\n Editing booking: ");
             System.out.println(booking.toString());
@@ -88,7 +84,7 @@ public class HomeownerBookingManager implements BookingHandler {
     }
 
     @Override
-    public boolean handleOnce() {
+    public static boolean handleOnce() {
         System.out.println("\nHomeowner Booking Menu");
         System.out.println("1. View bookings for properties");
         System.out.println("2. Update booking status");

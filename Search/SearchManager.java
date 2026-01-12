@@ -12,27 +12,34 @@ import properties.PropertyQueryService;
 import room.Room;
 import room.RoomType;
 
-public class SearchManager {
-    private Scanner scanner;
-    private PropertyQueryService propertyQueryService;
-    private List<Room> lastResults = new ArrayList<>();
+public final class SearchManager {
+    private static Scanner scanner = new Scanner(System.in);
+    private static List<Room> lastResults = new ArrayList<>();
+    private static SearchManager instance;
 
-    public SearchManager(
-        PropertyQueryService propertyQueryService,
-        Scanner scanner
-    ) {
-        this.propertyQueryService = propertyQueryService;
-        this.scanner = scanner;
+    public static SearchManager getInstance() {
+        if (instance == null) { instance = new SearchManager(); }
+        return instance;
     }
 
+    public SearchManager() {}
+
     // checks if room is available between two dates
-    private boolean isRoomAvailable(Room room, LocalDate moveIn, LocalDate moveOut) {
+    private static boolean isRoomAvailable(
+        Room room, 
+        LocalDate moveIn, 
+        LocalDate moveOut
+    ) {
         if (moveIn == null || moveOut == null) { return true; }
         return room.isAvailable(moveIn, moveOut);
     }
 
     // checks if room is in price range
-    private boolean inPriceRange(Room room, Double minPrice, Double maxPrice) {
+    private static boolean inPriceRange(
+        Room room, 
+        Double minPrice, 
+        Double maxPrice
+    ) {
         Double price = room.getRentPrice();
 
         if (
@@ -44,17 +51,17 @@ public class SearchManager {
     }
 
     // checks if room is a certain type
-    private boolean correctRoomType(Room room, RoomType roomType) {
+    private static boolean correctRoomType(Room room, RoomType roomType) {
         return roomType == null || room.getRoomType() == roomType;
     }
 
     // checks if room is in a property in a certain city
-    private boolean matchesLocation(Property property, String city) {
+    private static boolean matchesLocation(Property property, String city) {
         return city == null || property.getCity().equalsIgnoreCase(city);
     }
 
-    public List<Room> searchRooms(RoomSearchCriteria criteria) {
-        lastResults = propertyQueryService.getAllProperties().stream() // gets all properties
+    public static List<Room> searchRooms(RoomSearchCriteria criteria) {
+        lastResults = PropertyQueryService.getAllProperties().stream() // gets all properties
             .filter(property -> matchesLocation(property, criteria.city)) // gets all properties in certain city
             .flatMap(property -> property.getRooms().stream()) // gets all rooms for selected properties
             .filter(room -> isRoomAvailable(room, criteria.moveIn, criteria.moveOut)) // selects rooms available in date range
@@ -65,7 +72,7 @@ public class SearchManager {
         return lastResults;
     }
 
-    public void displaySearchResults(List<Room> rooms) {
+    public static void displaySearchResults(List<Room> rooms) {
         if (rooms.isEmpty()) {
             System.out.println("No rooms match your search criteria.");
             return;
@@ -77,7 +84,7 @@ public class SearchManager {
     }
 
     // different to toString format - more detailed which wouldnt be convinient elsewhere
-    public void viewRoomDetails(Room room) {
+    public static void viewRoomDetails(Room room) {
         if (room == null) { return; }
 
         Property property = room.getProperty();
@@ -95,7 +102,7 @@ public class SearchManager {
         System.out.println("Available until: " + room.getEndDate());
     }
 
-    private void viewSelectedRoom() {
+    private static void viewSelectedRoom() {
         if (lastResults.isEmpty()) {
             System.out.println("No rooms to select.");
             return;
@@ -116,7 +123,7 @@ public class SearchManager {
         viewRoomDetails(selectedRoom);
     }
 
-    private void performSearch() {
+    private static void performSearch() {
         RoomSearchCriteria criteria = new RoomSearchCriteria();
 
         criteria.city = Helpers.readOptionalString(
@@ -167,7 +174,7 @@ public class SearchManager {
         displaySearchResults(results);
     }
 
-    public void start() {
+    public static void handleOnce() {
         while (true) {
             System.out.println("\nRoom Search");
             System.out.println("1. Search rooms");
@@ -176,7 +183,12 @@ public class SearchManager {
             System.out.println("4. Back");
 
             switch (
-                Helpers.readIntInRange(scanner, "Choose option: ", 1, 4)
+                Helpers.readIntInRange(
+                    scanner, 
+                    "Choose option: ", 
+                    1, 
+                    4
+                )
             ) {
                 case 1 -> performSearch();
                 case 2 -> displaySearchResults(lastResults);

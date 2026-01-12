@@ -3,14 +3,14 @@ package session;
 import user.User;
 
 // exists to store the current logged in user
-public class Session {
-    private User currentUser;
+public final class Session {
+    private static User currentUser;
 
-    public User getCurrentUser() { return currentUser; }
+    public static User getCurrentUser() { return currentUser; }
 
-    public boolean isLoggedIn() { return currentUser != null; }
+    public static boolean isLoggedIn() { return currentUser != null; }
 
-    public void login(User user) { this.currentUser = user; }
+    public static void login(User user) { currentUser = user; }
 
-    public void logout() { this.currentUser = null; }
+    public static void logout() { currentUser = null; }
 }

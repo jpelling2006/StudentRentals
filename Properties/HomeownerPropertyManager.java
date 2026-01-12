@@ -9,30 +9,25 @@ import java.util.UUID;
 import helpers.Helpers;
 import session.Session;
 
-public class HomeownerPropertyManager implements PropertiesHandler {
-    private final Map<UUID, Property> properties = new HashMap<>();
+public final class HomeownerPropertyManager implements PropertiesHandler {
+    private final static Map<UUID, Property> properties = new HashMap<>();
+    private final static Scanner scanner = new Scanner(System.in);
+    private static HomeownerPropertyManager instance;
 
-    private final PropertyQueryService propertyQueryService;
-    private final Scanner scanner;
-    private final Session session;
-
-    public HomeownerPropertyManager(
-        PropertyQueryService propertyQueryService, 
-        Scanner scanner, 
-        Session session
-    ) {
-        this.propertyQueryService = propertyQueryService;
-        this.scanner = scanner;
-        this.session = session;
+    public static HomeownerPropertyManager getInstance() {
+        if (instance == null) { instance = new HomeownerPropertyManager(); }
+        return instance;
     }
 
-    public void newProperty() {
+    private HomeownerPropertyManager() {}
+
+    private static void newProperty() {
         Property property = new Property();
 
         System.out.println("\nCreating new property");
 
         property.generatePropertyID();
-        property.setUser(session.getCurrentUser());
+        property.setUser(Session.getCurrentUser());
         property.setCity(
             Helpers.readString(scanner, "Enter city: ", 64)
         );
@@ -63,9 +58,9 @@ public class HomeownerPropertyManager implements PropertiesHandler {
         System.out.println("Property created successfully");
     } 
 
-    public void listUserProperties() {
-        List<Property> userProperties = propertyQueryService.getUserProperties(
-            session.getCurrentUser()
+    private static void listUserProperties() {
+        List<Property> userProperties = PropertyQueryService.getUserProperties(
+            Session.getCurrentUser()
         );
 
         if (userProperties.isEmpty()) {
@@ -77,9 +72,9 @@ public class HomeownerPropertyManager implements PropertiesHandler {
         Helpers.printIndexed(userProperties, Property::toString);
     }
 
-    public void editProperty() {
-        List<Property> userProperties = propertyQueryService.getUserProperties(
-            session.getCurrentUser()
+    private static void editProperty() {
+        List<Property> userProperties = PropertyQueryService.getUserProperties(
+            Session.getCurrentUser()
         );
 
         if (userProperties.isEmpty()) {
@@ -96,7 +91,7 @@ public class HomeownerPropertyManager implements PropertiesHandler {
         editPropertyMenu(selectedProperty);
     }
 
-    protected void editPropertyMenu(Property property) {
+    private static void editPropertyMenu(Property property) {
         while (true) {
             System.out.println("\nEditing property: " + property.getAddress());
             System.out.println("1. Address");
@@ -106,53 +101,49 @@ public class HomeownerPropertyManager implements PropertiesHandler {
             System.out.println("5. Bathrooms");
             System.out.println("6. Cancel");
 
-            try {
-                Integer choice = Helpers.readIntInRange(
+            switch (
+                Helpers.readIntInRange(
                     scanner, "Enter choice: ", 1, 6
+                )
+            ) {
+                case 1 -> property.setAddress(
+                    Helpers.readString(
+                        scanner, 
+                        "Enter new address: ", 
+                        512
+                    )
                 );
-
-                switch (choice) {
-                    case 1 -> property.setAddress(
-                        Helpers.readString(
-                            scanner, 
-                            "Enter new address: ", 
-                            512
-                        )
-                    );
-                    case 2 -> property.setDescription(
-                        Helpers.readString(
-                            scanner, 
-                            "Enter new description: ", 
-                            2048
-                        )
-                    );
-                    case 3 -> property.setPropertyType(
-                        Helpers.readEnum(
-                            scanner, 
-                            "Enter new property type: ", 
-                            PropertyType.class
-                        )
-                    );
-                    case 4 -> property.setBedrooms(
-                        Helpers.readInt(scanner, "Enter bedrooms amount: ")
-                    );
-                    case 5 -> property.setBathrooms(
-                        Helpers.readInt(scanner, "Enter bathrooms amount: ")
-                    );
-                    case 6 -> {
-                        System.out.println("Edit cancelled.");
-                        return;
-                    }
+                case 2 -> property.setDescription(
+                    Helpers.readString(
+                        scanner, 
+                        "Enter new description: ", 
+                        2048
+                    )
+                );
+                case 3 -> property.setPropertyType(
+                    Helpers.readEnum(
+                        scanner, 
+                        "Enter new property type: ", 
+                        PropertyType.class
+                    )
+                );
+                case 4 -> property.setBedrooms(
+                    Helpers.readInt(scanner, "Enter bedrooms amount: ")
+                );
+                case 5 -> property.setBathrooms(
+                    Helpers.readInt(scanner, "Enter bathrooms amount: ")
+                );
+                case 6 -> {
+                    System.out.println("Edit cancelled.");
+                    return;
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a number.");
             }
         }
     }
 
-    public void deleteProperty() {
-        List<Property> userProperties = propertyQueryService.getUserProperties(
-            session.getCurrentUser()
+    private static void deleteProperty() {
+        List<Property> userProperties = PropertyQueryService.getUserProperties(
+            Session.getCurrentUser()
         );
 
         if (userProperties.isEmpty()) {
@@ -176,7 +167,8 @@ public class HomeownerPropertyManager implements PropertiesHandler {
         System.out.println("Property deleted successfully.");
     }
 
-    private boolean confirmDeletion(Property property) {
+    // remove this
+    private static boolean confirmDeletion(Property property) {
         System.out.println("\nAre you sure you want to delete this property?");
         System.out.println(
             property.getAddress()+ " ("
@@ -187,7 +179,7 @@ public class HomeownerPropertyManager implements PropertiesHandler {
     }
 
     @Override
-    public boolean handleOnce() {
+    public static boolean handleOnce() {
         System.out.println("\nHomeowner Property Menu");
         System.out.println("1. Create property");
         System.out.println("2. List properties");

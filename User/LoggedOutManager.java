@@ -11,40 +11,22 @@ import review.ReviewHandler;
 import helpers.Helpers;
 import session.Session;
 
-public class LoggedOutManager implements UserHandler {
+public final class LoggedOutManager implements UserHandler {
+    private static LoggedOutManager instance;
 
-    private final Map<String, User> users = new HashMap<>();
-    private final Scanner scanner;
-    private final Session session;
-
-    // Handlers to pass to users
-    private final BookingHandler bookingHandler;
-    private final PropertiesHandler propertiesHandler;
-    private final RoomHandler roomHandler;
-    private final ReviewHandler reviewHandler;
-
-    public LoggedOutManager(
-        Scanner scanner,
-        Session session,
-        BookingHandler bookingHandler,
-        PropertiesHandler propertiesHandler,
-        RoomHandler roomHandler,
-        ReviewHandler reviewHandler
-    ) {
-        this.scanner = scanner;
-        this.session = session;
-        this.bookingHandler = bookingHandler;
-        this.propertiesHandler = propertiesHandler;
-        this.roomHandler = roomHandler;
-        this.reviewHandler = reviewHandler;
+    public static LoggedOutManager getInstance() {
+        if (instance == null) { instance = new LoggedOutManager(); }
+        return instance;
     }
 
-    private void register() {
+    public LoggedOutManager() {}
+
+    private static void register() {
         System.out.println("\nRegister new user:");
         System.out.println("1. Student");
         System.out.println("2. Homeowner");
 
-        int choice = Helpers.readIntInRange(scanner, "Choose user type: ", 1, 2);
+        Integer choice = Helpers.readIntInRange(scanner, "Choose user type: ", 1, 2);
 
         String username;
         while (true) {
@@ -98,7 +80,7 @@ public class LoggedOutManager implements UserHandler {
         System.out.println("Registration successful! You can now login.");
     }
 
-    private void login() {
+    private static void login() {
         String username = Helpers.readString(scanner, "Username: ", 32).toLowerCase();
         String password = Helpers.readString(scanner, "Password: ", 128);
 
@@ -120,7 +102,7 @@ public class LoggedOutManager implements UserHandler {
         }
     }
 
-    private void forgetPassword() {
+    private static void forgetPassword() {
         String username = Helpers.readString(scanner, "Username: ", 32).toLowerCase();
         User user = users.get(username);
 
@@ -142,7 +124,7 @@ public class LoggedOutManager implements UserHandler {
     }
 
     @Override
-    public boolean handleOnce() {
+    public static boolean handleOnce() {
         System.out.println("\nUser Management System (Logged Out)");
         System.out.println("1. Register");
         System.out.println("2. Login");

@@ -8,19 +8,18 @@ import session.Session;
 // non admin meaning students or homeowners
 // they require extremely similar functionality, hence why they both use this class
 public class NonAdminUserManager implements UserHandler {
-    private final Scanner scanner;
-    private final Session session;
+    private static Scanner scanner = new Scanner(System.in);
+    private static NonAdminUserManager instance;
 
-    public NonAdminUserManager(
-        Scanner scanner,
-        Session session
-    ) {
-        this.scanner = scanner;
-        this.session = session;
+    public static NonAdminUserManager getInstance() {
+        if (instance == null) { instance = new NonAdminUserManager(); }
+        return instance;
     }
 
-    public void viewDetails() {
-        User user = session.getCurrentUser();
+    public NonAdminUserManager() {}
+
+    private static void viewDetails() {
+        User user = Session.getCurrentUser();
 
         System.out.println("\nYour details");
         System.out.println("Username: " + user.getUsername());
@@ -33,13 +32,13 @@ public class NonAdminUserManager implements UserHandler {
         }
     }
 
-    public void editDetails() {
-        if (!session.isLoggedIn()) {
+    private static void editDetails() {
+        if (!Session.isLoggedIn()) {
             System.out.println("No user logged in.");
             return;
         }
 
-        User user = session.getCurrentUser();
+        User user = Session.getCurrentUser();
 
         while (true) {
             System.out.println("\nEdit My Details");
@@ -64,20 +63,56 @@ public class NonAdminUserManager implements UserHandler {
                     6
                 )
             ) {
-                case 1 -> user.setEmail(Helpers.readString(scanner, "Enter new email: ", 64));
-                case 2 -> user.setPhone(Helpers.readString(scanner, "Enter new phone number: ", 10));
+                case 1 -> user.setEmail(
+                    Helpers.readString(
+                        scanner, 
+                        "Enter new email: ", 
+                        64
+                    )
+                );
+                case 2 -> user.setPhone(
+                    Helpers.readString(
+                        scanner, 
+                        "Enter new phone number: ", 
+                        10
+                    )
+                );
                 case 3 -> {
                     try {
-                        user.setPasswordHash(Helpers.readString(scanner, "Enter new password:", 128));
+                        user.setPasswordHash(
+                            Helpers.readString(
+                                scanner, 
+                                "Enter new password:", 
+                                128
+                            )
+                        );
                         System.out.println("Password updated.");
-                    } catch (Exception e) { System.out.println("Password update failed."); }
+                    } catch (Exception e) {
+                        System.out.println("Password update failed.");
+                    }
                 }
                 case 4 -> {
-                    if (user instanceof StudentUser student) { student.setUniversity(Helpers.readString(scanner, "Enter new university name: ", 128));}
+                    if (user instanceof StudentUser student) {
+                        student.setUniversity(
+                            Helpers.readString(
+                                scanner, 
+                                "Enter new university name: ", 
+                                128
+                            )
+                        );
+                    }
                     else { return; }
                 }
                 case 5 -> {
-                    if (user instanceof StudentUser student) { student.setStudentNumber(Helpers.readString(scanner, "Enter new student number: ", 32));}
+                    if (user instanceof StudentUser student) {
+                        student.setStudentNumber(
+                            Helpers.readString(
+                                scanner, 
+                                "Enter new student number: ", 
+                                32
+                            )
+                        );
+                    }
                 }
                 case 6 -> { return; }
             }

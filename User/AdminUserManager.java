@@ -5,29 +5,27 @@ import java.util.Scanner;
 
 import helpers.Helpers;
 
-public class AdminUserManager implements UserHandler {
-    private final UserQueryService userQueryService;
-    private final Scanner scanner;
+public final class AdminUserManager implements UserHandler {
+    private static Scanner scanner = new Scanner(System.in);
+    private static AdminUserManager instance;
 
-    public AdminUserManager(
-        UserQueryService userQueryService,
-        Scanner scanner
-    ) {
-        this.userQueryService = userQueryService;
-        this.scanner = scanner;
+    public static AdminUserManager getInstance() {
+        if (instance == null) { instance = new AdminUserManager(); }
+        return instance;
     }
 
-    public void listAllUsers() {
-        List<User> users = userQueryService.getAllUsers();
+    private AdminUserManager() {}
+
+    public static void listAllUsers() {
+        List<User> users = UserQueryService.getAllUsers();
 
         // prints a list of all users
         System.out.println("\nAll users:");
         Helpers.printIndexed(users, User::toString);
     }
 
-    // maybe also delete all info linked to this user?
-    public void deleteUser() {
-        List<User> users = userQueryService.getAllUsers();
+    public static void deleteUser() {
+        List<User> users = UserQueryService.getAllUsers();
 
         if (users.isEmpty()) {
             System.out.println("There are no users. How are you here?");
@@ -56,13 +54,6 @@ public class AdminUserManager implements UserHandler {
         System.out.println("1. List all users");
         System.out.println("2. Delete user");
         System.out.println("3. Back");
-
-        Integer choice = Helpers.readIntInRange(
-            new Scanner(System.in), 
-            "Choose option: ", 
-            1, 
-            3
-        );
 
         return switch (
             Helpers.readIntInRange(scanner, "Choose option: ", 1, 3)

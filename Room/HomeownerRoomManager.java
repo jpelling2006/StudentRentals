@@ -8,37 +8,30 @@ import properties.Property;
 import properties.PropertyQueryService;
 import session.Session;
 
-public class HomeownerRoomManager implements RoomHandler {
-    private final PropertyQueryService propertyQueryService;
-    private final RoomQueryService roomQueryService;
-    private final Session session;
-    private final Scanner scanner;
+public final class HomeownerRoomManager implements RoomHandler {
+    private final static Scanner scanner = new Scanner(System.in);
+    private static HomeownerRoomManager instance;
 
-    public HomeownerRoomManager(
-        PropertyQueryService propertyQueryService,
-        RoomQueryService roomQueryService,
-        Session session, 
-        Scanner scanner
-    ) {
-        this.propertyQueryService = propertyQueryService;
-        this.roomQueryService = roomQueryService;
-        this.session = session;
-        this.scanner = scanner;
+    public static HomeownerRoomManager getInstance() {
+        if (instance == null) { instance = new HomeownerRoomManager(); }
+        return instance;
     }
 
-    public void listRooms() {
-        List<Room> rooms = roomQueryService.getUserRooms(session.getCurrentUser());
+    private HomeownerRoomManager() {}
+
+    private static void listRooms() {
+        List<Room> rooms = RoomQueryService.getUserRooms(Session.getCurrentUser());
         System.out.println("\nYour rooms:");
         Helpers.printIndexed(rooms, Room::toString);
     }
 
-    public void createRoom() {
+    private static void createRoom() {
         Room room = new Room();
         room.generateRoomID();
 
         Property property = Helpers.selectFromList(
             scanner, 
-            propertyQueryService.getUserProperties(session.getCurrentUser()), 
+            PropertyQueryService.getUserProperties(Session.getCurrentUser()), 
             "Select property",
             Property::toString
         );
@@ -74,8 +67,8 @@ public class HomeownerRoomManager implements RoomHandler {
         System.out.println("Room created.");
     }
 
-    public void editRoom() {
-        List<Room> rooms = roomQueryService.getUserRooms(session.getCurrentUser());
+    private static void editRoom() {
+        List<Room> rooms = RoomQueryService.getUserRooms(Session.getCurrentUser());
 
         if (rooms.isEmpty()) {
             System.out.println("You have no rooms to edit.");
@@ -97,7 +90,7 @@ public class HomeownerRoomManager implements RoomHandler {
         editRoomMenu(room);
     }
 
-    protected void editRoomMenu(Room room) {
+    private static void editRoomMenu(Room room) {
         while (true) {
             System.out.println( "\nEditing room: ");
             System.out.println(room.toString());
@@ -159,8 +152,8 @@ public class HomeownerRoomManager implements RoomHandler {
         }
     }
 
-    public void deleteRoom() {
-        List<Room> rooms = roomQueryService.getUserRooms(session.getCurrentUser());
+    private static void deleteRoom() {
+        List<Room> rooms = RoomQueryService.getUserRooms(Session.getCurrentUser());
 
         // user selects booking from list
         Room selectedRoom = Helpers.selectFromList(
@@ -186,7 +179,7 @@ public class HomeownerRoomManager implements RoomHandler {
     }
 
     @Override
-    public boolean handleOnce() {
+    public static boolean handleOnce() {
         while (true) {
             System.out.println("\nHomeowner Room Menu");
             System.out.println("1. Create room");

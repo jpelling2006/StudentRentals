@@ -8,28 +8,21 @@ import room.Room;
 import room.RoomQueryService;
 import session.Session;
 
-public class StudentBookingManager implements BookingHandler {
-    private final BookingQueryService bookingQueryService;
-    private final RoomQueryService roomQueryService;
-    private final Session session;
-    private final Scanner scanner;
+public final class StudentBookingManager implements BookingHandler {
+    private final static Scanner scanner = new Scanner(System.in);
+    private static StudentBookingManager instance;
 
-    public StudentBookingManager(
-        BookingQueryService bookingQueryService,
-        RoomQueryService roomQueryService,
-        Session session,
-        Scanner scanner
-    ) {
-        this.bookingQueryService = bookingQueryService;
-        this.roomQueryService = roomQueryService;
-        this.session = session;
-        this.scanner = scanner;
+    public static StudentBookingManager getInstance() {
+        if (instance == null) { instance = new StudentBookingManager(); }
+        return instance;
     }
 
-    public void createBooking() {
+    private StudentBookingManager() {}
+
+    private static void createBooking() {
         Room room = Helpers.selectFromList(
             scanner,
-            roomQueryService.getAllRooms(),
+            RoomQueryService.getAllRooms(),
             "Select room",
             Room::toString
         );
@@ -38,7 +31,7 @@ public class StudentBookingManager implements BookingHandler {
         Booking booking = new Booking();
         booking.generateBookingID();
         booking.setRoom(room);
-        booking.setUsername(session.getCurrentUser().getUsername());
+        booking.setUsername(Session.getCurrentUser().getUsername());
         booking.setBookingStatus(BookingStatus.PENDING);
 
         // user input values
@@ -49,9 +42,9 @@ public class StudentBookingManager implements BookingHandler {
         System.out.println("Booking created.");
     }
 
-    public void editBooking() {
-        List<Booking> userBookings = bookingQueryService.getBookingsForStudent(
-            session.getCurrentUser().getUsername()
+    private static void editBooking() {
+        List<Booking> userBookings = BookingQueryService.getBookingsForStudent(
+            Session.getCurrentUser().getUsername()
         );
 
         if (userBookings.isEmpty()) {
@@ -69,7 +62,7 @@ public class StudentBookingManager implements BookingHandler {
         );
     }
 
-    private void editBookingMenu(Booking booking) {
+    private static void editBookingMenu(Booking booking) {
         // booking can only be edited if booking is pending
         if (booking.getBookingStatus() != BookingStatus.PENDING) {
             System.out.println("Only pending bookings can be edited.");
@@ -105,18 +98,18 @@ public class StudentBookingManager implements BookingHandler {
         }
     }
 
-    public void listBookings() {
+    private static void listBookings() {
         List<Booking> bookings =
-            bookingQueryService.getBookingsForStudent(
-                session.getCurrentUser().getUsername()
+            BookingQueryService.getBookingsForStudent(
+                Session.getCurrentUser().getUsername()
             );
 
         Helpers.printIndexed(bookings, Booking::toString);
     }
 
-    public void cancelBooking() {
-        List<Booking> userBookings = bookingQueryService.getBookingsForStudent(
-            session.getCurrentUser().getUsername()
+    private static void cancelBooking() {
+        List<Booking> userBookings = BookingQueryService.getBookingsForStudent(
+            Session.getCurrentUser().getUsername()
         );
 
         if (userBookings.isEmpty()) {
@@ -146,7 +139,7 @@ public class StudentBookingManager implements BookingHandler {
     }
 
     @Override
-    public boolean handleOnce() {
+    public static boolean handleOnce() {
         System.out.println("\nStudent Booking Menu");
         System.out.println("1. Create booking");
         System.out.println("2. View bookings");

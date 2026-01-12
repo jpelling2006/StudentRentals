@@ -5,20 +5,19 @@ import java.util.Scanner;
 
 import helpers.Helpers;
 
-public class AdminReviewManager implements ReviewHandler {
-    private final ReviewQueryService reviewQueryService;
-    private final Scanner scanner;
+public final class AdminReviewManager implements ReviewHandler {
+    private final static Scanner scanner = new Scanner(System.in);
+    private static AdminReviewManager instance;
 
-    public AdminReviewManager(
-        ReviewQueryService reviewQueryService,
-        Scanner scanner
-    ) {
-        this.reviewQueryService = reviewQueryService;
-        this.scanner = scanner;
+    public static AdminReviewManager getInstance() {
+        if (instance == null) { instance = new AdminReviewManager(); }
+        return instance;
     }
 
-    public void listAllReviews() {
-        List<Review> reviews = reviewQueryService.getAllReviews();
+    private AdminReviewManager() {}
+
+    public static void listAllReviews() {
+        List<Review> reviews = ReviewQueryService.getAllReviews();
 
         if (reviews.isEmpty()) {
             System.out.println("There are no reviews.");
@@ -30,8 +29,8 @@ public class AdminReviewManager implements ReviewHandler {
         Helpers.printIndexed(reviews, Review::toString);
     }
 
-    public void deleteAnyReview() {
-        List<Review> reviews = reviewQueryService.getAllReviews();
+    public static void deleteAnyReview() {
+        List<Review> reviews = ReviewQueryService.getAllReviews();
 
         if (reviews.isEmpty()) {
             System.out.println("You have no reviews to delete");
@@ -60,7 +59,7 @@ public class AdminReviewManager implements ReviewHandler {
     }
 
     @Override
-    public boolean handleOnce() {
+    public static boolean handleOnce() {
         System.out.println("\nAdmin Review Menu");
         System.out.println("1. View reviews");
         System.out.println("1. Delete review");

@@ -6,38 +6,32 @@ import java.util.Scanner;
 import helpers.Helpers;
 import properties.Property;
 import properties.PropertyQueryService;
+import room.AdminRoomManager;
 import room.Room;
 import session.Session;
 
-public class StudentReviewManager implements ReviewHandler {
-    private final ReviewQueryService reviewQueryService;
-    private final PropertyQueryService propertyQueryService;
-    private final Session session;
-    private final Scanner scanner;
+public final class StudentReviewManager implements ReviewHandler {
+    private final static Scanner scanner = new Scanner(System.in);
+    private static StudentReviewManager instance;
 
-    public StudentReviewManager(
-        ReviewQueryService reviewQueryService,
-        PropertyQueryService propertyQueryService,
-        Session session,
-        Scanner scanner
-    ) {
-        this.reviewQueryService = reviewQueryService;
-        this.propertyQueryService = propertyQueryService;
-        this.session = session;
-        this.scanner = scanner;
+    public static StudentReviewManager getInstance() {
+        if (instance == null) { instance = new StudentReviewManager(); }
+        return new StudentReviewManager();
     }
 
-    private boolean hasCompletedBooking(Property property, String username) {
+    private StudentReviewManager() {}
+
+    private static boolean hasCompletedBooking(Property property, String username) {
         for (Room room : property.getRooms()) {
             if (room.bookingCompletedByUser(username)) { return true; }
         }
         return false;
     }
 
-    public void createReview() {
+    public static void createReview() {
         Property selectedProperty = Helpers.selectFromList(
             scanner, 
-            propertyQueryService.getAllProperties(), 
+            PropertyQueryService.getAllProperties(), 
             "Select property",
             Property::toString
         );
@@ -47,7 +41,7 @@ public class StudentReviewManager implements ReviewHandler {
         if ( // if user hasn't completed booking on selected property
             !hasCompletedBooking(
                 selectedProperty, 
-                session.getCurrentUser().getUsername()
+                Session.getCurrentUser().getUsername()
             )
         ) {
             System.out.println(
@@ -63,7 +57,7 @@ public class StudentReviewManager implements ReviewHandler {
         // automatically filled fields
         review.generateReviewID();
         review.setProperty(selectedProperty);
-        review.setUsername(session.getCurrentUser().getUsername());
+        review.setUsername(Session.getCurrentUser().getUsername());
 
         // user inputted fields
         review.setStars(
@@ -95,9 +89,9 @@ public class StudentReviewManager implements ReviewHandler {
         } catch (IllegalStateException e) { System.out.println(e.getMessage()); }
     }
 
-    public void listReviews() {
-        List<Review> userReviews = reviewQueryService.getStudentReviews(
-            session.getCurrentUser().getUsername()
+    public static void listReviews() {
+        List<Review> userReviews = ReviewQueryService.getStudentReviews(
+            Session.getCurrentUser().getUsername()
         );
 
         if (userReviews.isEmpty()) {
@@ -110,9 +104,9 @@ public class StudentReviewManager implements ReviewHandler {
         Helpers.printIndexed(userReviews, Review::toString);
     }
 
-    public void editReview() {
-        List<Review> userReviews = reviewQueryService.getStudentReviews(
-            session.getCurrentUser().getUsername()
+    public static void editReview() {
+        List<Review> userReviews = ReviewQueryService.getStudentReviews(
+            Session.getCurrentUser().getUsername()
         );
 
         if (userReviews.isEmpty()) {
@@ -132,7 +126,7 @@ public class StudentReviewManager implements ReviewHandler {
         );
     }
 
-    private void editReviewMenu(Review review) {
+    private static void editReviewMenu(Review review) {
         while (true) {
             System.out.println( "\nEditing review: ");
             System.out.println(review.toString());
@@ -179,9 +173,9 @@ public class StudentReviewManager implements ReviewHandler {
         }
     }
 
-    public void deleteReview() {
-        List<Review> userReviews = reviewQueryService.getStudentReviews(
-            session.getCurrentUser().getUsername()
+    public static void deleteReview() {
+        List<Review> userReviews = ReviewQueryService.getStudentReviews(
+            Session.getCurrentUser().getUsername()
         );
 
         if (userReviews.isEmpty()) {
@@ -214,7 +208,7 @@ public class StudentReviewManager implements ReviewHandler {
     }
 
     @Override
-    public boolean handleOnce() {
+    public static boolean handleOnce() {
         System.out.println("\nStudent Review Menu");
         System.out.println("1. Create review");
         System.out.println("2. View reviews");

@@ -6,39 +6,31 @@ import user.HomeownerUser;
 import user.StudentUser;
 import user.User;
 
-public class BookingManager {
-    private final AdminBookingManager adminBookingManager;
-    private final HomeownerBookingManager homeownerBookingManager;
-    private final StudentBookingManager studentBookingManager;
-    private final Session session;
+public final class BookingManager {
+    private static BookingManager instance;
 
-    public BookingManager(
-        Session session,
-        AdminBookingManager adminBookingManager,
-        HomeownerBookingManager homeownerBookingManager,
-        StudentBookingManager studentBookingManager
-    ) {
-        this.session = session;
-        this.adminBookingManager = adminBookingManager;
-        this.homeownerBookingManager = homeownerBookingManager;
-        this.studentBookingManager = studentBookingManager;
+    public static BookingManager getInstance() {
+        if (instance == null) { instance = new BookingManager(); }
+        return instance;
     }
 
+    private BookingManager() {}
+
     public boolean handleOnce() {
-        if (!session.isLoggedIn()) {
+        if (!Session.isLoggedIn()) {
             System.out.println("Please log in first.");
             return true;
         }
 
-        User user = session.getCurrentUser();
+        User user = Session.getCurrentUser();
 
         // automatic routing based on user type
         if (user instanceof AdministratorUser) {
-            return adminBookingManager.handleOnce();
+            return AdminBookingManager.handleOnce();
         } else if (user instanceof HomeownerUser) {
-            return homeownerBookingManager.handleOnce();
+            return HomeownerBookingManager.handleOnce();
         } else if (user instanceof StudentUser) {
-            return studentBookingManager.handleOnce();
+            return StudentBookingManager.handleOnce();
         }
 
         System.out.println("You do not have access to bookings.");

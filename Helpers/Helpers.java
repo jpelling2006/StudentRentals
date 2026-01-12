@@ -8,6 +8,13 @@ import java.util.Scanner;
 import java.util.function.Function;
 
 public final class Helpers {
+    private static Helpers instance;
+
+    public static Helpers getInstance() {
+        if (instance == null) { instance = new Helpers(); }
+        return instance;
+    }
+
     // prevent instantiation
     private Helpers() {}
 

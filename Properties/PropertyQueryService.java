@@ -8,20 +8,26 @@ import java.util.UUID;
 
 import user.User;
 
-public class PropertyQueryService {
-    protected Map<UUID, Property> properties = new HashMap<>();
+public final class PropertyQueryService {
+    private static Map<UUID, Property> properties = new HashMap<>();
+    private static PropertyQueryService instance;
 
-    public PropertyQueryService() {};
+    public static PropertyQueryService getInstance() {
+        if (instance == null) { instance = new PropertyQueryService(); }
+        return instance;
+    }
 
-    public Property getPropertyByID(UUID propertyID) {
+    private PropertyQueryService() {};
+
+    public static Property getPropertyByID(UUID propertyID) {
         return properties.get(propertyID);
     }
 
-    public List<Property> getAllProperties() {
+    public static List<Property> getAllProperties() {
         return new ArrayList<>(properties.values());
     }
 
-    public List<Property> getUserProperties(User user) {
+    public static List<Property> getUserProperties(User user) {
         return properties.values().stream() // gets all properties
             .filter(property -> property.getUser().equals(user)) // gets all properties for user
             .toList();

@@ -4,17 +4,20 @@ import java.time.LocalDate;
 
 import room.RoomQueryService;
 
-public class BookingStatusUpdater {
-    private final RoomQueryService roomQueryService;
+public final class BookingStatusUpdater {
+    private static BookingStatusUpdater instance;
 
-    public BookingStatusUpdater(RoomQueryService roomQueryService) {
-        this.roomQueryService = roomQueryService;
+    public static BookingStatusUpdater getInstance() {
+        if (instance == null) { instance = new BookingStatusUpdater(); }
+        return instance;
     }
 
-    public void updateEndedBookings() {
+    private BookingStatusUpdater() {}
+
+    public static void updateEndedBookings() {
         LocalDate today = LocalDate.now();
 
-        roomQueryService.getAllRooms().stream() // gets all rooms
+        RoomQueryService.getAllRooms().stream() // gets all rooms
             .flatMap(room -> room.getBookings().stream()) // gets all bookings for each room
             .filter( // only bookings to update
                 booking -> booking.getBookingStatus() != BookingStatus.ENDED

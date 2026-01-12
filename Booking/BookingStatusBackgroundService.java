@@ -1,24 +1,23 @@
 package booking;
 
 public class BookingStatusBackgroundService implements Runnable {
-    private final BookingStatusUpdater bookingStatusUpdater;
     private volatile boolean running = true;
-    private final long interval;
+    private final static long interval = 6000;
+    private static BookingStatusBackgroundService instance;
 
-    public BookingStatusBackgroundService(
-        BookingStatusUpdater bookingStatusUpdater,
-        long interval
-    ) {
-        this.bookingStatusUpdater = bookingStatusUpdater;
-        this.interval = interval;
+    public static BookingStatusBackgroundService getInstance() {
+        if (instance == null) { instance = new BookingStatusBackgroundService(); }
+        return instance;
     }
+
+    public BookingStatusBackgroundService() {}
 
     // updates bookings every given period
     @Override
     public void run() {
         while (running) {
             try {
-                bookingStatusUpdater.updateEndedBookings();
+                BookingStatusUpdater.updateEndedBookings();
                 Thread.sleep(interval);
             } catch (InterruptedException e) { running = false; }
         }

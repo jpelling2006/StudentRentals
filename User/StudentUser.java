@@ -9,24 +9,17 @@ public class StudentUser extends User implements BookingAccess, ReviewAccess {
     private String university;
     private String studentNumber;
 
-    private final BookingHandler bookingHandler;
-    private final ReviewHandler reviewHandler;
-
     public StudentUser(
         String username,
         String email,
         String phone,
         String passwordHash,
         String university,
-        String studentNumber,
-        BookingHandler bookingHandler,
-        ReviewHandler reviewHandler
+        String studentNumber
     ) throws Exception {
         super(username, email, phone, passwordHash);
         setUniversity(university);
         setStudentNumber(studentNumber);
-        this.bookingHandler = bookingHandler;
-        this.reviewHandler = reviewHandler;
     }
 
     public String getUniversity() { return university; }
@@ -50,8 +43,8 @@ public class StudentUser extends User implements BookingAccess, ReviewAccess {
     }
 
     @Override
-    public BookingHandler getBookingHandler() { return bookingHandler; }
+    public BookingHandler getBookingHandler() { return BookingHandler; }
 
     @Override
-    public ReviewHandler getReviewHandler() { return reviewHandler; }
+    public ReviewHandler getReviewHandler() { return ReviewHandler; }
 }

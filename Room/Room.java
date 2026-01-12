@@ -10,7 +10,7 @@ import booking.Booking;
 import booking.BookingStatus;
 import properties.Property;
 
-public class Room {
+public final class Room {
     private UUID roomID;
     private Property property;
     private RoomType roomType;

@@ -5,17 +5,19 @@ import java.util.Scanner;
 
 import helpers.Helpers;
 
-public class AdminRoomManager implements RoomHandler {
-    private final RoomQueryService roomQueryService;
-    private final Scanner scanner;
+public final class AdminRoomManager implements RoomHandler {
+    private final static Scanner scanner = new Scanner(System.in);
+    private static AdminRoomManager instance;
 
-    public AdminRoomManager(RoomQueryService roomQueryService, Scanner scanner) {
-        this.roomQueryService = roomQueryService;
-        this.scanner = scanner;
+    public static AdminRoomManager getInstance() {
+        if (instance == null) { instance = new AdminRoomManager(); }
+        return new AdminRoomManager();
     }
 
-    public void listAllRooms() {
-        List<Room> rooms = roomQueryService.getAllRooms();
+    private AdminRoomManager() {}
+
+    private static void listAllRooms() {
+        List<Room> rooms = RoomQueryService.getAllRooms();
 
         if (rooms.isEmpty()) {
             System.out.println("There are no rooms.");
@@ -27,8 +29,8 @@ public class AdminRoomManager implements RoomHandler {
         Helpers.printIndexed(rooms, Room::toString);
     }
 
-    public void deleteAnyRoom() {
-        List<Room> rooms = roomQueryService.getAllRooms();
+    private static void deleteAnyRoom() {
+        List<Room> rooms = RoomQueryService.getAllRooms();
 
         if (rooms.isEmpty()) {
             System.out.println("There are no rooms.");
@@ -52,7 +54,7 @@ public class AdminRoomManager implements RoomHandler {
     }
 
     @Override
-    public boolean handleOnce() {
+    public static boolean handleOnce() {
         System.out.println("\nAdmin Room Menu");
         System.out.println("1. View rooms");
         System.out.println("2. Delete room");
