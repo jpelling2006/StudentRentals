@@ -1,11 +1,13 @@
 package user;
 
-import access.BookingAccess;
-import access.ReviewAccess;
-import booking.BookingHandler;
-import review.ReviewHandler;
+// import access.BookingAccess;
+// import access.ReviewAccess;
+// import booking.BookingHandler;
+// import review.ReviewHandler;
 
-public class StudentUser extends User implements BookingAccess, ReviewAccess {
+public class StudentUser extends User
+// implements BookingAccess, ReviewAccess
+{
     private String university;
     private String studentNumber;
 
@@ -42,9 +44,9 @@ public class StudentUser extends User implements BookingAccess, ReviewAccess {
         this.studentNumber = studentNumber;
     }
 
-    @Override
-    public BookingHandler getBookingHandler() { return BookingHandler; }
+    // @Override
+    // public BookingHandler getBookingHandler() { return BookingHandler; }
 
-    @Override
-    public ReviewHandler getReviewHandler() { return ReviewHandler; }
+    // @Override
+    // public ReviewHandler getReviewHandler() { return ReviewHandler; }
 }

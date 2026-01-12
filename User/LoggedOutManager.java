@@ -4,14 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import booking.BookingHandler;
-import properties.PropertiesHandler;
-import room.RoomHandler;
-import review.ReviewHandler;
 import helpers.Helpers;
 import session.Session;
 
 public final class LoggedOutManager implements UserHandler {
+    private final static Map<String, User> users = new HashMap<>();
     private static final Scanner scanner = new Scanner(System.in);
     private static LoggedOutManager instance;
 
@@ -56,20 +53,14 @@ public final class LoggedOutManager implements UserHandler {
                     phone,
                     password,
                     university,
-                    studentNumber,
-                    bookingHandler,
-                    reviewHandler
+                    studentNumber
                 );
             } else { // homeowner
                 newUser = new HomeownerUser(
                     username,
                     email,
                     phone,
-                    password,
-                    bookingHandler,
-                    propertiesHandler,
-                    roomHandler,
-                    reviewHandler
+                    password
                 );
             }
         } catch (Exception e) {
@@ -93,7 +84,7 @@ public final class LoggedOutManager implements UserHandler {
 
         try {
             if (user.verifyPassword(password)) {
-                session.login(user);
+                Session.login(user);
                 System.out.println("Login successful!");
             } else {
                 System.out.println("Incorrect password.");
