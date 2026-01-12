@@ -1,7 +1,7 @@
 package booking;
 
 public class BookingStatusBackgroundService implements Runnable {
-    private volatile boolean running = true;
+    private volatile static boolean running = true;
     private final static long interval = 6000;
     private static BookingStatusBackgroundService instance;
 

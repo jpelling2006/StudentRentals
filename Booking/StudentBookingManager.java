@@ -143,11 +143,12 @@ public final class StudentBookingManager implements BookingHandler {
         System.out.println("\nStudent Booking Menu");
         System.out.println("1. Create booking");
         System.out.println("2. View bookings");
-        System.out.println("3. Cancel booking");
-        System.out.println("4. Back");
+        System.out.println("3. Edit Booking");
+        System.out.println("4. Cancel booking");
+        System.out.println("5. Back");
 
         return switch (
-            Helpers.readIntInRange(scanner, "Choose option: ", 1, 4)
+            Helpers.readIntInRange(scanner, "Choose option: ", 1, 5)
         ) {
             case 1 -> {
                 createBooking();
@@ -158,10 +159,14 @@ public final class StudentBookingManager implements BookingHandler {
                 yield false;
             }
             case 3 -> {
+                editBooking();
+                yield false;
+            }
+            case 4 -> {
                 cancelBooking();
                 yield false;
             }
-            case 4 -> true;
+            case 5 -> true;
             default -> false;
         };
     }

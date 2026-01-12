@@ -16,7 +16,7 @@ public final class AdminReviewManager implements ReviewHandler {
 
     private AdminReviewManager() {}
 
-    public static void listAllReviews() {
+    private static void listAllReviews() {
         List<Review> reviews = ReviewQueryService.getAllReviews();
 
         if (reviews.isEmpty()) {
@@ -29,7 +29,7 @@ public final class AdminReviewManager implements ReviewHandler {
         Helpers.printIndexed(reviews, Review::toString);
     }
 
-    public static void deleteAnyReview() {
+    private static void deleteAnyReview() {
         List<Review> reviews = ReviewQueryService.getAllReviews();
 
         if (reviews.isEmpty()) {

@@ -16,7 +16,7 @@ public final class BookingManager {
 
     private BookingManager() {}
 
-    public boolean handleOnce() {
+    public static boolean handleOnce() {
         if (!Session.isLoggedIn()) {
             System.out.println("Please log in first.");
             return true;

@@ -28,7 +28,7 @@ public final class StudentReviewManager implements ReviewHandler {
         return false;
     }
 
-    public static void createReview() {
+    private static void createReview() {
         Property selectedProperty = Helpers.selectFromList(
             scanner, 
             PropertyQueryService.getAllProperties(), 
@@ -89,7 +89,7 @@ public final class StudentReviewManager implements ReviewHandler {
         } catch (IllegalStateException e) { System.out.println(e.getMessage()); }
     }
 
-    public static void listReviews() {
+    private static void listReviews() {
         List<Review> userReviews = ReviewQueryService.getStudentReviews(
             Session.getCurrentUser().getUsername()
         );
@@ -104,7 +104,7 @@ public final class StudentReviewManager implements ReviewHandler {
         Helpers.printIndexed(userReviews, Review::toString);
     }
 
-    public static void editReview() {
+    private static void editReview() {
         List<Review> userReviews = ReviewQueryService.getStudentReviews(
             Session.getCurrentUser().getUsername()
         );

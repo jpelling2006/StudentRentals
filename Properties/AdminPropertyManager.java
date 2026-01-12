@@ -16,7 +16,7 @@ public final class AdminPropertyManager implements PropertiesHandler {
 
     private AdminPropertyManager() {}
 
-    public static void listAllProperties() {
+    private static void listAllProperties() {
         List<Property> properties = PropertyQueryService.getAllProperties();
 
         if (properties.isEmpty()) {
@@ -29,7 +29,7 @@ public final class AdminPropertyManager implements PropertiesHandler {
         Helpers.printIndexed(properties, Property::toString);
     }
 
-    public static void deleteAnyProperty() {
+    private static void deleteAnyProperty() {
         List<Property> properties = PropertyQueryService.getAllProperties();
         Property selectedProperty = Helpers.selectFromList(
             scanner, 

@@ -30,13 +30,6 @@ public final class AdminState implements UIState {
         System.out.println("5. Review manager");
         System.out.println("6. Exit");
 
-        Integer choice = Helpers.readIntInRange(
-            scanner, 
-            "Choose option: ", 
-            1, 
-            6
-        );
-
         switch (
             Helpers.readIntInRange(
                 scanner, 

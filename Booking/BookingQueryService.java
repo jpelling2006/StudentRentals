@@ -21,14 +21,14 @@ public final class BookingQueryService {
             .toList();
     }
 
-    public List<Booking> getBookingsForStudent(String username) {
+    public static List<Booking> getBookingsForStudent(String username) {
         return RoomQueryService.getAllRooms().stream() // gets all rooms
             .map(room -> room.getBookingByUser(username)) // gets all bookings by user
             .filter(booking -> booking != null) // gets rid of null bookings
             .toList();
     }
 
-    public List<Booking> getBookingsForHomeowner(User user) {
+    public static List<Booking> getBookingsForHomeowner(User user) {
         return RoomQueryService.getAllRooms().stream() // gets all rooms
             .filter(room -> room.getProperty().getUser().equals(user)) // gets all rooms by user
             .flatMap(room -> room.getBookings().stream()) // gets all bookings for rooms

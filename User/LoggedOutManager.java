@@ -12,6 +12,7 @@ import helpers.Helpers;
 import session.Session;
 
 public final class LoggedOutManager implements UserHandler {
+    private static final Scanner scanner = new Scanner(System.in);
     private static LoggedOutManager instance;
 
     public static LoggedOutManager getInstance() {

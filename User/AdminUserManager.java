@@ -16,7 +16,7 @@ public final class AdminUserManager implements UserHandler {
 
     private AdminUserManager() {}
 
-    public static void listAllUsers() {
+    private static void listAllUsers() {
         List<User> users = UserQueryService.getAllUsers();
 
         // prints a list of all users
@@ -24,7 +24,7 @@ public final class AdminUserManager implements UserHandler {
         Helpers.printIndexed(users, User::toString);
     }
 
-    public static void deleteUser() {
+    private static void deleteUser() {
         List<User> users = UserQueryService.getAllUsers();
 
         if (users.isEmpty()) {
@@ -49,7 +49,7 @@ public final class AdminUserManager implements UserHandler {
     }
 
     @Override
-    public boolean handleOnce() {
+    public static boolean handleOnce() {
         System.out.println("\nAdmin User Management System");
         System.out.println("1. List all users");
         System.out.println("2. Delete user");
