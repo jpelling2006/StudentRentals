@@ -9,7 +9,7 @@ import java.util.UUID;
 import helpers.Helpers;
 import session.Session;
 
-public class HomeownerPropertyManager {
+public class HomeownerPropertyManager implements PropertiesHandler {
     private final Map<UUID, Property> properties = new HashMap<>();
 
     private final PropertyQueryService propertyQueryService;
@@ -184,5 +184,43 @@ public class HomeownerPropertyManager {
         );
 
         return Helpers.confirm(scanner);
+    }
+
+    @Override
+    public boolean handleOnce() {
+        System.out.println("\nHomeowner Property Menu");
+        System.out.println("1. Create property");
+        System.out.println("2. List properties");
+        System.out.println("3. Edit property");
+        System.out.println("4. Delete property");
+        System.out.println("5. Back");
+
+        return switch (
+            Helpers.readIntInRange(
+                scanner,
+                "Choose option: ",
+                1,
+                5
+            )
+        ) {
+            case 1 -> {
+                newProperty();
+                yield false;
+            }
+            case 2 -> {
+                listUserProperties();
+                yield false;
+            }
+            case 3 -> {
+                editProperty();
+                yield false;
+            }
+            case 4 -> {
+                deleteProperty();
+                yield false;
+            }
+            case 5 -> true;
+            default -> false;
+        };
     }
 }
