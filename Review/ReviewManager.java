@@ -1,14 +1,29 @@
 package review;
 
-import access.ReviewAccess;
 import session.Session;
+import user.AdministratorUser;
+import user.HomeownerUser;
+import user.StudentUser;
 import user.User;
 
 public class ReviewManager {
-    private Session session;
+    private final Session session;
 
-    public ReviewManager(Session session) { this.session = session; }
-    
+    private final AdminReviewManager adminReviewManager;
+    private final HomeownerReviewManager homeownerReviewManager;
+    private final StudentReviewManager studentReviewManager;
+
+    public ReviewManager(
+        Session session,
+        AdminReviewManager adminReviewManager,
+        HomeownerReviewManager homeownerReviewManager,
+        StudentReviewManager studentReviewManager
+    ) {
+        this.session = session;
+        this.adminReviewManager = adminReviewManager;
+        this.homeownerReviewManager = homeownerReviewManager;
+        this.studentReviewManager = studentReviewManager;
+    }
 
     public boolean handleOnce() {
         if (!session.isLoggedIn()) {
@@ -18,8 +33,13 @@ public class ReviewManager {
 
         User user = session.getCurrentUser();
 
-        if (user instanceof ReviewAccess reviewAccess) {
-            return reviewAccess.getReviewHandler().handleOnce();
+        // automatic routing based on user type
+        if (user instanceof AdministratorUser) {
+            return adminReviewManager.handleOnce();
+        } else if (user instanceof HomeownerUser) {
+            return homeownerReviewManager.handleOnce();
+        } else if (user instanceof StudentUser) {
+            return studentReviewManager.handleOnce();
         }
 
         System.out.println("You do not have access to reviews.");

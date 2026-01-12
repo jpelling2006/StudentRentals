@@ -1,13 +1,25 @@
 package room;
 
-import access.RoomAccess;
 import session.Session;
+import user.AdministratorUser;
+import user.HomeownerUser;
 import user.User;
 
 public class RoomManager {
-    protected final Session session;
+    private final Session session;
 
-    protected RoomManager(Session session) { this.session = session; }
+    private final AdminRoomManager adminRoomManager;
+    private final HomeownerRoomManager homeownerRoomManager;
+
+    public RoomManager(
+        Session session,
+        AdminRoomManager adminRoomManager,
+        HomeownerRoomManager homeownerRoomManager
+    ) {
+        this.session = session;
+        this.adminRoomManager = adminRoomManager;
+        this.homeownerRoomManager = homeownerRoomManager;
+    }
 
     public boolean handleOnce() {
         if (!session.isLoggedIn()) {
@@ -17,8 +29,10 @@ public class RoomManager {
 
         User user = session.getCurrentUser();
 
-        if (user instanceof RoomAccess roomAccess) {
-            return roomAccess.getRoomHandler().handleOnce();
+        if (user instanceof AdministratorUser) {
+            return adminRoomManager.handleOnce();
+        } else if (user instanceof HomeownerUser) {
+            return homeownerRoomManager.handleOnce();
         }
 
         System.out.println("You do not have access to rooms.");

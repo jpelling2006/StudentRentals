@@ -7,7 +7,7 @@ import session.Session;
 
 // non admin meaning students or homeowners
 // they require extremely similar functionality, hence why they both use this class
-public class NonAdminUserManager {
+public class NonAdminUserManager implements UserHandler {
     private final Scanner scanner;
     private final Session session;
 
@@ -82,5 +82,28 @@ public class NonAdminUserManager {
                 case 6 -> { return; }
             }
         }
+    }
+
+    @Override
+    public boolean handleOnce() {
+        System.out.println("\nUser Management System");
+        System.out.println("1. View details");
+        System.out.println("2. Edit details");
+        System.out.println("3. Logout");
+
+        return switch (
+            Helpers.readIntInRange(scanner, "Choose option: ", 1, 3)
+        ) {
+            case 1 -> {
+                viewDetails();
+                yield false;
+            }
+            case 2 -> {
+                editDetails();
+                yield false;
+            }
+            case 3 -> true;
+            default -> false;
+        };
     }
 }

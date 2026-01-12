@@ -29,8 +29,6 @@ public class StudentUser extends User implements BookingAccess, ReviewAccess {
         this.reviewHandler = reviewHandler;
     }
 
-
-    // Getters / Setters with validation
     public String getUniversity() { return university; }
     public void setUniversity(String university) {
         if (university != null && university.length() > 128) {
@@ -51,7 +49,6 @@ public class StudentUser extends User implements BookingAccess, ReviewAccess {
         this.studentNumber = studentNumber;
     }
 
-    // Implement interfaces
     @Override
     public BookingHandler getBookingHandler() { return bookingHandler; }
 
