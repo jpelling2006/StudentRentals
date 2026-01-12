@@ -8,7 +8,7 @@ import properties.Property;
 import properties.PropertyQueryService;
 import session.Session;
 
-public class HomeownerRoomManager {
+public class HomeownerRoomManager implements RoomHandler {
     private final PropertyQueryService propertyQueryService;
     private final RoomQueryService roomQueryService;
     private final Session session;
@@ -183,5 +183,45 @@ public class HomeownerRoomManager {
 
         selectedRoom.getProperty().removeRoom(selectedRoom);
         System.out.println("Room deleted.");
+    }
+
+    @Override
+    public boolean handleOnce() {
+        while (true) {
+            System.out.println("\nHomeowner Room Menu");
+            System.out.println("1. Create room");
+            System.out.println("2. View rooms");
+            System.out.println("3. Edit room");
+            System.out.println("4. Delete room");
+            System.out.println("5. Back");
+
+            return switch (
+                Helpers.readIntInRange(
+                    scanner,
+                    "Choose option: ",
+                    1,
+                    5
+                )
+            ) {
+                case 1 -> {
+                    createRoom();
+                    yield false;
+                }
+                case 2 -> {
+                    listRooms();
+                    yield false;
+                }
+                case 3 -> {
+                    editRoom();
+                    yield false;
+                }
+                case 4 -> {
+                    deleteRoom();
+                    yield false;
+                }
+                case 5 -> true;
+                default -> false;
+            };
+        }
     }
 }

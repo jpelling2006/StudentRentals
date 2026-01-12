@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import helpers.Helpers;
 
-public class AdminRoomManager {
+public class AdminRoomManager implements RoomHandler {
     private final RoomQueryService roomQueryService;
     private final Scanner scanner;
 
@@ -49,5 +49,28 @@ public class AdminRoomManager {
 
         selectedRoom.getProperty().removeRoom(selectedRoom);
         System.out.println("Room deleted by admin");
+    }
+
+    @Override
+    public boolean handleOnce() {
+        System.out.println("\nAdmin Room Menu");
+        System.out.println("1. View rooms");
+        System.out.println("2. Delete room");
+        System.out.println("3. Back"); 
+
+        return switch (
+            Helpers.readIntInRange(scanner, "Choose option: ", 1, 3) 
+        ) {
+            case 1 -> {
+                listAllRooms();
+                yield false;
+            }
+            case 2 -> {
+                deleteAnyRoom();
+                yield false;
+            }
+            case 3 -> true;
+            default -> false;
+        };
     }
 }
