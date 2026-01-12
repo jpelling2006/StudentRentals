@@ -62,7 +62,6 @@ public final class AdminBookingManager implements BookingHandler {
         System.out.println("Booking deleted.");
     }
 
-    @Override
     public static boolean handleOnce() {
         System.out.println("\nAdmin Booking Menu");
         System.out.println("1. View all bookings");

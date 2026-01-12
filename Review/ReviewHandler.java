@@ -1,5 +1,5 @@
 package review;
 
 public interface ReviewHandler {
-    boolean handleOnce();
+    static boolean handleOnce() { return false; }
 }

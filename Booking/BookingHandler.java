@@ -1,5 +1,5 @@
 package booking;
 
 public interface BookingHandler {
-    boolean handleOnce();
+    static boolean handleOnce() { return false; }
 }

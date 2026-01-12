@@ -119,7 +119,6 @@ public class NonAdminUserManager implements UserHandler {
         }
     }
 
-    @Override
     public static boolean handleOnce() {
         System.out.println("\nUser Management System");
         System.out.println("1. View details");

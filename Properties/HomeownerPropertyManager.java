@@ -178,7 +178,6 @@ public final class HomeownerPropertyManager implements PropertiesHandler {
         return Helpers.confirm(scanner);
     }
 
-    @Override
     public static boolean handleOnce() {
         System.out.println("\nHomeowner Property Menu");
         System.out.println("1. Create property");

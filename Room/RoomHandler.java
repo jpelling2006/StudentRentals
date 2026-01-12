@@ -1,5 +1,5 @@
 package room;
 
 public interface RoomHandler {
-    boolean handleOnce();
+    static boolean handleOnce() { return false; }
 }

@@ -138,7 +138,6 @@ public final class StudentBookingManager implements BookingHandler {
         System.out.println("Booking cancelled.");
     }
 
-    @Override
     public static boolean handleOnce() {
         System.out.println("\nStudent Booking Menu");
         System.out.println("1. Create booking");

@@ -38,7 +38,7 @@ public class StudentState implements UIState {
 
             switch (choice) {
                 case 1 -> UserManager.handleOnce();
-                case 2 -> SearchManager.start();
+                case 2 -> SearchManager.handleOnce();
                 case 3 -> BookingManager.handleOnce();
                 case 4 -> ReviewManager.handleOnce();
                 case 5 -> { return; }

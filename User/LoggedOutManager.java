@@ -124,7 +124,6 @@ public final class LoggedOutManager implements UserHandler {
         }
     }
 
-    @Override
     public static boolean handleOnce() {
         System.out.println("\nUser Management System (Logged Out)");
         System.out.println("1. Register");

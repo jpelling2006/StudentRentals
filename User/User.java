@@ -14,7 +14,12 @@ public abstract class User {
     private String passwordHash;
     private byte[] salt;
 
-    public User(String username, String email, String phone, String passwordHash) throws Exception {
+    public User(
+        String username,
+        String email,
+        String phone,
+        String passwordHash
+    ) throws Exception {
         setUsername(username);
         setEmail(email);
         setPhone(phone);

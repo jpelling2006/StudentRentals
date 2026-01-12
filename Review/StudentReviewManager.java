@@ -207,7 +207,6 @@ public final class StudentReviewManager implements ReviewHandler {
         System.out.println("Room deleted successfully.");
     }
 
-    @Override
     public static boolean handleOnce() {
         System.out.println("\nStudent Review Menu");
         System.out.println("1. Create review");

@@ -58,7 +58,6 @@ public final class AdminReviewManager implements ReviewHandler {
         System.out.println("Room deleted successfully.");
     }
 
-    @Override
     public static boolean handleOnce() {
         System.out.println("\nAdmin Review Menu");
         System.out.println("1. View reviews");

@@ -27,7 +27,6 @@ public final class HomeownerReviewManager implements ReviewHandler {
         Helpers.printIndexed(userReviews, Review::toString);
     }
 
-    @Override
     public static boolean handleOnce() {
         System.out.println("\nHomeowner Review Menu");
         System.out.println("1. View reviews");

@@ -83,7 +83,6 @@ public final class HomeownerBookingManager implements BookingHandler {
         }
     }
 
-    @Override
     public static boolean handleOnce() {
         System.out.println("\nHomeowner Booking Menu");
         System.out.println("1. View bookings for properties");

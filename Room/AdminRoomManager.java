@@ -53,7 +53,6 @@ public final class AdminRoomManager implements RoomHandler {
         System.out.println("Room deleted by admin");
     }
 
-    @Override
     public static boolean handleOnce() {
         System.out.println("\nAdmin Room Menu");
         System.out.println("1. View rooms");
