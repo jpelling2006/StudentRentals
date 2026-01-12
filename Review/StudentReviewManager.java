@@ -9,7 +9,7 @@ import properties.PropertyQueryService;
 import room.Room;
 import session.Session;
 
-public class StudentReviewManager {
+public class StudentReviewManager implements ReviewHandler {
     private final ReviewQueryService reviewQueryService;
     private final PropertyQueryService propertyQueryService;
     private final Session session;
@@ -211,5 +211,43 @@ public class StudentReviewManager {
 
         selectedReview.getProperty().removeReview(selectedReview.getUsername());
         System.out.println("Room deleted successfully.");
+    }
+
+    @Override
+    public boolean handleOnce() {
+        System.out.println("\nStudent Review Menu");
+        System.out.println("1. Create review");
+        System.out.println("2. View reviews");
+        System.out.println("3. Edit review");
+        System.out.println("4. Delete review");
+        System.out.println("5. Back");
+
+        return switch (
+            Helpers.readIntInRange(
+                scanner, 
+                "Choose option: ", 
+                1, 
+                5
+            )
+        ) {
+            case 1 -> {
+                createReview();
+                yield false;
+            }
+            case 2 -> {
+                listReviews();
+                yield false;
+            }
+            case 3 -> {
+                editReview();
+                yield false;
+            }
+            case 4 -> {
+                deleteReview();
+                yield false;
+            }
+            case 5 -> true;
+            default -> false;
+        };
     }
 }

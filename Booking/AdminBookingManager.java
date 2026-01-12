@@ -73,8 +73,14 @@ public class AdminBookingManager implements BookingHandler {
         return switch (
             Helpers.readIntInRange(scanner, "Choose option: ", 1, 3)
         ) {
-            case 1 -> { listAllBookings(); yield false; }
-            case 2 -> { deleteBooking(); yield false; }
+            case 1 -> {
+                listAllBookings();
+                yield false;
+            }
+            case 2 -> {
+                deleteBooking();
+                yield false;
+            }
             case 3 -> true;
             default -> false;
         };

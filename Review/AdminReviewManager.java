@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import helpers.Helpers;
 
-public class AdminReviewManager {
+public class AdminReviewManager implements ReviewHandler {
     private final ReviewQueryService reviewQueryService;
     private final Scanner scanner;
 
@@ -57,5 +57,28 @@ public class AdminReviewManager {
 
         selectedReview.getProperty().removeReview(selectedReview.getUsername());
         System.out.println("Room deleted successfully.");
+    }
+
+    @Override
+    public boolean handleOnce() {
+        System.out.println("\nAdmin Review Menu");
+        System.out.println("1. View reviews");
+        System.out.println("1. Delete review");
+        System.out.println("2. Back");
+
+        return switch (
+            Helpers.readIntInRange(scanner, "Choose option: ", 1, 3)
+        ) {
+            case 1 -> {
+                listAllReviews();
+                yield false;
+            }
+            case 2 -> {
+                deleteAnyReview();
+                yield false;
+            }
+            case 3 -> true;
+            default -> false;
+        };
     }
 }

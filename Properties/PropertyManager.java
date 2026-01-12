@@ -24,6 +24,4 @@ public class PropertyManager {
         System.out.println("You do not have access to properties.");
         return true;
     }
-
-    
 }
