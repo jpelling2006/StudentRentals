@@ -85,9 +85,15 @@ public class UserManager {
             loggedOutMenu();
         }
 
-        switch (session.getCurrentUser().getUserType()) {
-            case STUDENT, HOMEOWNER -> nonAdminMenu();
-            case ADMINISTRATOR -> adminMenu();
+        User currentUser = session.getCurrentUser();
+
+        if (currentUser instanceof StudentUser || currentUser instanceof HomeownerUser) {
+            nonAdminMenu();
+        } else if (currentUser instanceof AdministratorUser) {
+            adminMenu();
+        } else {
+            System.out.println("Unknown user type. Cannot start session.");
         }
     }
+
 }
