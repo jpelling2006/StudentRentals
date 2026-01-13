@@ -56,6 +56,7 @@ public final class AdminUserManager implements UserHandler {
         }
 
         System.out.println("Are you sure you want to delete this user?");
+        System.out.println(selectedUser.toString());
 
         if (!Helpers.confirm(scanner)) {
             System.out.println("Deletion cancelled.");

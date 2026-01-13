@@ -47,11 +47,19 @@ public final class StudentReviewManager implements ReviewHandler {
         }
 
         try {
-            Integer stars = Helpers.readIntInRange(scanner, "Enter stars: ", 1, 5);
-            String title = Helpers.readString(scanner, "Enter review title: ", 256);
-            String content = Helpers.readString(scanner, "Enter review content: ", 1024);
+            Integer stars = Helpers.readIntInRange(
+                scanner, "Enter stars: ", 1, 5
+            );
+            String title = Helpers.readString(
+                scanner, "Enter review title: ", 256
+            );
+            String content = Helpers.readString(
+                scanner, "Enter review content: ", 1024
+            );
 
-            Review review = new Review(selectedProperty, username, stars, title, content);
+            Review review = new Review(
+                selectedProperty, username, stars, title, content
+            );
 
             // add review to property
             selectedProperty.addReview(review);

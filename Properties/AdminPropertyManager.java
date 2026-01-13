@@ -38,7 +38,13 @@ public final class AdminPropertyManager implements PropertiesHandler {
             Property::toString
         );
 
-        if (selectedProperty == null) { return; }
+        if (selectedProperty == null) {
+            System.out.println("Property doesn't exist.");
+            return;
+        }
+
+        System.out.println("Are you sure you want to delete this booking?");
+        System.out.println(selectedProperty.toString());
 
         PropertyQueryService.removeFromIndex(selectedProperty);
         selectedProperty.removeProperty(selectedProperty.getPropertyID());

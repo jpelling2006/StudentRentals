@@ -95,7 +95,7 @@ public final class HomeownerPropertyManager implements PropertiesHandler {
 
     private static void editPropertyMenu(Property property) {
         while (true) {
-            System.out.println("\nEditing property: " + property.getAddress());
+            System.out.println("\nEditing property: " + property.toString());
             System.out.println("1. Address");
             System.out.println("2. Description");
             System.out.println("3. Property type");

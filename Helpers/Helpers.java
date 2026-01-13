@@ -122,7 +122,13 @@ public final class Helpers {
 
             if (value >= min && value <= max) return value;
 
-            System.out.println("Please enter a number between " + min + " and " + max + " or leave blank.");
+            System.out.println(
+                "Please enter a number between " 
+                + min 
+                + " and "
+                + max 
+                + " or leave blank."
+            );
         }
     }
 
@@ -151,7 +157,9 @@ public final class Helpers {
             try { 
                 return Double.parseDouble(input); 
             } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid decimal number or leave blank.");
+                System.out.println(
+                    "Please enter a valid decimal number or leave blank."
+                );
             }
         }
     }
@@ -223,7 +231,9 @@ public final class Helpers {
     }
 
     public static LocalDate readDate(Scanner scanner, String prompt) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+            "yyyy-MM-dd"
+        );
 
         while (true) {
             System.out.print(prompt + " (yyyy-mm-dd): ");
@@ -237,7 +247,9 @@ public final class Helpers {
     }
 
     public static LocalDate readOptionalDate(Scanner scanner, String prompt) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+            "yyyy-MM-dd"
+        );
 
         while (true) {
             System.out.print(prompt + " (yyyy-mm-dd, leave blank for any): ");
@@ -248,7 +260,9 @@ public final class Helpers {
             try { 
                 return LocalDate.parse(input, formatter); 
             } catch (DateTimeParseException e) {
-                System.out.println("Invalid date format. Please use yyyy-MM-dd or leave blank.");
+                System.out.println(
+                    "Invalid date format. Please use yyyy-MM-dd or leave blank."
+                );
             }
         }
     }
@@ -290,7 +304,10 @@ public final class Helpers {
     }
 
     // prints formatted list using .toString() overrides given in object classes
-    public static <T> void printIndexed(List<T> list, Function<T, String> formatter) {
+    public static <T> void printIndexed(
+        List<T> list,
+        Function<T, String> formatter
+    ) {
         if (list == null || list.isEmpty()) {
             System.out.println("No items found.");
             return;

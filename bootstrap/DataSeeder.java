@@ -44,26 +44,73 @@ public final class DataSeeder {
             );
             LoggedOutManager.addUser(admin);
 
-            Property property1 = new Property(homeowner, "Cardiff", "Abacws, Senghennydd Road, Cathays, Cardiff CF24 4AG", "A lovely little townhouse. Don't mind the mould!", PropertyType.HOUSE, 5, 2);
+            Property property1 = new Property(
+                homeowner, 
+                "Cardiff", 
+                "Senghennydd Road, Cathays, Cardiff CF24 4AG", 
+                "A lovely little townhouse. Don't mind the mould!", 
+                PropertyType.HOUSE, 
+                5, 
+                2
+            );
             PropertyQueryService.indexProperty(property1);
 
-            Property property2 = new Property(homeowner, "High Wycombe", "Amersham Hill, High Wycombe, Buckinghamshire, HP13 6NN", "Right on the outskirts of High Wycombe. You are so close to escaping!", PropertyType.FLAT, 3, 1);
+            Property property2 = new Property(
+                homeowner, 
+                "High Wycombe", 
+                "Amersham Hill, High Wycombe, Buckinghamshire, HP13 6NN", 
+                "Right on the outskirts of High Wycombe. You are so close to escaping!",
+                PropertyType.FLAT, 
+                3, 
+                1
+            );
             PropertyQueryService.indexProperty(property2);
 
-            Room room1 = new Room(property1, RoomType.DOUBLE, 150.0, true, "First floor rear", "Desk, wardrobe, a little rat hole in the corner for all your new friends!", LocalDate.parse("2026-07-01"), LocalDate.parse("2027-06-30"));
-            // property1.addRoom(room1);
+            Room room1 = new Room(
+                property1,
+                RoomType.DOUBLE, 
+                150.0, 
+                true, 
+                "First floor rear", 
+                "Desk, wardrobe, a little rat hole in the corner for all your new friends!",
+                LocalDate.parse("2026-07-01"),
+                LocalDate.parse("2027-06-30")
+            );
 
-            Room room2 = new Room(property2, RoomType.SINGLE, 125.5, true, "Ground floor front", "Desk, wardrobe, and various slugs!", LocalDate.parse("2025-07-01"), LocalDate.parse("2026-06-30"));
-            // property2.addRoom(room2);
+            Room room2 = new Room(property2,
+                RoomType.SINGLE, 
+                125.5, 
+                true, 
+                "Ground floor front", 
+                "Desk, wardrobe, and various slugs!",
+                LocalDate.parse("2025-07-01"),
+                LocalDate.parse("2026-06-30")
+            );
 
-            new Booking(BookingStatus.PENDING, room1, student.getUsername(), LocalDate.parse("2026-08-01"), LocalDate.parse("2027-06-30"));
-            // room1.addBooking(booking1);
+            new Booking(
+                BookingStatus.PENDING,
+                room1,
+                student.getUsername(),
+                LocalDate.parse("2026-08-01"),
+                LocalDate.parse("2027-06-30")
+            );
 
-            new Booking(BookingStatus.ENDED, room2, student.getUsername(), LocalDate.parse("2025-08-01"), LocalDate.parse("2025-09-30"));
-            // room2.addBooking(booking2);
+            new Booking(
+                BookingStatus.ENDED,
+                room2,
+                student.getUsername(),
+                LocalDate.parse("2025-08-01"),
+                LocalDate.parse("2025-09-30")
+            );
 
-            new Review(property2, student.getUsername(), 2, "Place smells!", "Property had an incredibly horrible mouldy smell, and the landlord did nothing!");
-            // property2.addReview(review1);
+            new Review(
+                property2,
+                student.getUsername(), 
+                2, 
+                "Place smells!", 
+                "Property had an incredibly horrible mouldy smell, and the landlord did nothing!"
+            );
+
         } catch (Exception e) {
             e.printStackTrace();
         }

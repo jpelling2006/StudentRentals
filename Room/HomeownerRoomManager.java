@@ -50,12 +50,26 @@ public final class HomeownerRoomManager implements RoomHandler {
             Double rentPrice = Helpers.readDouble(scanner, "Rent per week: ");
             System.out.println("Are bills included?");
             boolean billsIncluded = (Helpers.confirm(scanner));
-            String location = Helpers.readString(scanner, "Location: ", 64);
-            String amenities = Helpers.readString(scanner, "Amenities: ", 256);
-            LocalDate startDate = Helpers.readFutureDate(scanner, "Start date");
+            String location = Helpers.readString(
+                scanner, "Location: ", 64);
+            String amenities = Helpers.readString(
+                scanner, "Amenities: ", 256
+            );
+            LocalDate startDate = Helpers.readFutureDate(
+                scanner, "Start date"
+            );
             LocalDate endDate = Helpers.readFutureDate(scanner, "End date");
 
-            new Room(selectedProperty, roomType, rentPrice, billsIncluded, location, amenities, startDate, endDate);
+            new Room(
+                selectedProperty, 
+                roomType, 
+                rentPrice, 
+                billsIncluded, 
+                location, 
+                amenities, 
+                startDate, 
+                endDate
+            );
 
             System.out.println("Room created successfully.");
         } catch (Exception e) {
@@ -164,7 +178,7 @@ public final class HomeownerRoomManager implements RoomHandler {
         if (selectedRoom == null) return;
 
         System.out.println("Are you sure you want to delete this room?");
-        selectedRoom.toString();
+        System.out.println(selectedRoom.toString());
 
         // if user selects "n"
         if (!Helpers.confirm(scanner)) {

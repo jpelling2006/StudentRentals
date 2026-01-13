@@ -47,7 +47,7 @@ public final class AdminReviewManager implements ReviewHandler {
         if (selectedReview == null) { return; }
 
         System.out.println("Are you sure you want to delete this review?");
-        selectedReview.toString();
+        System.out.println(selectedReview.toString());
 
         if (!Helpers.confirm(scanner)) {
             System.out.println("Deletion cancelled");

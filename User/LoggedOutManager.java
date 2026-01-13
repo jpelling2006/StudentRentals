@@ -30,11 +30,20 @@ public final class LoggedOutManager implements UserHandler {
         System.out.println("1. Student");
         System.out.println("2. Homeowner");
 
-        Integer choice = Helpers.readIntInRange(scanner, "Choose user type: ", 1, 2);
+        Integer userTypeChoice = Helpers.readIntInRange(
+            scanner, 
+            "Choose user type: ", 
+            1, 
+            2
+        );
 
         String username;
         while (true) {
-            username = Helpers.readString(scanner, "Username: ", 32).toLowerCase();
+            username = Helpers.readString(
+                scanner, 
+                "Username: ", 
+                32
+            ).toLowerCase();
             if (users.containsKey(username)) {
                 System.out.println("Username already exists. Try again.");
                 continue;
@@ -42,32 +51,41 @@ public final class LoggedOutManager implements UserHandler {
             break;
         }
 
-        String email = Helpers.readString(scanner, "Email: ", 64);
-        String phone = Helpers.readString(scanner, "Phone (10 digits): ", 10);
-        String password = Helpers.readString(scanner, "Password (min 8 chars): ", 128);
+        String email = Helpers.readString(
+            scanner, "Email: ", 64
+        );
+        String phone = Helpers.readString(
+            scanner, "Phone (10 digits): ", 10
+        );
+        String password = Helpers.readString(
+            scanner, "Password (min 8 chars): ", 128
+        );
 
         User newUser = null;
 
         try {
-            if (choice == 1) { // student
-                String university = Helpers.readString(scanner, "University: ", 128);
-                String studentNumber = Helpers.readString(scanner, "Student number: ", 32);
+            switch (userTypeChoice) {
+                case 1 -> { // student
+                    String university = Helpers.readString(scanner, "University: ", 128);
+                    String studentNumber = Helpers.readString(scanner, "Student number: ", 32);
 
-                newUser = new StudentUser(
-                    username,
-                    email,
-                    phone,
-                    password,
-                    university,
-                    studentNumber
-                );
-            } else { // homeowner
-                newUser = new HomeownerUser(
-                    username,
-                    email,
-                    phone,
-                    password
-                );
+                    newUser = new StudentUser(
+                        username,
+                        email,
+                        phone,
+                        password,
+                        university,
+                        studentNumber
+                    );
+                }
+                case 2 -> { // homeowner
+                    newUser = new HomeownerUser(
+                        username,
+                        email,
+                        phone,
+                        password
+                    );
+                }
             }
         } catch (Exception e) {
             System.out.println("Failed to create user: " + e.getMessage());
@@ -83,8 +101,16 @@ public final class LoggedOutManager implements UserHandler {
     }
 
     private static void login(UIContext context) {
-        String username = Helpers.readString(scanner, "Username: ", 32).toLowerCase();
-        String password = Helpers.readString(scanner, "Password: ", 128);
+        String username = Helpers.readString(
+            scanner, 
+            "Username: ", 
+            32
+        ).toLowerCase();
+        String password = Helpers.readString(
+            scanner, 
+            "Password: ", 
+            128
+        );
 
         User user = users.get(username);
         if (user == null) {
@@ -108,7 +134,11 @@ public final class LoggedOutManager implements UserHandler {
     }
 
     private static void forgetPassword() {
-        String username = Helpers.readString(scanner, "Username: ", 32).toLowerCase();
+        String username = Helpers.readString(
+            scanner, 
+            "Username: ", 
+            32
+        ).toLowerCase();
         User user = users.get(username);
 
         if (user == null) {
@@ -118,7 +148,11 @@ public final class LoggedOutManager implements UserHandler {
 
         while (true) {
             try {
-                String newPassword = Helpers.readString(scanner, "New password: ", 128);
+                String newPassword = Helpers.readString(
+                    scanner, 
+                    "New password: ", 
+                    128
+                );
                 user.setPasswordHash(newPassword);
                 System.out.println("Password reset successful.");
                 return;
@@ -136,7 +170,9 @@ public final class LoggedOutManager implements UserHandler {
         System.out.println("4. Exit");
 
         return switch (
-            Helpers.readIntInRange(scanner, "Choose option: ", 1, 4)
+            Helpers.readIntInRange(
+                scanner, "Choose option: ", 1, 4
+            )
         ) {
             case 1 -> {
                 register(context);

@@ -4,12 +4,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import helpers.Helpers;
 import properties.Property;
-import properties.PropertyQueryService;
 import room.Room;
+import room.RoomQueryService;
 import room.RoomType;
 
 public final class SearchManager {
@@ -34,40 +33,39 @@ public final class SearchManager {
         return room.isAvailable(moveIn, moveOut);
     }
 
-    // checks if room is in price range
-    private static boolean inPriceRange(
-        Room room, 
-        Double minPrice, 
-        Double maxPrice
-    ) {
-        Double price = room.getRentPrice();
-
-        if (
-            (minPrice != null && price < minPrice)
-            || (maxPrice != null && price > maxPrice)
-        ) { return false; }
-
-        return true;
-    }
-
-    // checks if room is a certain type
-    private static boolean correctRoomType(Room room, RoomType roomType) {
-        return roomType == null || room.getRoomType() == roomType;
-    }
-
-    // checks if room is in a property in a certain city
-    private static boolean matchesLocation(Property property, String city) {
-        return city == null || property.getCity().equalsIgnoreCase(city);
-    }
-
     public static List<Room> searchRooms(RoomSearchCriteria criteria) {
-        lastResults = PropertyQueryService.getAllProperties().stream() // gets all properties
-            .filter(property -> matchesLocation(property, criteria.city)) // gets all properties in certain city
-            .flatMap(property -> property.getRooms().stream()) // gets all rooms for selected properties
-            .filter(room -> isRoomAvailable(room, criteria.moveIn, criteria.moveOut)) // selects rooms available in date range
-            .filter(room -> inPriceRange(room, criteria.minPrice, criteria.maxPrice)) // selects rooms in price range
-            .filter(room -> correctRoomType(room, criteria.roomType)) // selects rooms of a certain type
-            .collect(Collectors.toList());
+        lastResults = RoomQueryService.getAllRooms().stream()
+            .filter(room -> {
+                Property property = room.getProperty();
+
+                if (
+                    criteria.city != null
+                    && !property.getCity().equalsIgnoreCase(criteria.city)
+                ) { 
+                    return false; 
+                }
+
+                if (
+                    criteria.roomType != null
+                    && room.getRoomType() != criteria.roomType
+                ) {
+                    return false;
+                }
+
+                Double price = room.getRentPrice();
+                if (criteria.minPrice != null && price < criteria.minPrice) {
+                    return false;
+                }
+                if (criteria.maxPrice != null && price > criteria.maxPrice) {
+                    return false;
+                }
+
+                if (!isRoomAvailable(room, criteria.moveIn, criteria.moveOut)) {
+                    return false;
+                }
+                return true;
+            })
+            .toList();
 
         return lastResults;
     }
@@ -144,7 +142,9 @@ public final class SearchManager {
 
             if (criteria.minPrice != null && criteria.maxPrice != null) {
                 if (criteria.minPrice > criteria.maxPrice) {
-                    System.out.println("Min price must be less than or equal to max price!");
+                    System.out.println(
+                        "Min price must be less than or equal to max price!"
+                    );
                     continue;
                 }
             }
@@ -153,18 +153,25 @@ public final class SearchManager {
         }
 
         while (true) {
-            criteria.moveIn = Helpers.readOptionalFutureDate(scanner, "Move in date (blank for any): ");
-            criteria.moveOut = Helpers.readOptionalFutureDate(scanner, "Move out date (blank for any): ");
+            criteria.moveIn = Helpers.readOptionalFutureDate(
+                scanner, "Move in date (blank for any): "
+            );
+            criteria.moveOut = Helpers.readOptionalFutureDate(
+                scanner, "Move out date (blank for any): "
+            );
 
             // only check if both dates are given
-            if (criteria.moveIn != null && criteria.moveOut != null && criteria.moveOut.isBefore(criteria.moveIn)) {
+            if (
+                criteria.moveIn != null
+                && criteria.moveOut != null
+                && criteria.moveOut.isBefore(criteria.moveIn)
+            ) {
                 System.out.println("Move out date must be after move in date.");
                 continue;
             }
 
             break;
         }
-
 
         criteria.roomType = Helpers.readOptionalEnum(
             scanner, 

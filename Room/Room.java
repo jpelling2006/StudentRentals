@@ -142,7 +142,9 @@ public final class Room {
         }
 
         if (!isAvailable(booking.getStartDate(), booking.getEndDate())) {
-            throw new IllegalStateException("Room is not available for these dates.");
+            throw new IllegalStateException(
+                "Room is not available for these dates."
+            );
         }
 
         bookingsByUser.put(username, booking);
@@ -158,7 +160,9 @@ public final class Room {
         bookingsByUser.remove(username);
     }
 
-    public boolean hasBooking(String username) { return bookingsByUser.containsKey(username); }
+    public boolean hasBooking(String username) {
+        return bookingsByUser.containsKey(username);
+    }
 
     public boolean bookingCompletedByUser(String username) {
         Booking booking = bookingsByUser.get(username);
