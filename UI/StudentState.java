@@ -20,7 +20,7 @@ public class StudentState implements UIState {
     public StudentState() {}
 
     @Override
-    public void handleRequest() {
+    public void handleRequest(UIContext context) {
         while (true) {
             System.out.println("\nStudent Menu:");
             System.out.println("1. User Manager");
@@ -37,11 +37,14 @@ public class StudentState implements UIState {
             );
 
             switch (choice) {
-                case 1 -> UserManager.handleOnce();
+                case 1 -> UserManager.handleManager(context);
                 case 2 -> SearchManager.handleOnce();
                 case 3 -> BookingManager.handleOnce();
                 case 4 -> ReviewManager.handleOnce();
-                case 5 -> { return; }
+                case 5 -> {
+                    context.setState(null);
+                    return;
+                }
             }
         }
     }

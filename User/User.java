@@ -2,12 +2,16 @@ package user;
 
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 public abstract class User {
+    private static final Map<String, User> users = new HashMap<>();
+
     private String username;
     private String email;
     private String phone;
@@ -24,8 +28,14 @@ public abstract class User {
         setEmail(email);
         setPhone(phone);
         setPasswordHash(passwordHash); // uses the setter to hash
+
+        users.put(username.toLowerCase(), this);
     }
 
+    // expose users map
+    public static Map<String, User> getAllUsersMap() {
+        return users;
+    }
 
     public String getUsername() { return username; }
     public void setUsername(String username) {

@@ -1,7 +1,5 @@
 package ui;
 
-import user.UserManager;
-
 public class LoggedOutState implements UIState {
     private static LoggedOutState instance;
 
@@ -10,10 +8,13 @@ public class LoggedOutState implements UIState {
         return instance;
     }
 
-    public LoggedOutState() {}
+    private LoggedOutState() {}
 
     @Override
-    public void handleRequest() {
-        UserManager.handleOnce();
+    public void handleRequest(UIContext context) {
+        boolean exit = user.UserManager.handleOnce(context);
+        if (exit) {
+            context.setState(null);
+        }
     }
 }

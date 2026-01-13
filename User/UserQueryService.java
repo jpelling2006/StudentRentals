@@ -1,11 +1,9 @@
 package user;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public final class UserQueryService {
-    private static Map<String, User> users = new HashMap<>();
     private static UserQueryService instance;
 
     public static UserQueryService getInstance() {
@@ -16,10 +14,13 @@ public final class UserQueryService {
     public UserQueryService() {}
 
     public static User getUserByUsername(String username) {
-        return users.get(username);
+        if (username == null) return null;
+        Map<String, User> users = User.getAllUsersMap();
+        return users.get(username.toLowerCase());
     }
 
     public static List<User> getAllUsers() {
+        Map<String, User> users = User.getAllUsersMap();
         return users.values().stream().toList();
     }
 }

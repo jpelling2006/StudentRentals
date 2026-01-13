@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 import helpers.Helpers;
 import session.Session;
+import ui.LoggedOutState;
+import ui.UIContext;
 
 // non admin meaning students or homeowners
 // they require extremely similar functionality, hence why they both use this class
@@ -119,14 +121,15 @@ public class NonAdminUserManager implements UserHandler {
         }
     }
 
-    public static boolean handleOnce() {
+    public static boolean handleOnce(UIContext context) {
         System.out.println("\nUser Management System");
         System.out.println("1. View details");
         System.out.println("2. Edit details");
         System.out.println("3. Logout");
+        System.out.println("4. Back");
 
         return switch (
-            Helpers.readIntInRange(scanner, "Choose option: ", 1, 3)
+            Helpers.readIntInRange(scanner, "Choose option: ", 1, 4)
         ) {
             case 1 -> {
                 viewDetails();
@@ -136,7 +139,13 @@ public class NonAdminUserManager implements UserHandler {
                 editDetails();
                 yield false;
             }
-            case 3 -> true;
+            case 3 -> {
+                Session.logout();
+                System.out.println("Logged out successfully");
+                context.setState(LoggedOutState.getInstance());
+                yield true;
+            }
+            case 4 -> true;
             default -> false;
         };
     }

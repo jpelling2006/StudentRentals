@@ -1,5 +1,6 @@
 package booking;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,26 +21,31 @@ public final class StudentBookingManager implements BookingHandler {
     private StudentBookingManager() {}
 
     private static void createBooking() {
-        Room room = Helpers.selectFromList(
+        Room selectedRoom = Helpers.selectFromList(
             scanner,
             RoomQueryService.getAllRooms(),
             "Select room",
             Room::toString
         );
 
-        // automatically generated values
-        Booking booking = new Booking();
-        booking.generateBookingID();
-        booking.setRoom(room);
-        booking.setUsername(Session.getCurrentUser().getUsername());
-        booking.setBookingStatus(BookingStatus.PENDING);
+        if (selectedRoom == null) { return; }
 
-        // user input values
-        booking.setStartDate(Helpers.readFutureDate(scanner, "Start date"));
-        booking.setEndDate(Helpers.readFutureDate(scanner, "End date"));
+        String username = Session.getCurrentUser().getUsername();
+        BookingStatus bookingStatus = BookingStatus.PENDING;
 
-        room.addBooking(booking);
-        System.out.println("Booking created.");
+        try {
+            LocalDate startDate = Helpers.readFutureDate(scanner, "Start date");
+            LocalDate endDate = Helpers.readFutureDate(scanner, "End date");
+
+            Booking booking = new Booking(bookingStatus, selectedRoom, username, startDate, endDate);
+
+            // add booking to room
+            selectedRoom.addBooking(booking);
+
+            System.out.println("Booking created successfully.");
+        } catch (Exception e) {
+            System.out.println("Failed to create booking: " + e.getMessage());
+        }
     }
 
     private static void editBooking() {

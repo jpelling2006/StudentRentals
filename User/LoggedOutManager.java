@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import helpers.Helpers;
 import session.Session;
+import ui.UIContext;
 
 public final class LoggedOutManager implements UserHandler {
     private final static Map<String, User> users = new HashMap<>();
@@ -19,7 +20,12 @@ public final class LoggedOutManager implements UserHandler {
 
     public LoggedOutManager() {}
 
-    private static void register() {
+    // for seeding
+    public static void addUser(User user) {
+        users.put(user.getUsername().toLowerCase(), user);
+    }
+
+    private static void register(UIContext context) {
         System.out.println("\nRegister new user:");
         System.out.println("1. Student");
         System.out.println("2. Homeowner");
@@ -69,10 +75,14 @@ public final class LoggedOutManager implements UserHandler {
         }
 
         users.put(username, newUser);
-        System.out.println("Registration successful! You can now login.");
+
+        // log in automatically
+        Session.login(newUser);
+        System.out.println("Registration & login succesfful!");
+        UserManager.handleOnce(context);
     }
 
-    private static void login() {
+    private static void login(UIContext context) {
         String username = Helpers.readString(scanner, "Username: ", 32).toLowerCase();
         String password = Helpers.readString(scanner, "Password: ", 128);
 
@@ -86,6 +96,9 @@ public final class LoggedOutManager implements UserHandler {
             if (user.verifyPassword(password)) {
                 Session.login(user);
                 System.out.println("Login successful!");
+
+                // switch to main menu
+                UserManager.handleOnce(context);
             } else {
                 System.out.println("Incorrect password.");
             }
@@ -115,7 +128,7 @@ public final class LoggedOutManager implements UserHandler {
         }
     }
 
-    public static boolean handleOnce() {
+    public static boolean handleOnce(UIContext context) {
         System.out.println("\nUser Management System (Logged Out)");
         System.out.println("1. Register");
         System.out.println("2. Login");
@@ -126,18 +139,20 @@ public final class LoggedOutManager implements UserHandler {
             Helpers.readIntInRange(scanner, "Choose option: ", 1, 4)
         ) {
             case 1 -> {
-                register();
+                register(context);
                 yield false;
             }
             case 2 -> {
-                login();
+                login(context);
                 yield false;
             }
             case 3 -> {
                 forgetPassword();
                 yield false;
             }
-            case 4 -> true;
+            case 4 -> {
+                yield true;
+            }
             default -> false;
         };
     }

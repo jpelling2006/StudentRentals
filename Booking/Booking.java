@@ -9,9 +9,24 @@ public class Booking {
     private UUID bookingID;
     private BookingStatus bookingStatus;
     private Room room;
-    private String username; // students only
+    private String username;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    public Booking(
+        BookingStatus bookingStatus,
+        Room room,
+        String username,
+        LocalDate startDate,
+        LocalDate endDate
+    ) throws Exception {
+        generateBookingID();
+        setBookingStatus(bookingStatus);
+        setRoom(room);
+        setUsername(username);
+        setStartDate(startDate);
+        setEndDate(endDate);
+    }
 
     public UUID getBookingID() { return bookingID; }
     public void generateBookingID() {

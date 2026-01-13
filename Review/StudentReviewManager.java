@@ -37,56 +37,31 @@ public final class StudentReviewManager implements ReviewHandler {
 
         if (selectedProperty == null) { return; }
 
-        if ( // if user hasn't completed booking on selected property
-            !hasCompletedBooking(
-                selectedProperty, 
-                Session.getCurrentUser().getUsername()
-            )
-        ) {
+        String username = Session.getCurrentUser().getUsername();
+
+        if (!hasCompletedBooking(selectedProperty, username)) {
             System.out.println(
                 "You can only review properties you have stayed in."
             );
             return;
         }
 
-        Review review = new Review();
-
-        System.out.println("\nCreating new review");
-
-        // automatically filled fields
-        review.generateReviewID();
-        review.setProperty(selectedProperty);
-        review.setUsername(Session.getCurrentUser().getUsername());
-
-        // user inputted fields
-        review.setStars(
-            Helpers.readIntInRange(
-                scanner, 
-                "Enter stars: ", 
-                1, 
-                5
-            )
-        );
-        review.setTitle(
-            Helpers.readString(
-                scanner, 
-                "Enter review title: ", 
-                256
-            )
-        );
-        review.setContent(
-            Helpers.readString(
-                scanner, 
-                "Enter review content: ", 
-                1024
-            )
-        );
-
         try {
+            Integer stars = Helpers.readIntInRange(scanner, "Enter stars: ", 1, 5);
+            String title = Helpers.readString(scanner, "Enter review title: ", 256);
+            String content = Helpers.readString(scanner, "Enter review content: ", 1024);
+
+            Review review = new Review(selectedProperty, username, stars, title, content);
+
+            // add review to property
             selectedProperty.addReview(review);
+
             System.out.println("Review created successfully.");
-        } catch (IllegalStateException e) { System.out.println(e.getMessage()); }
+        } catch (Exception e) {
+            System.out.println("Failed to create review: " + e.getMessage());
+        }
     }
+
 
     private static void listReviews() {
         List<Review> userReviews = ReviewQueryService.getStudentReviews(

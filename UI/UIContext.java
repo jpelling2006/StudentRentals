@@ -7,7 +7,10 @@ public class UIContext {
         this.state = state;
     }
 
-    public void request() {
-        state.handleRequest();
+    public void run() {
+        while (state != null) {
+            state.handleRequest(this);
+        }
+        System.out.println("Exiting, goodbye!");
     }
 }

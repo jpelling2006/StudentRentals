@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import helpers.Helpers;
 import session.Session;
+import user.User;
 
 public final class HomeownerPropertyManager implements PropertiesHandler {
     private final static Map<UUID, Property> properties = new HashMap<>();
@@ -21,42 +22,33 @@ public final class HomeownerPropertyManager implements PropertiesHandler {
 
     private HomeownerPropertyManager() {}
 
-    private static void newProperty() {
-        Property property = new Property();
+    // for seeding
+    public static void addProperty(Property property) {
+        properties.put(property.getPropertyID(), property);
+    }
 
+    private static void newProperty() {
         System.out.println("\nCreating new property");
 
-        property.generatePropertyID();
-        property.setUser(Session.getCurrentUser());
-        property.setCity(
-            Helpers.readString(scanner, "Enter city: ", 64)
-        );
-        property.setAddress(
-            Helpers.readString(scanner, "Enter address: ", 512)
-        );
-        property.setDescription(
-            Helpers.readString(
-                scanner, 
-                "Enter property description: ", 
-                2048)
-        );
-        property.setPropertyType(
-            Helpers.readEnum(
-                scanner, 
-                "Enter property type: ", 
-                PropertyType.class
-            )
-        );
-        property.setBedrooms(
-            Helpers.readInt(scanner, "Enter bedrooms amount: ")
-        );
-        property.setBathrooms(
-            Helpers.readInt(scanner, "Enter bathrooms amount: ")
-        );
+        try {
+            User user = Session.getCurrentUser();
+            String city = Helpers.readString(scanner, "Enter city: ", 64);
+            String address = Helpers.readString(scanner, "Enter address: ", 512);
+            String description = Helpers.readString(scanner, "Enter property description: ", 2048);
+            PropertyType propertyType = Helpers.readEnum(scanner, "Enter property type: ", PropertyType.class);
+            Integer bedrooms = Helpers.readInt(scanner, "Enter bedrooms amount: ");
+            Integer bathrooms = Helpers.readInt(scanner, "Enter bathrooms amount: ");
 
-        properties.put(property.getPropertyID(), property);
-        System.out.println("Property created successfully");
-    } 
+            Property property = new Property(user, city, address, description, propertyType, bedrooms, bathrooms);
+
+            properties.put(property.getPropertyID(), property);
+
+            System.out.println("Property created successfully.");
+        } catch (Exception e) {
+            System.out.println("Failed to create property: " + e.getMessage());
+        }
+    }
+
 
     private static void listUserProperties() {
         List<Property> userProperties = PropertyQueryService.getUserProperties(

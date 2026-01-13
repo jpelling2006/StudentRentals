@@ -1,5 +1,6 @@
 package room;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,45 +27,38 @@ public final class HomeownerRoomManager implements RoomHandler {
     }
 
     private static void createRoom() {
-        Room room = new Room();
-        room.generateRoomID();
-
-        Property property = Helpers.selectFromList(
+        Property selectedProperty = Helpers.selectFromList(
             scanner, 
             PropertyQueryService.getUserProperties(Session.getCurrentUser()), 
             "Select property",
             Property::toString
         );
 
-        if (property == null) { return; }
+        if (selectedProperty == null) { return; }
 
-        // input fields
-        room.setProperty(property);
-        room.setRoomType(
-            Helpers.readEnum(
+        try {
+            RoomType roomType = Helpers.readEnum(
                 scanner, 
                 "Select room type", 
                 RoomType.class
-            )
-        );
-        room.setRentPrice(
-            Helpers.readDouble(scanner, "Rent per week: ")
-        );
+            );
+            Double rentPrice = Helpers.readDouble(scanner, "Rent per week: ");
+            System.out.println("Are bills included?");
+            boolean billsIncluded = (Helpers.confirm(scanner));
+            String location = Helpers.readString(scanner, "Location: ", 64);
+            String amenities = Helpers.readString(scanner, "Amenities: ", 256);
+            LocalDate startDate = Helpers.readFutureDate(scanner, "Start date");
+            LocalDate endDate = Helpers.readFutureDate(scanner, "End date");
 
-        System.out.println("Are bills included?");
-        room.setBillsIncluded(Helpers.confirm(scanner));
+            Room room = new Room(selectedProperty, roomType, rentPrice, billsIncluded, location, amenities, startDate, endDate);
 
-        room.setLocation(
-            Helpers.readString(scanner, "Location: ", 64)
-        );
-        room.setAmenities(
-            Helpers.readString(scanner, "Amenities: ", 256)
-        );
-        room.setStartDate(Helpers.readFutureDate(scanner, "Start date"));
-        room.setEndDate(Helpers.readFutureDate(scanner, "End date"));
+            // add room to property
+            selectedProperty.addRoom(room);
 
-        property.addRoom(room);
-        System.out.println("Room created.");
+            System.out.println("Room created successfully.");
+        } catch (Exception e) {
+            System.out.println("Failed to create room: " + e.getMessage());
+        }
     }
 
     private static void editRoom() {

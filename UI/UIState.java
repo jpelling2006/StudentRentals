@@ -1,5 +1,5 @@
 package ui;
 
 public interface UIState {
-    void handleRequest();
+    void handleRequest(UIContext context);
 }

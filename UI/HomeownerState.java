@@ -21,7 +21,7 @@ public class HomeownerState implements UIState {
     private HomeownerState() {}
 
     @Override
-    public void handleRequest() {
+    public void handleRequest(UIContext context) {
         System.out.println("\nHomeowner Menu:");
         System.out.println("1. User Manager");
         System.out.println("2. Property manager");
@@ -38,12 +38,15 @@ public class HomeownerState implements UIState {
         );
 
         switch (choice) {
-            case 1 -> UserManager.handleOnce();
+            case 1 -> UserManager.handleManager(context);
             case 2 -> PropertyManager.handleOnce();
             case 3 -> RoomManager.handleOnce();
             case 4 -> BookingManager.handleOnce();
             case 5 -> ReviewManager.handleOnce();
-            case 6 -> { return; }
+            case 6 -> {
+                context.setState(null);
+                return;
+            }
         }
     }
 }

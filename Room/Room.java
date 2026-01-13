@@ -22,6 +22,27 @@ public final class Room {
     private LocalDate endDate;
     private Map<String, Booking> bookingsByUser = new HashMap<>();
 
+    public Room(
+        Property property,
+        RoomType roomType,
+        Double rentPrice,
+        Boolean billsIncluded,
+        String location,
+        String amenities,
+        LocalDate startDate,
+        LocalDate endDate
+    ) throws Exception {
+        generateRoomID();
+        setRoomType(roomType);
+        setRentPrice(rentPrice);
+        setBillsIncluded(billsIncluded);
+        setLocation(location);
+        setAmenities(amenities);
+        setStartDate(startDate);
+        setEndDate(endDate);
+        property.addRoom(this);
+    }
+
     public UUID getRoomID() { return roomID; }
     public void generateRoomID() {
         this.roomID = UUID.randomUUID();

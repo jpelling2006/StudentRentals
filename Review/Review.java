@@ -12,6 +12,22 @@ public class Review {
     private String title;
     private String content;
 
+    public Review(
+        Property property,
+        String username,
+        Integer stars,
+        String title,
+        String content
+    ) throws Exception {
+        generateReviewID();
+        setProperty(property);
+        setUsername(username);
+        setStars(stars);
+        setTitle(title);
+        setContent(content);
+        property.addReview(this);
+    }
+
     public UUID getReviewID() { return reviewID; }
     public void generateReviewID() {
         this.reviewID = UUID.randomUUID();

@@ -12,6 +12,8 @@ import room.Room;
 import user.User;
 
 public class Property {
+    private static final Map<UUID, Property> properties = new HashMap<>();
+
     private UUID propertyID;
     private User user;
     private String city;
@@ -22,6 +24,31 @@ public class Property {
     private Integer bathrooms;
     private List<Room> rooms = new ArrayList<>();
     private Map<String, Review> reviewsByUser = new HashMap<>();
+
+    public Property(
+        User user,
+        String city,
+        String address,
+        String description,
+        PropertyType propertyType,
+        Integer bedrooms,
+        Integer bathrooms
+    ) throws Exception {
+        generatePropertyID();
+        setUser(user);
+        setCity(city);
+        setAddress(address);
+        setDescription(description);
+        setPropertyType(propertyType);
+        setBedrooms(bedrooms);
+        setBathrooms(bathrooms);
+        properties.put(this.propertyID, this);
+    }
+
+    // expose properties map
+    public static Map<UUID, Property> getAllPropertiesMap() {
+        return properties;
+    }
 
     public UUID getPropertyID() { return propertyID; }
     public void generatePropertyID() {
