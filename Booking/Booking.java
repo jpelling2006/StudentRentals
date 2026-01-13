@@ -26,6 +26,7 @@ public class Booking {
         setUsername(username);
         setStartDate(startDate);
         setEndDate(endDate);
+        room.addBooking(this);
     }
 
     public UUID getBookingID() { return bookingID; }
@@ -73,7 +74,7 @@ public class Booking {
 
     public LocalDate getEndDate() { return endDate; }
     public void setEndDate(LocalDate endDate) { 
-        if (endDate == null || endDate.isBefore(startDate)) {
+        if (endDate == null) {
             throw new IllegalArgumentException("Invalid end date.");
         }
         this.endDate = endDate;
@@ -97,6 +98,7 @@ public class Booking {
             : "Unknown property";
 
         // format
-        return startDate + " to " + endDate + " (" + bookingStatus + ")\n" + address;
+        return startDate + " to " + endDate + " (" + bookingStatus + ")\n"
+        + address + " - " + room.getLocation();
     }
 }

@@ -33,6 +33,7 @@ public final class Room {
         LocalDate endDate
     ) throws Exception {
         generateRoomID();
+        setProperty(property);
         setRoomType(roomType);
         setRentPrice(rentPrice);
         setBillsIncluded(billsIncluded);
@@ -117,14 +118,6 @@ public final class Room {
     }
 
     private void validateDate(LocalDate start, LocalDate end) {
-        LocalDate today = LocalDate.now();
-
-        if (start != null && start.isBefore(today)) {
-            throw new IllegalArgumentException("Start date cannot be in the past.");
-        }
-        if (end != null && end.isBefore(today)) {
-            throw new IllegalArgumentException("End date cannot be in the past.");
-        }
         if (start != null && end != null && end.isBefore(start)) {
             throw new IllegalArgumentException(
                 "End date cannot be before start date."
@@ -187,6 +180,9 @@ public final class Room {
         return true;
     }
 
+    // delete bookings
+    public void removeRoom() { bookingsByUser.clear(); }
+
     @Override
     public String toString() {
         return "£" + rentPrice + "/week - "
@@ -194,7 +190,7 @@ public final class Room {
         + property.getCity() + " - "
         + property.getAddress() + " - "
         + location
-        + "\n" + startDate + " - "
-        + endDate;
+        + "\n" + startDate + " - " + endDate + "\n"
+        + amenities;
     }
 }

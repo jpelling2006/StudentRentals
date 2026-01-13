@@ -51,19 +51,19 @@ public final class DataSeeder {
             HomeownerPropertyManager.addProperty(property2);
 
             Room room1 = new Room(property1, RoomType.DOUBLE, 150.0, true, "First floor rear", "Desk, wardrobe, a little rat hole in the corner for all your new friends!", LocalDate.parse("2026-07-01"), LocalDate.parse("2027-06-30"));
-            property1.addRoom(room1);
+            // property1.addRoom(room1);
 
-            Room room2 = new Room(property1, RoomType.SINGLE, 125.5, true, "Ground floor front", "Desk, wardrobe, and various slugs!", LocalDate.parse("2025-07-01"), LocalDate.parse("2026-06-30"));
-            property1.addRoom(room2);
+            Room room2 = new Room(property2, RoomType.SINGLE, 125.5, true, "Ground floor front", "Desk, wardrobe, and various slugs!", LocalDate.parse("2025-07-01"), LocalDate.parse("2026-06-30"));
+            // property2.addRoom(room2);
 
-            Booking booking1 = new Booking(BookingStatus.PENDING, room1, student.getUsername(), LocalDate.parse("2026-08-01"), LocalDate.parse("2027-06-30"));
-            room1.addBooking(booking1);
+            new Booking(BookingStatus.PENDING, room1, student.getUsername(), LocalDate.parse("2026-08-01"), LocalDate.parse("2027-06-30"));
+            // room1.addBooking(booking1);
 
-            Booking booking2 = new Booking(BookingStatus.ENDED, room2, student.getUsername(), LocalDate.parse("2025-08-01"), LocalDate.parse("2025-09-30"));
-            room1.addBooking(booking2);
+            new Booking(BookingStatus.ENDED, room2, student.getUsername(), LocalDate.parse("2025-08-01"), LocalDate.parse("2025-09-30"));
+            // room2.addBooking(booking2);
 
-            Review review1 = new Review(property2, student.getUsername(), 2, "Place smells!", "Property had an incredibly horrible mouldy smell, and the landlord did nothing!");
-            property2.addReview(review1);
+            new Review(property2, student.getUsername(), 2, "Place smells!", "Property had an incredibly horrible mouldy smell, and the landlord did nothing!");
+            // property2.addReview(review1);
         } catch (Exception e) {
             e.printStackTrace();
         }

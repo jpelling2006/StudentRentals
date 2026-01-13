@@ -1,13 +1,6 @@
 package user;
 
-// import access.BookingAccess;
-// import access.ReviewAccess;
-// import booking.BookingHandler;
-// import review.ReviewHandler;
-
-public class StudentUser extends User
-// implements BookingAccess, ReviewAccess
-{
+public class StudentUser extends User {
     private String university;
     private String studentNumber;
 
@@ -43,10 +36,4 @@ public class StudentUser extends User
         }
         this.studentNumber = studentNumber;
     }
-
-    // @Override
-    // public BookingHandler getBookingHandler() { return BookingHandler; }
-
-    // @Override
-    // public ReviewHandler getReviewHandler() { return ReviewHandler; }
 }

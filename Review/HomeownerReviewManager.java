@@ -22,6 +22,11 @@ public final class HomeownerReviewManager implements ReviewHandler {
             Session.getCurrentUser()
         );
 
+        if (userReviews.isEmpty()) {
+            System.out.println("No bookings exist.");
+            return;
+        }
+
         // prints list of all user reviews
         System.out.println("\nYour reviews:");
         Helpers.printIndexed(userReviews, Review::toString);

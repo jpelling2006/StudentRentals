@@ -11,7 +11,7 @@ public final class AdminRoomManager implements RoomHandler {
 
     public static AdminRoomManager getInstance() {
         if (instance == null) { instance = new AdminRoomManager(); }
-        return new AdminRoomManager();
+        return instance;
     }
 
     private AdminRoomManager() {}
@@ -47,7 +47,7 @@ public final class AdminRoomManager implements RoomHandler {
         if (selectedRoom == null) { return; }
 
         System.out.println("Are you sure you want to delete this room?");
-        selectedRoom.toString();
+        System.out.println(selectedRoom.toString());
 
         selectedRoom.getProperty().removeRoom(selectedRoom);
         System.out.println("Room deleted by admin");

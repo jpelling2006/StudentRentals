@@ -131,40 +131,42 @@ public final class SearchManager {
             "City (blank for any): ", 
             64
         );
-        criteria.minPrice = Helpers.readOptionalDouble(
-            scanner, 
-            "Min price (blank for any): "
-        );
-        criteria.maxPrice = Helpers.readOptionalDouble(
-            scanner, 
-            "Min price (blank for any): "
-        );
 
         while (true) {
-            criteria.moveIn = Helpers.readFutureDate(
+            criteria.minPrice = Helpers.readOptionalDouble(
                 scanner, 
-                "Move in date (blank for any): "
+                "Min price (blank for any): "
             );
-            criteria.moveOut = Helpers.readFutureDate(
+            criteria.maxPrice = Helpers.readOptionalDouble(
                 scanner, 
-                "Move out date (blank for any): "
+                "Max price (blank for any): "
             );
 
-            // only checks if endDate is after startDate if both are given
-            if (
-                (criteria.moveIn != null) ||
-                (
-                    criteria.moveOut != null
-                    && criteria.moveOut.isBefore(criteria.moveIn)
-                )
-            ) {
-                System.out.println("Move out date must be after move in date.");
-                continue;
+            if (criteria.minPrice != null && criteria.maxPrice != null) {
+                if (criteria.minPrice > criteria.maxPrice) {
+                    System.out.println("Min price must be less than or equal to max price!");
+                    continue;
+                }
             }
+
             break;
         }
 
-        criteria.roomType = Helpers.readEnum(
+        while (true) {
+            criteria.moveIn = Helpers.readOptionalFutureDate(scanner, "Move in date (blank for any): ");
+            criteria.moveOut = Helpers.readOptionalFutureDate(scanner, "Move out date (blank for any): ");
+
+            // only check if both dates are given
+            if (criteria.moveIn != null && criteria.moveOut != null && criteria.moveOut.isBefore(criteria.moveIn)) {
+                System.out.println("Move out date must be after move in date.");
+                continue;
+            }
+
+            break;
+        }
+
+
+        criteria.roomType = Helpers.readOptionalEnum(
             scanner, 
             "Room type: ", 
             RoomType.class

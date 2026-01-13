@@ -6,6 +6,7 @@ import booking.BookingManager;
 import helpers.Helpers;
 import review.ReviewManager;
 import search.SearchManager;
+import session.Session;
 import user.UserManager;
 
 public class StudentState implements UIState {
@@ -17,11 +18,12 @@ public class StudentState implements UIState {
         return instance;
     }
 
-    public StudentState() {}
+    private StudentState() {}
 
     @Override
     public void handleRequest(UIContext context) {
-        while (true) {
+        boolean running = true;
+        while (running) {
             System.out.println("\nStudent Menu:");
             System.out.println("1. User Manager");
             System.out.println("2. Room searcher");
@@ -43,8 +45,12 @@ public class StudentState implements UIState {
                 case 4 -> ReviewManager.handleOnce();
                 case 5 -> {
                     context.setState(null);
-                    return;
+                    running = false;
                 }
+            }
+
+            if (Session.isLoggedIn() == false) {
+                running = false;
             }
         }
     }

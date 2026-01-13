@@ -162,8 +162,24 @@ public class Property {
         return (double) sum / reviewsByUser.size();
     }
 
+    public void removeProperty(UUID propertyID) {
+        if (propertyID != null) {
+            // delete rooms (and their bookings)
+            for (Room room : rooms) {
+                room.removeRoom();
+            }
+            rooms.clear();
+
+            reviewsByUser.clear();
+
+            properties.remove(this.propertyID);
+        }
+    }
+
     @Override
     public String toString() {
-        return address + " (" + propertyType + ")";
+        return city + " - " + address + " (" + propertyType + ")\n"
+        + description + "\n"
+        + bedrooms + " bedrooms and " + bathrooms + " bathooms.";
     }
 }

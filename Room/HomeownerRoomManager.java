@@ -22,6 +22,11 @@ public final class HomeownerRoomManager implements RoomHandler {
 
     private static void listRooms() {
         List<Room> rooms = RoomQueryService.getUserRooms(Session.getCurrentUser());
+
+        if (rooms.isEmpty()) {
+            System.out.println("You have no rooms.");
+        }
+
         System.out.println("\nYour rooms:");
         Helpers.printIndexed(rooms, Room::toString);
     }
@@ -50,10 +55,7 @@ public final class HomeownerRoomManager implements RoomHandler {
             LocalDate startDate = Helpers.readFutureDate(scanner, "Start date");
             LocalDate endDate = Helpers.readFutureDate(scanner, "End date");
 
-            Room room = new Room(selectedProperty, roomType, rentPrice, billsIncluded, location, amenities, startDate, endDate);
-
-            // add room to property
-            selectedProperty.addRoom(room);
+            new Room(selectedProperty, roomType, rentPrice, billsIncluded, location, amenities, startDate, endDate);
 
             System.out.println("Room created successfully.");
         } catch (Exception e) {
@@ -103,7 +105,7 @@ public final class HomeownerRoomManager implements RoomHandler {
                         scanner, 
                         "Choose a field to edit: ", 
                         1, 
-                        7
+                        8
                     )
                 ) {
                     case 1 -> room.setRoomType(
@@ -134,11 +136,13 @@ public final class HomeownerRoomManager implements RoomHandler {
                         room.setStartDate(
                             Helpers.readFutureDate(scanner, "Start date")
                         );
+                    }
+                    case 7 -> {
                         room.setEndDate(
                             Helpers.readFutureDate(scanner, "End date")
                         );
                     }
-                    case 7 -> { return; }
+                    case 8 -> { return; }
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -173,41 +177,39 @@ public final class HomeownerRoomManager implements RoomHandler {
     }
 
     public static boolean handleOnce() {
-        while (true) {
-            System.out.println("\nHomeowner Room Menu");
-            System.out.println("1. Create room");
-            System.out.println("2. View rooms");
-            System.out.println("3. Edit room");
-            System.out.println("4. Delete room");
-            System.out.println("5. Back");
+        System.out.println("\nHomeowner Room Menu");
+        System.out.println("1. Create room");
+        System.out.println("2. View rooms");
+        System.out.println("3. Edit room");
+        System.out.println("4. Delete room");
+        System.out.println("5. Back");
 
-            return switch (
-                Helpers.readIntInRange(
-                    scanner,
-                    "Choose option: ",
-                    1,
-                    5
-                )
-            ) {
-                case 1 -> {
-                    createRoom();
-                    yield false;
-                }
-                case 2 -> {
-                    listRooms();
-                    yield false;
-                }
-                case 3 -> {
-                    editRoom();
-                    yield false;
-                }
-                case 4 -> {
-                    deleteRoom();
-                    yield false;
-                }
-                case 5 -> true;
-                default -> false;
-            };
-        }
+        return switch (
+            Helpers.readIntInRange(
+                scanner,
+                "Choose option: ",
+                1,
+                5
+            )
+        ) {
+            case 1 -> {
+                createRoom();
+                yield false;
+            }
+            case 2 -> {
+                listRooms();
+                yield false;
+            }
+            case 3 -> {
+                editRoom();
+                yield false;
+            }
+            case 4 -> {
+                deleteRoom();
+                yield false;
+            }
+            case 5 -> true;
+            default -> false;
+        };
     }
 }

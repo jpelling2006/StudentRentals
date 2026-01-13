@@ -40,7 +40,7 @@ public final class AdminPropertyManager implements PropertiesHandler {
 
         if (selectedProperty == null) { return; }
 
-        properties.remove(selectedProperty);
+        selectedProperty.removeProperty(selectedProperty.getPropertyID());
         System.out.println("Property deleted successfully.");
     }
 

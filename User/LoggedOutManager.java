@@ -78,7 +78,7 @@ public final class LoggedOutManager implements UserHandler {
 
         // log in automatically
         Session.login(newUser);
-        System.out.println("Registration & login succesfful!");
+        System.out.println("Registration & login succesfful!"); 
         UserManager.handleOnce(context);
     }
 

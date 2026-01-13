@@ -116,6 +116,10 @@ public abstract class User {
         return hashPassword(rawPassword, salt).equals(passwordHash);
     }
 
+    public static void removeUser(String username) {
+        if (username != null) { users.remove(username.toLowerCase()); }
+    }
+
     // get user type from class name
     private String getRoleName() {
         return getClass().getSimpleName().replace("User","");

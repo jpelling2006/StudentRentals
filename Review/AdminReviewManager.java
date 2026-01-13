@@ -61,7 +61,7 @@ public final class AdminReviewManager implements ReviewHandler {
     public static boolean handleOnce() {
         System.out.println("\nAdmin Review Menu");
         System.out.println("1. View reviews");
-        System.out.println("1. Delete review");
+        System.out.println("2. Delete review");
         System.out.println("2. Back");
 
         return switch (

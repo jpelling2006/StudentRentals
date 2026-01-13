@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import helpers.Helpers;
+import session.Session;
 
 public final class AdminUserManager implements UserHandler {
     private static Scanner scanner = new Scanner(System.in);
@@ -18,6 +19,11 @@ public final class AdminUserManager implements UserHandler {
 
     private static void listAllUsers() {
         List<User> users = UserQueryService.getAllUsers();
+
+        if (users.isEmpty()) {
+            System.out.println("There are no users. How are you here?");
+            return;
+        }
 
         // prints a list of all users
         System.out.println("\nAll users:");
@@ -44,7 +50,19 @@ public final class AdminUserManager implements UserHandler {
             return;
         }
 
-        users.remove(selectedUser);
+        if (selectedUser == Session.getCurrentUser()) {
+            System.out.println("Can't delete self.");
+            return;
+        }
+
+        System.out.println("Are you sure you want to delete this user?");
+
+        if (!Helpers.confirm(scanner)) {
+            System.out.println("Deletion cancelled.");
+            return;
+        }
+
+        User.removeUser(selectedUser.getUsername());
         System.out.println("User deleted successfully");
     }
 

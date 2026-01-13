@@ -7,6 +7,7 @@ import helpers.Helpers;
 import properties.PropertyManager;
 import review.ReviewManager;
 import room.RoomManager;
+import session.Session;
 import user.UserManager;
 
 public class HomeownerState implements UIState {
@@ -22,31 +23,36 @@ public class HomeownerState implements UIState {
 
     @Override
     public void handleRequest(UIContext context) {
-        System.out.println("\nHomeowner Menu:");
-        System.out.println("1. User Manager");
-        System.out.println("2. Property manager");
-        System.out.println("3. Room manager");
-        System.out.println("4. Booking manager");
-        System.out.println("5. Review manager");
-        System.out.println("6. Exit");
+        boolean running = true;
+        while (running) {
+            System.out.println("\nHomeowner Menu:");
+            System.out.println("1. User Manager");
+            System.out.println("2. Property manager");
+            System.out.println("3. Room manager");
+            System.out.println("4. Booking manager");
+            System.out.println("5. Review manager");
+            System.out.println("6. Exit");
 
-        Integer choice = Helpers.readIntInRange(
-            scanner, 
-            "Choose option: ", 
-            1, 
-            6
-        );
+            Integer choice = Helpers.readIntInRange(
+                scanner, 
+                "Choose option: ", 
+                1, 
+                6
+            );
 
-        switch (choice) {
-            case 1 -> UserManager.handleManager(context);
-            case 2 -> PropertyManager.handleOnce();
-            case 3 -> RoomManager.handleOnce();
-            case 4 -> BookingManager.handleOnce();
-            case 5 -> ReviewManager.handleOnce();
-            case 6 -> {
-                context.setState(null);
-                return;
+            switch (choice) {
+                case 1 -> UserManager.handleManager(context);
+                case 2 -> PropertyManager.handleOnce();
+                case 3 -> RoomManager.handleOnce();
+                case 4 -> BookingManager.handleOnce();
+                case 5 -> ReviewManager.handleOnce();
+                case 6 -> {
+                    context.setState(null);
+                    running = false;
+                }
             }
+
+            if (Session.isLoggedIn() == false) { running = false; }
         }
     }
 }

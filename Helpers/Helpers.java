@@ -74,6 +74,21 @@ public final class Helpers {
         }
     }
 
+    public static Integer readOptionalInt(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) return null;
+
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number or leave blank.");
+            }
+        }
+    }
+
     public static Integer readIntInRange(
         Scanner scanner,
         String prompt,
@@ -94,10 +109,27 @@ public final class Helpers {
         }
     }
 
+    public static Integer readOptionalIntInRange(
+        Scanner scanner,
+        String prompt,
+        Integer min,
+        Integer max
+    ) {
+        while (true) {
+            Integer value = readOptionalInt(scanner, prompt); // use blankable int
+
+            if (value == null) return null;
+
+            if (value >= min && value <= max) return value;
+
+            System.out.println("Please enter a number between " + min + " and " + max + " or leave blank.");
+        }
+    }
+
     public static Double readDouble(Scanner scanner, String prompt) {
         while (true) {
             System.out.print(prompt);
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
 
             try { return Double.parseDouble(input); }
             catch (NumberFormatException e) {
@@ -109,14 +141,17 @@ public final class Helpers {
     public static Double readOptionalDouble(Scanner scanner, String prompt) {
         while (true) {
             System.out.print(prompt);
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
 
-            // allows null values
-            if (input == null) { return null; }
+            // allows blank input
+            if (input.isEmpty()) { 
+                return null; 
+            }
 
-            try { return Double.parseDouble(input); }
-            catch (NumberFormatException e) {
-                System.out.println("Please enter a valid decimal number.");
+            try { 
+                return Double.parseDouble(input); 
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid decimal number or leave blank.");
             }
         }
     }
@@ -161,6 +196,32 @@ public final class Helpers {
         }
     }
 
+    public static <T extends Enum<T>> T readOptionalEnum(
+        Scanner scanner,
+        String prompt,
+        Class<T> enumType
+    ) {
+        T[] values = enumType.getEnumConstants();
+
+        while (true) {
+            System.out.println(prompt);
+            for (int i = 0; i < values.length; i++) {
+                System.out.println((i + 1) + ". " + values[i].name());
+            }
+
+            Integer choice = readOptionalIntInRange(
+                scanner, 
+                "Choose option (leave blank for any): ", 
+                1, 
+                values.length
+            );
+
+            if (choice == null) return null;
+
+            return values[choice - 1];
+        }
+    }
+
     public static LocalDate readDate(Scanner scanner, String prompt) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -175,9 +236,38 @@ public final class Helpers {
         }
     }
 
+    public static LocalDate readOptionalDate(Scanner scanner, String prompt) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        while (true) {
+            System.out.print(prompt + " (yyyy-mm-dd, leave blank for any): ");
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) { return null; }
+
+            try { 
+                return LocalDate.parse(input, formatter); 
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format. Please use yyyy-MM-dd or leave blank.");
+            }
+        }
+    }
+
     public static LocalDate readFutureDate(Scanner scanner, String prompt) {
         while (true) {
             LocalDate date = readDate(scanner, prompt);
+
+            if (!date.isBefore(LocalDate.now())) { return date; }
+
+            System.out.println("Date must be today or in the future.");
+        }
+    }
+
+    public static LocalDate readOptionalFutureDate(Scanner scanner, String prompt) {
+        while (true) {
+            LocalDate date = readOptionalDate(scanner, prompt);
+
+            if (date == null) { return null; }
 
             if (!date.isBefore(LocalDate.now())) { return date; }
 

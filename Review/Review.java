@@ -88,6 +88,6 @@ public class Review {
         String address = (property != null) ? property.getAddress() : "Unknown property";
 
         // formats string
-        return address + " - (" + stars + ")\n" + title;
+        return address + " - (" + stars + ")\n" + title + "\n" + content;
     }
 }
