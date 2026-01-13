@@ -40,34 +40,32 @@ public final class AdminPropertyManager implements PropertiesHandler {
 
         if (selectedProperty == null) { return; }
 
+        PropertyQueryService.removeFromIndex(selectedProperty);
         selectedProperty.removeProperty(selectedProperty.getPropertyID());
         System.out.println("Property deleted successfully.");
     }
 
     public static boolean handleOnce() {
-        System.out.println("\nAdmin Property Menu");
-        System.out.println("1. List properties");
-        System.out.println("2. Delete property");
-        System.out.println("3. Back");
+        boolean running = true;
+        while (running) {
+            System.out.println("\nAdmin Property Menu");
+            System.out.println("1. List properties");
+            System.out.println("2. Delete property");
+            System.out.println("3. Back");
 
-        return switch (
-            Helpers.readIntInRange(
-                scanner,
-                "Choose option: ",
-                1,
-                3
-            )
-        ) {
-            case 1 -> {
-                listAllProperties();
-                yield false;
+            switch (
+                Helpers.readIntInRange(
+                    scanner,
+                    "Choose option: ",
+                    1,
+                    3
+                )
+            ) {
+                case 1 -> listAllProperties();
+                case 2 -> deleteAnyProperty();
+                case 3 -> running = false;
             }
-            case 2 -> {
-                deleteAnyProperty();
-                yield false;
-            }
-            case 3 -> true;
-            default -> false;
-        };
+        }
+        return true;
     }
 }

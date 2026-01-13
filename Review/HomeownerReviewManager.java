@@ -33,24 +33,24 @@ public final class HomeownerReviewManager implements ReviewHandler {
     }
 
     public static boolean handleOnce() {
-        System.out.println("\nHomeowner Review Menu");
-        System.out.println("1. View reviews");
-        System.out.println("2. Back");
+        boolean running = true;
+        while (running) {
+            System.out.println("\nHomeowner Review Menu");
+            System.out.println("1. View reviews");
+            System.out.println("2. Back");
 
-        return switch (
-            Helpers.readIntInRange(
-                scanner, 
-                "Choose option: ", 
-                1, 
-                2
-            )
-        ) {
-            case 1 -> {
-                listUserReviews();
-                yield false;
+            switch (
+                Helpers.readIntInRange(
+                    scanner, 
+                    "Choose option: ", 
+                    1, 
+                    2
+                )
+            ) {
+                case 1 -> listUserReviews();
+                case 2 -> running = false;
             }
-            case 2 -> true;
-            default -> false;
-        };
+        }
+        return true;
     }
 }

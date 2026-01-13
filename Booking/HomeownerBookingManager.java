@@ -84,18 +84,26 @@ public final class HomeownerBookingManager implements BookingHandler {
     }
 
     public static boolean handleOnce() {
-        System.out.println("\nHomeowner Booking Menu");
-        System.out.println("1. View bookings for properties");
-        System.out.println("2. Update booking status");
-        System.out.println("3. Back");
+        boolean running = true;
+        while (running) {
+            System.out.println("\nHomeowner Booking Menu");
+            System.out.println("1. View bookings for properties");
+            System.out.println("2. Update booking status");
+            System.out.println("3. Back");
 
-        return switch (
-            Helpers.readIntInRange(scanner, "Choose option: ", 1, 3)
-        ) {
-            case 1 -> { listBookings(); yield false; }
-            case 2 -> { editBookingStatus(); yield false; }
-            case 3 -> true;
-            default -> false;
-        };
+            switch (
+                Helpers.readIntInRange(
+                    scanner, 
+                    "Choose option: ", 
+                    1, 
+                    3
+                )
+            ) {
+                case 1 -> listBookings();
+                case 2 -> editBookingStatus();
+                case 3 -> running = false;
+            }
+        }
+        return true;
     }
 }

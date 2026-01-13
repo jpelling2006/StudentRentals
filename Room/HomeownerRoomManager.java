@@ -177,39 +177,30 @@ public final class HomeownerRoomManager implements RoomHandler {
     }
 
     public static boolean handleOnce() {
-        System.out.println("\nHomeowner Room Menu");
-        System.out.println("1. Create room");
-        System.out.println("2. View rooms");
-        System.out.println("3. Edit room");
-        System.out.println("4. Delete room");
-        System.out.println("5. Back");
+        boolean running = true;
+        while (running) {
+            System.out.println("\nHomeowner Room Menu");
+            System.out.println("1. Create room");
+            System.out.println("2. View rooms");
+            System.out.println("3. Edit room");
+            System.out.println("4. Delete room");
+            System.out.println("5. Back");
 
-        return switch (
-            Helpers.readIntInRange(
-                scanner,
-                "Choose option: ",
-                1,
-                5
-            )
-        ) {
-            case 1 -> {
-                createRoom();
-                yield false;
+            switch (
+                Helpers.readIntInRange(
+                    scanner,
+                    "Choose option: ",
+                    1,
+                    5
+                )
+            ) {
+                case 1 -> createRoom();
+                case 2 -> listRooms();
+                case 3 -> editRoom();
+                case 4 -> deleteRoom();
+                case 5 -> running = false;
             }
-            case 2 -> {
-                listRooms();
-                yield false;
-            }
-            case 3 -> {
-                editRoom();
-                yield false;
-            }
-            case 4 -> {
-                deleteRoom();
-                yield false;
-            }
-            case 5 -> true;
-            default -> false;
-        };
+        }
+        return true;
     }
 }

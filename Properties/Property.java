@@ -45,9 +45,9 @@ public class Property {
         properties.put(this.propertyID, this);
     }
 
-    // expose properties map
-    public static Map<UUID, Property> getAllPropertiesMap() {
-        return properties;
+    public static Map<UUID, Property> getAllPropertiesMap() { return properties; }
+    public static Collection<Property> getAllProperties() {
+        return properties.values();
     }
 
     public UUID getPropertyID() { return propertyID; }

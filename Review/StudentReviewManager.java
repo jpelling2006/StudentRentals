@@ -182,39 +182,30 @@ public final class StudentReviewManager implements ReviewHandler {
     }
 
     public static boolean handleOnce() {
-        System.out.println("\nStudent Review Menu");
-        System.out.println("1. Create review");
-        System.out.println("2. View reviews");
-        System.out.println("3. Edit review");
-        System.out.println("4. Delete review");
-        System.out.println("5. Back");
+        boolean running = true;
+        while (running) {
+            System.out.println("\nStudent Review Menu");
+            System.out.println("1. Create review");
+            System.out.println("2. View reviews");
+            System.out.println("3. Edit review");
+            System.out.println("4. Delete review");
+            System.out.println("5. Back");
 
-        return switch (
-            Helpers.readIntInRange(
-                scanner, 
-                "Choose option: ", 
-                1, 
-                5
-            )
-        ) {
-            case 1 -> {
-                createReview();
-                yield false;
+            switch (
+                Helpers.readIntInRange(
+                    scanner, 
+                    "Choose option: ", 
+                    1, 
+                    5
+                )
+            ) {
+                case 1 -> createReview();
+                case 2 -> listReviews();
+                case 3 -> editReview();
+                case 4 -> deleteReview();
+                case 5 -> running = false;
             }
-            case 2 -> {
-                listReviews();
-                yield false;
-            }
-            case 3 -> {
-                editReview();
-                yield false;
-            }
-            case 4 -> {
-                deleteReview();
-                yield false;
-            }
-            case 5 -> true;
-            default -> false;
-        };
+        }
+        return true;
     }
 }

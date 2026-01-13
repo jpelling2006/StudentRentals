@@ -298,7 +298,7 @@ public final class Helpers {
 
         // applies format for each item in list
         for (int i = 0; i < list.size(); i++) {
-            System.out.println((i + 1) + ". " + formatter.apply(list.get(i)));
+            System.out.println("\n" + (i + 1) + ". " + formatter.apply(list.get(i)));
         }
     }
 }

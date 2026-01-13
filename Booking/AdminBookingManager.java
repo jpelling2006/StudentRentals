@@ -63,24 +63,26 @@ public final class AdminBookingManager implements BookingHandler {
     }
 
     public static boolean handleOnce() {
-        System.out.println("\nAdmin Booking Menu");
-        System.out.println("1. View all bookings");
-        System.out.println("2. Delete booking");
-        System.out.println("3. Back");
+        boolean running = true;
+        while (running) {
+            System.out.println("\nAdmin Booking Menu");
+            System.out.println("1. View all bookings");
+            System.out.println("2. Delete booking");
+            System.out.println("3. Back");
 
-        return switch (
-            Helpers.readIntInRange(scanner, "Choose option: ", 1, 3)
-        ) {
-            case 1 -> {
-                listAllBookings();
-                yield false;
+            switch (
+                Helpers.readIntInRange(
+                    scanner, 
+                    "Choose option: ", 
+                    1, 
+                    3
+                )
+            ) {
+                case 1 -> listAllBookings();
+                case 2 -> deleteBooking();
+                case 3 -> running = false;
             }
-            case 2 -> {
-                deleteBooking();
-                yield false;
-            }
-            case 3 -> true;
-            default -> false;
-        };
+        }
+        return true;
     }
 }

@@ -59,24 +59,26 @@ public final class AdminReviewManager implements ReviewHandler {
     }
 
     public static boolean handleOnce() {
-        System.out.println("\nAdmin Review Menu");
-        System.out.println("1. View reviews");
-        System.out.println("2. Delete review");
-        System.out.println("2. Back");
+        boolean running = true;
+        while (running) {
+            System.out.println("\nAdmin Review Menu");
+            System.out.println("1. View reviews");
+            System.out.println("2. Delete review");
+            System.out.println("2. Back");
 
-        return switch (
-            Helpers.readIntInRange(scanner, "Choose option: ", 1, 3)
-        ) {
-            case 1 -> {
-                listAllReviews();
-                yield false;
+            switch (
+                Helpers.readIntInRange(
+                    scanner, 
+                    "Choose option: ", 
+                    1, 
+                    3
+                )
+            ) {
+                case 1 -> listAllReviews();
+                case 2 -> deleteAnyReview();
+                case 3 -> running = false;
             }
-            case 2 -> {
-                deleteAnyReview();
-                yield false;
-            }
-            case 3 -> true;
-            default -> false;
-        };
+        }
+        return true;
     }
 }

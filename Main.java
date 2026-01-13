@@ -14,5 +14,7 @@ public class Main {
         uiContext.setState(LoggedOutState.getInstance());
 
         uiContext.run();
+
+        BookingStatusScheduler.stop();
     }
 }

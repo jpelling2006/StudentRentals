@@ -154,34 +154,30 @@ public final class StudentBookingManager implements BookingHandler {
     }
 
     public static boolean handleOnce() {
-        System.out.println("\nStudent Booking Menu");
-        System.out.println("1. Create booking");
-        System.out.println("2. View bookings");
-        System.out.println("3. Edit Booking");
-        System.out.println("4. Cancel booking");
-        System.out.println("5. Back");
+        boolean running = true;
+        while (running) {
+            System.out.println("\nStudent Booking Menu");
+            System.out.println("1. Create booking");
+            System.out.println("2. View bookings");
+            System.out.println("3. Edit Booking");
+            System.out.println("4. Cancel booking");
+            System.out.println("5. Back");
 
-        return switch (
-            Helpers.readIntInRange(scanner, "Choose option: ", 1, 5)
-        ) {
-            case 1 -> {
-                createBooking();
-                yield false;
+            switch (
+                Helpers.readIntInRange(
+                    scanner, 
+                    "Choose option: ", 
+                    1, 
+                    5
+                )
+            ) {
+                case 1 -> createBooking();
+                case 2 -> listBookings();
+                case 3 -> editBooking();
+                case 4 -> cancelBooking();
+                case 5 -> running = false;
             }
-            case 2 -> {
-                listBookings();
-                yield false;
-            }
-            case 3 -> {
-                editBooking();
-                yield false;
-            }
-            case 4 -> {
-                cancelBooking();
-                yield false;
-            }
-            case 5 -> true;
-            default -> false;
-        };
+        }
+        return true;
     }
 }
