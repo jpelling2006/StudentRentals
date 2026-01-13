@@ -34,10 +34,19 @@ public final class StudentBookingManager implements BookingHandler {
         BookingStatus bookingStatus = BookingStatus.PENDING;
 
         try {
-            LocalDate startDate = Helpers.readFutureDate(scanner, "Start date");
+            LocalDate startDate = Helpers.readFutureDate(
+                scanner, 
+                "Start date"
+            );
             LocalDate endDate = Helpers.readFutureDate(scanner, "End date");
 
-            Booking booking = new Booking(bookingStatus, selectedRoom, username, startDate, endDate);
+            Booking booking = new Booking(
+                bookingStatus, 
+                selectedRoom, 
+                username, 
+                startDate, 
+                endDate
+            );
 
             // add booking to room
             selectedRoom.addBooking(booking);
