@@ -58,7 +58,7 @@ public final class AdminReviewManager implements ReviewHandler {
         System.out.println("Room deleted successfully.");
     }
 
-    public static boolean handleOnce() {
+    protected static boolean handleOnce() {
         boolean running = true;
         while (running) {
             System.out.println("\nAdmin Review Menu");

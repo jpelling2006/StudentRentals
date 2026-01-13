@@ -1,6 +1,6 @@
 package user;
 
-public class AdministratorUser extends User {
+public final class AdministratorUser extends User {
     public AdministratorUser(
         String username,
         String email,

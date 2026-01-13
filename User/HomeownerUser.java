@@ -5,7 +5,7 @@ import java.util.List;
 
 import properties.Property;
 
-public class HomeownerUser extends User {
+public final class HomeownerUser extends User {
     private final List<Property> properties = new ArrayList<>();
 
     public HomeownerUser(

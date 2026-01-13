@@ -62,7 +62,7 @@ public final class AdminBookingManager implements BookingHandler {
         System.out.println("Booking deleted.");
     }
 
-    public static boolean handleOnce() {
+    protected static boolean handleOnce() {
         boolean running = true;
         while (running) {
             System.out.println("\nAdmin Booking Menu");

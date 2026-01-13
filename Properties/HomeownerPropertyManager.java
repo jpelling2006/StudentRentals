@@ -55,7 +55,6 @@ public final class HomeownerPropertyManager implements PropertiesHandler {
         }
     }
 
-
     private static void listUserProperties() {
         List<Property> userProperties = PropertyQueryService.getUserProperties(
             Session.getCurrentUser()
@@ -160,7 +159,10 @@ public final class HomeownerPropertyManager implements PropertiesHandler {
             Property::toString
         );
 
-        if (!confirmDeletion(selectedProperty)) {
+        System.out.println("\nAre you sure you want to delete this property?");
+        System.out.println(selectedProperty.toString());
+
+        if (!Helpers.confirm(scanner)) {
             System.out.println("Deletion cancelled.");
             return;
         }
@@ -171,15 +173,7 @@ public final class HomeownerPropertyManager implements PropertiesHandler {
         System.out.println("Property deleted successfully.");
     }
 
-    // remove this
-    private static boolean confirmDeletion(Property property) {
-        System.out.println("\nAre you sure you want to delete this property?");
-        System.out.println(property.toString());
-
-        return Helpers.confirm(scanner);
-    }
-
-    public static boolean handleOnce() {
+    protected static boolean handleOnce() {
         boolean running = true;
         while (running) {
             System.out.println("\nHomeowner Property Menu");

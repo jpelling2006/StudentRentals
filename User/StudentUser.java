@@ -1,6 +1,6 @@
 package user;
 
-public class StudentUser extends User {
+public final class StudentUser extends User {
     private String university;
     private String studentNumber;
 

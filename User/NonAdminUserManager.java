@@ -121,7 +121,7 @@ public class NonAdminUserManager implements UserHandler {
         }
     }
 
-    public static boolean handleOnce(UIContext context) {
+    protected static boolean handleOnce(UIContext context) {
         System.out.println("\nUser Management System");
         System.out.println("1. View details");
         System.out.println("2. Edit details");

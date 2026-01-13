@@ -153,7 +153,7 @@ public final class StudentBookingManager implements BookingHandler {
         System.out.println("Booking cancelled.");
     }
 
-    public static boolean handleOnce() {
+    protected static boolean handleOnce() {
         boolean running = true;
         while (running) {
             System.out.println("\nStudent Booking Menu");

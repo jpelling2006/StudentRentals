@@ -33,7 +33,7 @@ public final class SearchManager {
         return room.isAvailable(moveIn, moveOut);
     }
 
-    public static List<Room> searchRooms(RoomSearchCriteria criteria) {
+    private static List<Room> searchRooms(RoomSearchCriteria criteria) {
         lastResults = RoomQueryService.getAllRooms().stream()
             .filter(room -> {
                 Property property = room.getProperty();
@@ -70,7 +70,7 @@ public final class SearchManager {
         return lastResults;
     }
 
-    public static void displaySearchResults(List<Room> rooms) {
+    private static void displaySearchResults(List<Room> rooms) {
         if (rooms.isEmpty()) {
             System.out.println("No rooms match your search criteria.");
             return;
@@ -82,7 +82,7 @@ public final class SearchManager {
     }
 
     // different to toString format - more detailed which wouldnt be convinient elsewhere
-    public static void viewRoomDetails(Room room) {
+    private static void viewRoomDetails(Room room) {
         if (room == null) { return; }
 
         Property property = room.getProperty();

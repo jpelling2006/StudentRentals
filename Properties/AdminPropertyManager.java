@@ -51,7 +51,7 @@ public final class AdminPropertyManager implements PropertiesHandler {
         System.out.println("Property deleted successfully.");
     }
 
-    public static boolean handleOnce() {
+    protected static boolean handleOnce() {
         boolean running = true;
         while (running) {
             System.out.println("\nAdmin Property Menu");

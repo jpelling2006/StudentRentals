@@ -67,7 +67,7 @@ public final class AdminUserManager implements UserHandler {
         System.out.println("User deleted successfully");
     }
 
-    public static boolean handleOnce() {
+    protected static boolean handleOnce() {
         System.out.println("\nAdmin User Management System");
         System.out.println("1. List all users");
         System.out.println("2. Delete user");

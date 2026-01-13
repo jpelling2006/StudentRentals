@@ -190,7 +190,7 @@ public final class HomeownerRoomManager implements RoomHandler {
         System.out.println("Room deleted.");
     }
 
-    public static boolean handleOnce() {
+    protected static boolean handleOnce() {
         boolean running = true;
         while (running) {
             System.out.println("\nHomeowner Room Menu");

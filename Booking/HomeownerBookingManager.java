@@ -83,7 +83,7 @@ public final class HomeownerBookingManager implements BookingHandler {
         }
     }
 
-    public static boolean handleOnce() {
+    protected static boolean handleOnce() {
         boolean running = true;
         while (running) {
             System.out.println("\nHomeowner Booking Menu");

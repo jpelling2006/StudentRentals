@@ -17,7 +17,7 @@ public final class HomeownerReviewManager implements ReviewHandler {
 
     private HomeownerReviewManager() {}
 
-    public static void listUserReviews() {
+    private static void listUserReviews() {
         List<Review> userReviews = ReviewQueryService.getHomeownerReviews(
             Session.getCurrentUser()
         );
@@ -32,7 +32,7 @@ public final class HomeownerReviewManager implements ReviewHandler {
         Helpers.printIndexed(userReviews, Review::toString);
     }
 
-    public static boolean handleOnce() {
+    protected static boolean handleOnce() {
         boolean running = true;
         while (running) {
             System.out.println("\nHomeowner Review Menu");
