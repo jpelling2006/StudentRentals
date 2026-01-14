@@ -39,6 +39,7 @@ public final class SearchManager {
             .filter(room -> {
                 Property property = room.getProperty();
 
+                // filters by city (if entered)
                 if (
                     criteria.city != null
                     && !property.getCity().equalsIgnoreCase(criteria.city)
@@ -46,6 +47,7 @@ public final class SearchManager {
                     return false; 
                 }
 
+                // filters by room type (if entered)
                 if (
                     criteria.roomType != null
                     && room.getRoomType() != criteria.roomType
@@ -53,6 +55,7 @@ public final class SearchManager {
                     return false;
                 }
 
+                // filters by min/max rent price (if entered)
                 Double price = room.getRentPrice();
                 if (criteria.minPrice != null && price < criteria.minPrice) {
                     return false;
@@ -61,6 +64,7 @@ public final class SearchManager {
                     return false;
                 }
 
+                // filters by room availability (if move in dates are entered)
                 if (!isRoomAvailable(room, criteria.moveIn, criteria.moveOut)) {
                     return false;
                 }
@@ -71,15 +75,15 @@ public final class SearchManager {
         return lastResults;
     }
 
-    private static void displaySearchResults(List<Room> rooms) {
-        if (rooms.isEmpty()) {
+    private static void displaySearchResults(List<Room> results) {
+        if (results.isEmpty()) {
             System.out.println("No rooms match your search criteria.");
             return;
         }
 
         // prints list of search results
         System.out.println("\nSearch results");
-        Helpers.printIndexed(rooms, Room::toString);
+        Helpers.printIndexed(results, Room::toString);
     }
 
     // different to toString format - more detailed which wouldnt be convinient elsewhere

@@ -41,7 +41,9 @@ public abstract class User {
     public void setUsername(String username) {
         // add regex
         if (username == null || username.length() > 32) {
-            throw new IllegalArgumentException("Username must be up to 32 characters.");
+            throw new IllegalArgumentException(
+                "Username must be up to 32 characters."
+            );
         }
         this.username = username;
     }
@@ -56,7 +58,7 @@ public abstract class User {
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) {
-        if (phone == null || !phone.matches("^\\d{10}$")) {
+        if (phone == null || !isValidPhoneNumber(phone)) {
             throw new IllegalArgumentException(
                 "Phone number must be ten digits long."
             );
@@ -78,6 +80,14 @@ public abstract class User {
             "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"
         ); // https://www.baeldung.com/java-email-validation-regex
         Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    public static boolean isValidPhoneNumber(String phone) {
+        Pattern pattern = Pattern.compile(
+            "^\\d{10}$"
+        ); // https://www.baeldung.com/java-email-validation-regex
+        Matcher matcher = pattern.matcher(phone);
         return matcher.matches();
     }
 

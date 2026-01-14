@@ -66,17 +66,11 @@ public class NonAdminUserManager implements UserHandler {
                 )
             ) {
                 case 1 -> user.setEmail(
-                    Helpers.readString(
-                        scanner, 
-                        "Enter new email: ", 
-                        64
-                    )
+                    Helpers.readEmail(scanner, "Enter new email: ")
                 );
                 case 2 -> user.setPhone(
-                    Helpers.readString(
-                        scanner, 
-                        "Enter new phone number: ", 
-                        10
+                    Helpers.readPhoneNumber(
+                        scanner, "Enter new phone number: "
                     )
                 );
                 case 3 -> {

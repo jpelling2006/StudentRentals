@@ -15,6 +15,8 @@ import user.HomeownerUser;
 import user.LoggedOutManager;
 import user.StudentUser;
 
+// for the sole purpose of testing
+// creates test data so it doesnt need to be typed in each time
 public final class DataSeeder {
     public static void seed() {
         try {

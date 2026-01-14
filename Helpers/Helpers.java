@@ -6,6 +6,8 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Helpers {
     private static Helpers instance;
@@ -59,6 +61,40 @@ public final class Helpers {
                 );
             }
             else { return input; }
+        }
+    }
+
+    public static String readEmail(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = readString(scanner, prompt, 64);
+
+            Pattern pattern = Pattern.compile(
+                "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"
+            ); // https://www.baeldung.com/java-email-validation-regex
+            Matcher matcher = pattern.matcher(input);
+
+            if (!matcher.matches()) {
+                System.out.print(
+                    "Invalid email. Please use the format \"example@example.com\"."
+                );
+            } else { return input; }
+        }
+    }
+
+    public static String readPhoneNumber(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = readString(scanner, prompt, 32);
+
+            Pattern pattern = Pattern.compile("^\\d{10}$");
+            Matcher matcher = pattern.matcher(input);
+
+            if (!matcher.matches()) {
+                System.out.print(
+                    "Invalid phone number. Please enter ten digits."
+                );
+            } else { return input; }
         }
     }
 

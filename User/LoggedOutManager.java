@@ -51,11 +51,9 @@ public final class LoggedOutManager implements UserHandler {
             break;
         }
 
-        String email = Helpers.readString(
-            scanner, "Email: ", 64
-        );
-        String phone = Helpers.readString(
-            scanner, "Phone (10 digits): ", 10
+        String email = Helpers.readEmail(scanner, "Email: ");
+        String phone = Helpers.readPhoneNumber(
+            scanner, "Phone (10 digits): "
         );
         String password = Helpers.readString(
             scanner, "Password (min 8 chars): ", 128
@@ -66,8 +64,16 @@ public final class LoggedOutManager implements UserHandler {
         try {
             switch (userTypeChoice) {
                 case 1 -> { // student
-                    String university = Helpers.readString(scanner, "University: ", 128);
-                    String studentNumber = Helpers.readString(scanner, "Student number: ", 32);
+                    String university = Helpers.readString(
+                        scanner, 
+                        "University: ", 
+                        128
+                    );
+                    String studentNumber = Helpers.readString(
+                        scanner, 
+                        "Student number: ", 
+                        32
+                    );
 
                     newUser = new StudentUser(
                         username,

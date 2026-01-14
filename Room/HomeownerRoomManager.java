@@ -144,7 +144,11 @@ public final class HomeownerRoomManager implements RoomHandler {
                         )
                     );
                     case 5 -> room.setAmenities(
-                        Helpers.readString(scanner, "Amenities: ", 256)
+                        Helpers.readString(
+                            scanner, 
+                            "Amenities: ", 
+                            256
+                        )
                     );
                     case 6 -> {
                         room.setStartDate(

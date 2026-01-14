@@ -85,7 +85,11 @@ public class Review {
     @Override
     public String toString() {
         Property property = getProperty();
-        String address = (property != null) ? property.getAddress() : "Unknown property";
+
+        // if null, return "unknown property"
+        String address = (property != null)
+            ? property.getAddress()
+            : "Unknown property";
 
         // formats string
         return address + " - (" + stars + ")\n" + title + "\n" + content;
