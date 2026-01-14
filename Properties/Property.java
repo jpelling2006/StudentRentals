@@ -153,10 +153,9 @@ public class Property {
         if (reviewsByUser.isEmpty()) { return 0; }
 
         // counts values of all reviews
-        Integer sum = 0;
-        for (Review review : reviewsByUser.values()) {
-            sum += review.getStars();
-        }
+        Integer sum = reviewsByUser.values().stream()
+            .mapToInt(Review::getStars)
+            .sum();
 
         // returns mean average
         return (double) sum / reviewsByUser.size();
@@ -180,6 +179,7 @@ public class Property {
     public String toString() {
         return city + " - " + address + " (" + propertyType + ")\n"
         + description + "\n"
-        + bedrooms + " bedrooms and " + bathrooms + " bathooms.";
+        + bedrooms + " bedrooms and " + bathrooms + " bathooms.\n"
+        + getAverageRating() + " average rating.";
     }
 }

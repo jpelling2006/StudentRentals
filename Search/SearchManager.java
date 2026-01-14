@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import helpers.Helpers;
 import properties.Property;
@@ -65,7 +66,7 @@ public final class SearchManager {
                 }
                 return true;
             })
-            .toList();
+            .collect(Collectors.toList());
 
         return lastResults;
     }
