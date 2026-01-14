@@ -6,7 +6,6 @@ import java.util.Scanner;
 import helpers.Helpers;
 import properties.Property;
 import properties.PropertyQueryService;
-import room.Room;
 import session.Session;
 
 public final class StudentReviewManager implements ReviewHandler {
@@ -20,31 +19,17 @@ public final class StudentReviewManager implements ReviewHandler {
 
     private StudentReviewManager() {}
 
-    private static boolean hasCompletedBooking(Property property, String username) {
-        for (Room room : property.getRooms()) {
-            if (room.bookingCompletedByUser(username)) { return true; }
-        }
-        return false;
-    }
-
     private static void createReview() {
+        String username = Session.getCurrentUser().getUsername();
+
         Property selectedProperty = Helpers.selectFromList(
             scanner, 
-            PropertyQueryService.getAllProperties(), 
+            PropertyQueryService.getStayedInProperties(username), 
             "Select property",
             Property::toString
         );
 
         if (selectedProperty == null) { return; }
-
-        String username = Session.getCurrentUser().getUsername();
-
-        if (!hasCompletedBooking(selectedProperty, username)) {
-            System.out.println(
-                "You can only review properties you have stayed in."
-            );
-            return;
-        }
 
         try {
             Integer stars = Helpers.readIntInRange(
@@ -57,12 +42,7 @@ public final class StudentReviewManager implements ReviewHandler {
                 scanner, "Enter review content: ", 1024
             );
 
-            Review review = new Review(
-                selectedProperty, username, stars, title, content
-            );
-
-            // add review to property
-            selectedProperty.addReview(review);
+            new Review(selectedProperty, username, stars, title, content);
 
             System.out.println("Review created successfully.");
         } catch (Exception e) {

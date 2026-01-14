@@ -7,7 +7,6 @@ import booking.BookingStatus;
 import properties.Property;
 import properties.PropertyQueryService;
 import properties.PropertyType;
-import review.Review;
 import room.Room;
 import room.RoomType;
 import user.AdministratorUser;
@@ -105,13 +104,13 @@ public final class DataSeeder {
                 LocalDate.parse("2025-09-30")
             );
 
-            new Review(
-                property2,
-                student.getUsername(), 
-                2, 
-                "Place smells!", 
-                "Property had an incredibly horrible mouldy smell, and the landlord did nothing!"
-            );
+            // new Review(
+            //     property2,
+            //     student.getUsername(), 
+            //     2, 
+            //     "Place smells!", 
+            //     "Property had an incredibly horrible mouldy smell, and the landlord did nothing!"
+            // );
 
         } catch (Exception e) {
             e.printStackTrace();

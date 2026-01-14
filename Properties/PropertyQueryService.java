@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import room.RoomQueryService;
 import user.User;
 
 public final class PropertyQueryService {
@@ -80,6 +81,16 @@ public final class PropertyQueryService {
         );
         return propertyIDs.stream()
             .map(propertiesByID::get)
+            .collect(Collectors.toList());
+    }
+
+    public static List<Property> getStayedInProperties(String username) {
+        return RoomQueryService.getAllRooms().stream()
+            .map(room -> room.getBookingByUser(username))
+            .filter(booking -> booking != null)
+            .filter(booking -> booking.hasEnded())
+            .map(booking -> booking.getRoom().getProperty())
+            .distinct()
             .collect(Collectors.toList());
     }
 }
