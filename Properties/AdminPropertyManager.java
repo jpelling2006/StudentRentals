@@ -43,8 +43,13 @@ public final class AdminPropertyManager implements PropertiesHandler {
             return;
         }
 
-        System.out.println("Are you sure you want to delete this booking?");
+        System.out.println("Are you sure you want to delete this property?");
         System.out.println(selectedProperty.toString());
+
+        if (!Helpers.confirm(scanner)) {
+            System.out.println("Deletion cancelled");
+            return;
+        }
 
         PropertyQueryService.removeFromIndex(selectedProperty);
         selectedProperty.removeProperty(selectedProperty.getPropertyID());

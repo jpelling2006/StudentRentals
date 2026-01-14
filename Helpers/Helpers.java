@@ -66,7 +66,6 @@ public final class Helpers {
 
     public static String readEmail(Scanner scanner, String prompt) {
         while (true) {
-            System.out.print(prompt);
             String input = readString(scanner, prompt, 64);
 
             Pattern pattern = Pattern.compile(
@@ -84,7 +83,6 @@ public final class Helpers {
 
     public static String readPhoneNumber(Scanner scanner, String prompt) {
         while (true) {
-            System.out.print(prompt);
             String input = readString(scanner, prompt, 32);
 
             Pattern pattern = Pattern.compile("^\\d{10}$");
